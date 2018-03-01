@@ -6,7 +6,7 @@
     </div>
     <el-table
       border
-      :data="lzqDetail"
+      :data="yxqDetail"
       style="width: 100%">
       <el-table-column
         prop="Date"
@@ -32,20 +32,15 @@
 </template>
 
 <script>
-  import {fetchLZQDetail} from '../../api/auto'
+  import {fetchYXQDetail } from '../../api/auto'
   export default {
     name: 'HelloWorld',
     data () {
       return {
         tlCount: 0,
         tlAmount: 0,
-        lzqDetail: [],
+        yxqDetail: [],
         formLabelWidth: '100px'
-      }
-    },
-    filters: {
-      isDeletedDesc: function (isDeleted) {
-        return isDeleted ? '已删除' : '正常'
       }
     },
     created: function () {
@@ -54,16 +49,17 @@
     computed: {},
     methods: {
       init: function () {
-        this.fetchLZQDetail()
+        this.fetchYXQDetail()
       },
-      fetchLZQDetail: function () {
-        fetchLZQDetail({}).then(data => {
-          data = data.data || data
-          var result = data.Result
-          const {tlCount, tlAmount, detail} = result
+      fetchYXQDetail: function () {
+        fetchYXQDetail({}).then(data => {
+            data = data.data || data;
+            var result = data.Result;
+            const {tlCount, tlAmount, detail} = result;
+
           this.tlCount = tlCount
           this.tlAmount = tlAmount
-          this.lzqDetail = detail
+          this.yxqDetail = detail
         })
       }
     }

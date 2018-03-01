@@ -7,6 +7,13 @@ export function fetchLZQDetail() {
   })
 }
 
+export function fetchYXQDetail() {
+  return request({
+    url: '/spotrecord/detail?username=yxq',
+    method: 'get'
+  })
+}
+
 export function fetchArticle() {
   return request({
     url: '/article/detail',
