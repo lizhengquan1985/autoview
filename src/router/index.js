@@ -159,7 +159,8 @@ export const asyncRouterMap = [
           { path: 'complex-table', component: _import('example/table/complexTable'), name: 'complexTable', meta: { title: 'complexTable' }}
         ]
       },
-      { path: 'tab/index', icon: 'tab', component: _import('example/tab/index'), name: 'tab', meta: { title: 'tab' }}
+      { path: 'tab/index', icon: 'tab', component: _import('example/tab/index'), name: 'tab', meta: { title: 'tab' }},
+      { path: 'tab/lzq', icon: 'tab', component: _import('example/lzq'), name: 'lzq', meta: { title: 'lzq' }}
     ]
   },
 

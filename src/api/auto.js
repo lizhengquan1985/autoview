@@ -1,10 +1,9 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function fetchLZQDetail() {
   return request({
-    url: '/article/list',
-    method: 'get',
-    params: query
+    url: '/spotrecord/detail?username=lzq',
+    method: 'get'
   })
 }
 
