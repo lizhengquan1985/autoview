@@ -1,8 +1,17 @@
 <template>
   <div class="role-manage">
     <div class="filter-container">
+      账户:lzq, 统计从2018年3月1日开始的交易情况,个人操作不统计
+    </div>
+    <div class="filter-container">
       <span>套牢笔数：{{tlCount}}</span>
       <span>套牢资金：{{tlAmount}}</span>
+      <span>套牢市值：{{tlNowAmount}}</span>
+    </div>
+    <div class="filter-container">
+      <span>总收益：{{totalSy}}</span>
+      <span>总亏损：{{tlAmount - tlNowAmount}}</span>
+      <span :style="{color:red}">净收益：{{totalSy - tlAmount + tlNowAmount}}</span>
     </div>
     <el-table
       border
@@ -39,6 +48,7 @@
       return {
         tlCount: 0,
         tlAmount: 0,
+        tlNowAmount:0,
         yxqDetail: [],
         formLabelWidth: '100px'
       }
@@ -55,10 +65,12 @@
         fetchYXQDetail({}).then(data => {
             data = data.data || data;
             var result = data.Result;
-            const {tlCount, tlAmount, detail} = result;
+            const {tlCount, tlAmount, totalSy, tlNowAmount, detail} = result;
 
           this.tlCount = tlCount
           this.tlAmount = tlAmount
+          this.tlNowAmount = tlNowAmount
+          this.totalSy = totalSy
           this.yxqDetail = detail
         })
       }
