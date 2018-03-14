@@ -69,7 +69,7 @@ export default {
           itemWidth: 14,
           itemHeight: 5,
           itemGap: 13,
-          data: ['CMCC', 'CTCC', 'CUCC'],
+          data: ['TLCount', 'TLAmount', 'TLNowAmount', 'TotalSy', 'TotalLoss', 'AllEarning'],
           right: '4%',
           textStyle: {
             fontSize: 12,
@@ -91,6 +91,7 @@ export default {
               color: '#57617B'
             }
           },
+          // 时间点
           data: ['13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55']
         }],
         yAxis: [{

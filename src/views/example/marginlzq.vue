@@ -1,6 +1,6 @@
 <template>
   <div class="role-manage">
-    <div>
+    <div class="filter-container">
       账户:lzq, 统计从2018年3月1日开始的交易情况,个人操作不统计
     </div>
     <div class="filter-container">
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-  import {fetchLZQDetail} from '../../api/auto'
+  import {fetchLZQMarginDetail} from '../../api/auto'
   export default {
     name: 'HelloWorld',
     data () {
@@ -64,10 +64,10 @@
     computed: {},
     methods: {
       init: function () {
-        this.fetchLZQDetail()
+        this.fetchLZQMarginDetail()
       },
-      fetchLZQDetail: function () {
-        fetchLZQDetail({}).then(data => {
+      fetchLZQMarginDetail: function () {
+        fetchLZQMarginDetail({}).then(data => {
           data = data.data || data
           var result = data.Result
           const {tlCount, tlAmount, totalSy, tlNowAmount, detail} = result

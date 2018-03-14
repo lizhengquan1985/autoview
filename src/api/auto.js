@@ -6,6 +6,12 @@ export function fetchLZQDetail() {
     method: 'get'
   })
 }
+export function fetchLZQMarginDetail() {
+  return request({
+    url: '/spotrecord/margindetail?username=lzq',
+    method: 'get'
+  })
+}
 
 export function fetchYXQDetail() {
   return request({
