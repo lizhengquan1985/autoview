@@ -160,8 +160,8 @@ export const asyncRouterMap = [
         ]
       },
       { path: 'tab/index', icon: 'tab', component: _import('example/tab/index'), name: 'tab', meta: { title: 'tab' }},
-      { path: 'tab/lzq', icon: 'tab', component: _import('example/lzq'), name: 'lzq', meta: { title: 'lzq' }},
-      { path: 'tab/yxq', icon: 'tab', component: _import('example/yxq'), name: 'yxq', meta: { title: 'yxq' }},
+      { path: 'tab/spotRecord', icon: 'tab', component: _import('example/SpotRecord'), name: 'spotRecord', meta: { title: 'spotRecord' }},
+      { path: 'tab/tradeRecord', icon: 'tab', component: _import('example/TradeRecord'), name: 'tradeRecord', meta: { title: 'tradeRecord' }},
       { path: 'tab/marginlzq', icon: 'tab', component: _import('example/marginlzq'), name: 'marginlzq', meta: { title: 'marginlzq' }}
     ]
   },
