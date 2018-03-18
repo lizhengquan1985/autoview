@@ -1,50 +1,13 @@
 <template>
   <div class="role-manage">
     <div>
-      <el-select v-model="coin">
-        <el-option value="">全部</el-option>
-        <el-option value="btc">btc</el-option>
-        <el-option value="bch">bch</el-option>
-        <el-option value="eth">eth</el-option>
-        <el-option value="etc">etc</el-option>
-        <el-option value="ltc">ltc</el-option>
-        <el-option value="eos">eos</el-option>
-        <el-option value="xrp">xrp</el-option>
-        <el-option value="dash">dash</el-option>
-        <el-option value="zec">zec</el-option>
-        <el-option value="omg">omg</el-option>
-        <el-option value="hsr">hsr</el-option>
-        <el-option value="qtum">qtum</el-option>
-        <el-option value="iost">iost</el-option>
-        <el-option value="neo">neo</el-option>
 
-        <el-option value="trx">trx</el-option>
-        <el-option value="mds">mds</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-      </el-select>
       <el-radio-group v-model="hasSell">
         <el-radio-button label="0">全部</el-radio-button>
         <el-radio-button label="1">已经</el-radio-button>
         <el-radio-button label="2">未哦</el-radio-button>
       </el-radio-group>
-      <el-button @click="fetchSpotRecord()" icon="search" type="primary">搜索</el-button>
+      <el-button @click="fetchSpotRecordDTO()" icon="search" type="primary">搜索</el-button>
       <span>{{list.length}}</span>
     </div>
     <br/>
@@ -126,7 +89,7 @@
 </template>
 
 <script>
-  import {fetchSpotRecord} from '../../api/spotrecord'
+  import {fetchSpotRecordDTO} from '../../api/spotrecord'
 
   export default {
     name: 'HelloWorld',
@@ -156,14 +119,9 @@
       }
     },
     methods: {
-      fetchSpotRecord: function () {
-        const {coin, username, hasSell} = this
-        let {order} = this
-        let fw = hasSell
-        if (hasSell === '1') {
-          order = 'SellDate'
-        }
-        fetchSpotRecord({coin, order, username, fw}).then(data => {
+      fetchSpotRecordDTO: function () {
+
+        fetchSpotRecord({}).then(data => {
           data = data.data || data
           this.coinList = data
         })
