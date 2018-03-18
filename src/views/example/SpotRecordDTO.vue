@@ -1,12 +1,6 @@
 <template>
   <div class="role-manage">
     <div>
-
-      <el-radio-group v-model="hasSell">
-        <el-radio-button label="0">全部</el-radio-button>
-        <el-radio-button label="1">已经</el-radio-button>
-        <el-radio-button label="2">未哦</el-radio-button>
-      </el-radio-group>
       <el-button @click="fetchSpotRecordDTO()" icon="search" type="primary">搜索</el-button>
       <span>{{list.length}}</span>
     </div>
@@ -16,74 +10,38 @@
       :data="list"
       style="width: 100%">
       <el-table-column
-        prop="buyDate"
-        label="bDate"
-        width="170">
+        prop="统计日期"
+        label="date"
+        width="190">
       </el-table-column>
-      <template>
-        <el-table-column
-          label="sy"
-          width="70">
-          <template slot-scope="scope">
-            <el-tooltip effect="dark" :content="scope.row.coin" placement="top">
-              <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity -  scope.row.buyTradePrice * scope.row.buyTotalQuantity).toFixed(4):''}}</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="hasSell !== '2'"
-          label="syrate"
-          width="70">
-          <template slot-scope="scope">
-            <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity/(scope.row.buyTradePrice * scope.row.buyTotalQuantity)).toFixed(2):''}}</span>
-          </template>
-        </el-table-column>
-      </template>
       <el-table-column
-        label="bop/btp"
-        width="110">
+        prop="交易笔数"
+        label="count"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="投出金额"
+        label="putamount"
+        width="120">
         <template slot-scope="scope">
-          <el-tooltip effect="dark" :content="scope.row.coin" placement="top">
-            <span>{{scope.row.buyOrderPrice}}/{{scope.row.buyTradePrice}}</span>
-          </el-tooltip>
+          <span>{{(parseFloat(scope.row.投出金额)).toFixed(4)}}</span>
         </template>
       </el-table-column>
       <el-table-column
-        label="bQuantity/byAmount"
-        width="110">
+        label="sy"
+        width="120">
         <template slot-scope="scope">
-          <span>{{scope.row.buyTotalQuantity}}/{{(scope.row.buyTradePrice*scope.row.buyTotalQuantity).toFixed(2)}}</span>
+          <span>{{(parseFloat(scope.row.收益)).toFixed(4)}}</span>
         </template>
       </el-table-column>
-      <template>
-        <el-table-column
-          prop="sellDate"
-          label="ssdate"
-          width="170">
-        </el-table-column>
-        <el-table-column
-          prop="sellOrderPrice"
-          label="bop"
-          width="90">
-        </el-table-column>
-        <el-table-column
-          prop="sellTradePrice"
-          label="btp"
-          width="stp">
-        </el-table-column>
-        <el-table-column
-          prop="sellTotalQuantity"
-          label="ssdf"
-          width="90">
-        </el-table-column>
-        <el-table-column
-          label="success"
-          width="80">
-          <template slot-scope="scope">
-            <span>{{scope.row.buySuccess?'yes':'no'}}/{{scope.row.sellSuccess?'yes':'no'}}</span>
-          </template>
-        </el-table-column>
-      </template>
+      <el-table-column
+        prop="收益率"
+        label="rate"
+        width="120">
+        <template slot-scope="scope">
+          <span>{{(parseFloat(scope.row.收益率)).toFixed(4)}}</span>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -98,32 +56,19 @@
         coin: 'eos',
         order: 'Id',
         username: '',
-        coinList: [],
+        list: [],
         hasSell: '0',
         formLabelWidth: '100px'
       }
     },
     created: function () {
     },
-    computed: {
-      list: function () {
-        let hasSell = this.hasSell
-        let rs = this.coinList
-        if (hasSell === '1') {
-          rs = this.coinList.filter(it => it.hasSell)
-        } else if (hasSell === '2') {
-          rs = this.coinList.filter(it => !it.hasSell)
-        }
-        console.log(111111111, rs)
-        return rs
-      }
-    },
+    computed: {},
     methods: {
       fetchSpotRecordDTO: function () {
-
-        fetchSpotRecord({}).then(data => {
+        fetchSpotRecordDTO({}).then(data => {
           data = data.data || data
-          this.coinList = data
+          this.list = data
         })
       }
     }
