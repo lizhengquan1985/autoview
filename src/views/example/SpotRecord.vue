@@ -5,8 +5,10 @@
       <el-radio-group v-model="hasSell">
         <el-radio-button label="0">全部</el-radio-button>
         <el-radio-button label="1">已经</el-radio-button>
+        <el-radio-button label="2">未哦</el-radio-button>
       </el-radio-group>
       <el-button @click="fetchSpotRecord()" icon="search" type="primary">搜索</el-button>
+      <span>{{list.length}}</span>
     </div>
     <br/>
     <el-table
@@ -15,72 +17,67 @@
       style="width: 100%">
       <el-table-column
         prop="buyDate"
-        label="bDate"
-        width="170">
+        label="bDate">
       </el-table-column>
+      <template v-if="hasSell !== '2'">
+        <el-table-column
+          label="sy"
+          width="70">
+          <template slot-scope="scope">
+            <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity -  scope.row.buyTradePrice * scope.row.buyTotalQuantity).toFixed(4):''}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-if="hasSell !== '2'"
+          label="syrate"
+          width="70">
+          <template slot-scope="scope">
+            <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity/(scope.row.buyTradePrice * scope.row.buyTotalQuantity)).toFixed(2):''}}</span>
+          </template>
+        </el-table-column>
+      </template>
       <el-table-column
-        label="sy"
-        width="70">
+        label="bop/btp"
+        width="110">
         <template slot-scope="scope">
-          <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity -  scope.row.buyTradePrice * scope.row.buyTotalQuantity).toFixed(4):''}}</span>
+          <span>{{scope.row.buyOrderPrice}}/{{scope.row.buyTradePrice}}</span>
         </template>
       </el-table-column>
       <el-table-column
-        label="syrate"
-        width="70">
+        label="bQuantity/byAmount">
         <template slot-scope="scope">
-          <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity/(scope.row.buyTradePrice * scope.row.buyTotalQuantity)).toFixed(2):''}}</span>
+          <span>{{scope.row.buyTotalQuantity}}/{{(scope.row.buyTradePrice*scope.row.buyTotalQuantity).toFixed(2)}}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="buyOrderPrice"
-        label="bop"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        prop="buyTradePrice"
-        label="btp"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        prop="buyTotalQuantity"
-        label="bQuantity"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        label="bs"
-        width="50">
-        <template slot-scope="scope">
-          <span>{{scope.row.buySuccess?'':'no'}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="sellDate"
-        label="ssdate"
-        width="170">
-      </el-table-column>
-      <el-table-column
-        prop="sellOrderPrice"
-        label="bop"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        prop="sellTradePrice"
-        label="btp"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        prop="sellTotalQuantity"
-        label="90"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        label="ss"
-        width="50">
-        <template slot-scope="scope">
-          <span>{{scope.row.sellSuccess?'':'no'}}</span>
-        </template>
-      </el-table-column>
+      <template v-if="hasSell !== '2'">
+        <el-table-column
+          prop="sellDate"
+          label="ssdate"
+          width="170">
+        </el-table-column>
+        <el-table-column
+          prop="sellOrderPrice"
+          label="bop"
+          width="90">
+        </el-table-column>
+        <el-table-column
+          prop="sellTradePrice"
+          label="btp"
+          width="stp">
+        </el-table-column>
+        <el-table-column
+          prop="sellTotalQuantity"
+          label="ssdf"
+          width="90">
+        </el-table-column>
+        <el-table-column
+          label="success"
+          width="80">
+          <template slot-scope="scope">
+            <span>{{scope.row.buySuccess?'yes':'no'}}/{{scope.row.sellSuccess?'yes':'no'}}</span>
+          </template>
+        </el-table-column>
+      </template>
     </el-table>
   </div>
 </template>
@@ -93,6 +90,8 @@
     data() {
       return {
         coin: 'eos',
+        order: 'Id',
+        username: '',
         coinList: [],
         hasSell: '0',
         formLabelWidth: '100px'
@@ -115,8 +114,13 @@
     },
     methods: {
       fetchSpotRecord: function () {
-        const {coin} = this
-        fetchSpotRecord({coin}).then(data => {
+        const {coin, username, hasSell} = this
+        let {order} = this
+        let fw = hasSell
+        if (hasSell === '1') {
+          order = 'SellDate'
+        }
+        fetchSpotRecord({coin, order, username, fw}).then(data => {
           data = data.data || data
           this.coinList = data
         })
