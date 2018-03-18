@@ -20,9 +20,9 @@
 
         <el-option value="trx">trx</el-option>
         <el-option value="mds">mds</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="neo">neo</el-option>
+        <el-option value="ela">ela</el-option>
+        <el-option value="dta">dta</el-option>
+        <el-option value="itc">itc</el-option>
         <el-option value="neo">neo</el-option>
         <el-option value="neo">neo</el-option>
         <el-option value="neo">neo</el-option>
@@ -86,8 +86,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="bQuantity/byAmount"
-        width="110">
+        label="总数量/总金额"
+        width="120">
         <template slot-scope="scope">
           <span>{{scope.row.buyTotalQuantity}}/{{(scope.row.buyTradePrice*scope.row.buyTotalQuantity).toFixed(2)}}</span>
         </template>
@@ -95,23 +95,24 @@
       <template>
         <el-table-column
           prop="sellDate"
-          label="ssdate"
+          label="sDate"
           width="170">
         </el-table-column>
         <el-table-column
-          prop="sellOrderPrice"
-          label="bop"
-          width="90">
+          label="sop/stp"
+          width="110">
+          <template slot-scope="scope">
+            <el-tooltip effect="dark" :content="scope.row.coin" placement="top">
+              <span>{{scope.row.sellOrderPrice}}/{{scope.row.sellTradePrice}}</span>
+            </el-tooltip>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="sellTradePrice"
-          label="btp"
-          width="stp">
-        </el-table-column>
-        <el-table-column
-          prop="sellTotalQuantity"
-          label="ssdf"
-          width="90">
+          label="总数量/总金额"
+          width="120">
+          <template slot-scope="scope">
+            <span>{{scope.row.sellTotalQuantity}}/{{(scope.row.sellTotalQuantity*scope.row.sellTradePrice).toFixed(2)}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="success"
