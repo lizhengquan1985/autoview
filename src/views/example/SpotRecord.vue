@@ -58,8 +58,8 @@
       </el-table-column>
       <el-table-column
         prop="userName"
-        label="userName"
-        width="70">
+        label="name"
+        width="45">
       </el-table-column>
       <template>
         <el-table-column
