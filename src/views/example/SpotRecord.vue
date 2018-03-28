@@ -56,6 +56,11 @@
         label="bDate"
         width="170">
       </el-table-column>
+      <el-table-column
+        prop="userName"
+        label="userName"
+        width="70">
+      </el-table-column>
       <template>
         <el-table-column
           label="sy"
@@ -71,7 +76,7 @@
           label="syrate"
           width="70">
           <template slot-scope="scope">
-            <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity/(scope.row.buyTradePrice * scope.row.buyTotalQuantity)).toFixed(2):''}}</span>
+            <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity/(scope.row.buyTradePrice * scope.row.buyTotalQuantity)).toFixed(3):''}}</span>
           </template>
         </el-table-column>
       </template>
@@ -132,7 +137,7 @@
     name: 'HelloWorld',
     data() {
       return {
-        coin: 'eos',
+        coin: '',
         order: 'Id',
         username: '',
         coinList: [],
