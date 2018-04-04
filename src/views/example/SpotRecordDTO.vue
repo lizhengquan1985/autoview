@@ -1,6 +1,11 @@
 <template>
   <div class="role-manage">
     <div>
+      <el-select v-model="username">
+        <el-option value="">全部</el-option>
+        <el-option value="lzq">lzq</el-option>
+        <el-option value="yxq">yxq</el-option>
+      </el-select>
       <el-button @click="fetchSpotRecordDTO()" icon="search" type="primary">搜索</el-button>
       <span>{{list.length}}</span>
     </div>
@@ -66,7 +71,8 @@
     computed: {},
     methods: {
       fetchSpotRecordDTO: function () {
-        fetchSpotRecordDTO({}).then(data => {
+        const {username} = this
+        fetchSpotRecordDTO({username}).then(data => {
           data = data.data || data
           this.list = data
         })

@@ -43,6 +43,13 @@
         <el-radio-button label="1">已经</el-radio-button>
         <el-radio-button label="2">未哦</el-radio-button>
       </el-radio-group>
+      <el-select v-model="username">
+        <el-option value="">全部</el-option>
+        <el-option value="lzq">lzq</el-option>
+        <el-option value="yxq">yxq</el-option>
+      </el-select>
+      <el-input v-model="min" style="width: 100px;"/>
+      <el-input v-model="max" style="width: 100px;"/>
       <el-button @click="fetchSpotRecord()" icon="search" type="primary">搜索</el-button>
       <span>{{list.length}}</span>
     </div>
@@ -137,6 +144,8 @@
     name: 'HelloWorld',
     data() {
       return {
+        min:0,
+        max:0,
         coin: '',
         order: 'Id',
         username: '',
@@ -156,6 +165,15 @@
         } else if (hasSell === '2') {
           rs = this.coinList.filter(it => !it.hasSell)
         }
+
+        const {min, max} = this
+        if(min){
+          rs = rs.filter(it=> it.buyTradePrice*it.buyTotalQuantity >= min)
+        }
+        if(max){
+          rs = rs.filter(it=> it.buyTradePrice*it.buyTotalQuantity <= max)
+        }
+
         console.log(111111111, rs)
         return rs
       }
