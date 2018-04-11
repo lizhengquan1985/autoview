@@ -102,3 +102,44 @@ export function html2Text(val) {
 export function toThousandslsFilter(num) {
   return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
 }
+
+export function formatDate(dt, format = 'yyyy-MM-dd hh:mm:ss') {
+  if (!dt) {
+    return dt;
+  }
+
+  if (typeof dt === 'string' && dt.indexOf('T') > 0) {
+    return dt.replace('T', ' ').substring(0, 19);
+  }
+
+  if (typeof dt === 'number') {
+    dt = new Date(dt);
+  }
+
+  if (typeof dt === 'object') {
+    const o = {
+      'M+': dt.getMonth() + 1,
+      'd+': dt.getDate(),
+      'h+': dt.getHours(),
+      'm+': dt.getMinutes(),
+      's+': dt.getSeconds(),
+      'q+': Math.floor((dt.getMonth() + 3) / 3),
+      'S': dt.getMilliseconds(),
+    };
+    if (/(y+)/.test(format)) {
+      format = format.replace(RegExp.$1,
+        (dt.getFullYear() + '').substr(4 - RegExp.$1.length));
+    }
+    for (const k in o) {
+      if (new RegExp('(' + k + ')').test(format)) {
+        format = format.replace(RegExp.$1,
+          RegExp.$1.length === 1 ? o[k] : ('00' + o[k]).substr(
+            ('' + o[k]).length));
+      }
+    }
+
+    return format;
+  }
+
+  return dt;
+}

@@ -1,9 +1,9 @@
 <template>
   <div class="role-manage">
     <div>
-      <el-select v-model="coin">
+      <el-select v-model="coin" filterable>
         <el-option value="">全部</el-option>
-        <el-option value="btc">btc</el-option>
+        <!--<el-option value="btc">btc</el-option>-->
         <el-option value="bch">bch</el-option>
         <el-option value="eth">eth</el-option>
         <el-option value="etc">etc</el-option>
@@ -18,6 +18,7 @@
         <el-option value="iost">iost</el-option>
         <el-option value="neo">neo</el-option>
 
+        <el-option value="ont">ont</el-option>
         <el-option value="trx">trx</el-option>
         <el-option value="mds">mds</el-option>
         <el-option value="ht">ht</el-option>
@@ -59,14 +60,19 @@
       :data="list"
       style="width: 100%">
       <el-table-column
-        prop="buyDate"
         label="bDate"
-        width="170">
+        width="160">
+        <template slot-scope="scope">
+          {{scope.row.buyDate | formatDate}}
+        </template>
       </el-table-column>
       <el-table-column
         prop="userName"
         label="name"
-        width="45">
+        width="80">
+        <template slot-scope="scope">
+          {{scope.row.userName}}({{scope.row.coin}})
+        </template>
       </el-table-column>
       <template>
         <el-table-column
@@ -81,7 +87,7 @@
         <el-table-column
           v-if="hasSell !== '2'"
           label="syrate"
-          width="70">
+          width="65">
           <template slot-scope="scope">
             <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity/(scope.row.buyTradePrice * scope.row.buyTotalQuantity)).toFixed(3):''}}</span>
           </template>
@@ -105,9 +111,11 @@
       </el-table-column>
       <template>
         <el-table-column
-          prop="sellDate"
           label="sDate"
-          width="170">
+          width="160">
+          <template slot-scope="scope">
+            {{scope.row.sellDate | formatDate}}
+          </template>
         </el-table-column>
         <el-table-column
           label="sop/stp"
@@ -138,61 +146,61 @@
 </template>
 
 <script>
-  import {fetchSpotRecord} from '../../api/spotrecord'
+  import {fetchSpotRecord} from '../../api/spotrecord';
 
   export default {
     name: 'HelloWorld',
     data() {
       return {
-        min:0,
-        max:0,
+        min: 0,
+        max: 0,
         coin: '',
         order: 'Id',
         username: '',
         coinList: [],
         hasSell: '0',
-        formLabelWidth: '100px'
-      }
+        formLabelWidth: '100px',
+      };
     },
-    created: function () {
+    created: function() {
     },
     computed: {
-      list: function () {
-        let hasSell = this.hasSell
-        let rs = this.coinList
+      list: function() {
+        let hasSell = this.hasSell;
+        let rs = this.coinList;
         if (hasSell === '1') {
-          rs = this.coinList.filter(it => it.hasSell)
+          rs = this.coinList.filter(it => it.hasSell);
         } else if (hasSell === '2') {
-          rs = this.coinList.filter(it => !it.hasSell)
+          rs = this.coinList.filter(it => !it.hasSell);
         }
 
-        const {min, max} = this
-        if(min){
-          rs = rs.filter(it=> it.buyTradePrice*it.buyTotalQuantity >= min)
+        const {min, max} = this;
+        if (min) {
+          rs = rs.filter(it => it.buyTradePrice * it.buyTotalQuantity >= min);
         }
-        if(max){
-          rs = rs.filter(it=> it.buyTradePrice*it.buyTotalQuantity <= max)
+        if (max) {
+          rs = rs.filter(it => it.buyTradePrice * it.buyTotalQuantity <= max);
         }
 
-        console.log(111111111, rs)
-        return rs
-      }
+        console.log(111111111, rs);
+        return rs;
+      },
     },
     methods: {
-      fetchSpotRecord: function () {
-        const {coin, username, hasSell} = this
-        let {order} = this
-        let fw = hasSell
+      fetchSpotRecord: function() {
+        const {coin, username, hasSell} = this;
+        let {order} = this;
+        let fw = hasSell;
         if (hasSell === '1') {
-          order = 'SellDate'
+          order = 'SellDate';
         }
         fetchSpotRecord({coin, order, username, fw}).then(data => {
-          data = data.data || data
-          this.coinList = data
-        })
-      }
-    }
-  }
+          data = data.data || data;
+          this.coinList = data;
+        });
+      },
+    },
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

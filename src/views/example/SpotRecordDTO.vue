@@ -1,97 +1,59 @@
 <template>
   <div class="role-manage">
     <div>
-      <el-select v-model="username">
-        <el-option value="">全部</el-option>
-        <el-option value="lzq">lzq</el-option>
-        <el-option value="yxq">yxq</el-option>
-      </el-select>
-      <el-button @click="fetchSpotRecordDTO()" icon="search" type="primary">搜索</el-button>
-      <span>{{list.length}}</span>
+      <el-button @click="refresh()" icon="search" type="primary">刷新</el-button>
     </div>
     <br/>
-    <el-table
-      border
-      :data="list"
-      style="width: 100%">
-      <el-table-column
-        prop="统计日期"
-        label="date"
-        width="190">
-      </el-table-column>
-      <el-table-column
-        prop="交易笔数"
-        label="count"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        prop="投出金额"
-        label="putamount"
-        width="120">
-        <template slot-scope="scope">
-          <span>{{(parseFloat(scope.row.投出金额)).toFixed(4)}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="sy"
-        width="120">
-        <template slot-scope="scope">
-          <span>{{(parseFloat(scope.row.收益)).toFixed(4)}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="收益率"
-        label="rate"
-        width="120">
-        <template slot-scope="scope">
-          <span>{{(parseFloat(scope.row.收益率)).toFixed(4)}}</span>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div>
+      <div style="display: inline-block;width: 430px;margin-right: 10px;vertical-align: top;">
+        <ItemDTO :list="list['lzq']" :total="total['lzq']"/>
+      </div>
+      <div style="display: inline-block;width: 430px;vertical-align: top;">
+        <ItemDTO :list="list['yxq']" :total="total['yxq']"/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-  import {fetchSpotRecordDTO} from '../../api/spotrecord'
+  import {fetchSpotRecordDTO} from '../../api/spotrecord';
+  import ItemDTO from './SpotRecordItemDTO';
 
   export default {
+    components: {ItemDTO},
     name: 'HelloWorld',
     data() {
       return {
-        coin: 'eos',
-        order: 'Id',
-        username: '',
-        list: [],
-        hasSell: '0',
-        formLabelWidth: '100px'
-      }
+        total: {
+          lzq: 0,
+          yxq: 0,
+        },
+        list: {},
+      };
     },
-    created: function () {
+    created: function() {
+      this.refresh();
     },
     computed: {},
     methods: {
-      fetchSpotRecordDTO: function () {
-        const {username} = this
-        fetchSpotRecordDTO({username}).then(data => {
-          data = data.data || data
-          this.list = data
-        })
-      }
-    }
-  }
+      refresh: function() {
+        this.fetchSpotRecordDTO('lzq');
+        this.fetchSpotRecordDTO('yxq');
+      },
+      fetchSpotRecordDTO: function(username) {
+        fetchSpotRecordDTO({username}).then(res => {
+          res = res.data;
+          this.list[username] = res.data;
+          this.total[username] = res.total;
+        });
+      },
+    },
+  };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .role-manage {
     padding: 20px;
-  }
-
-  .permissions-select {
-    text-align: left;
-  }
-
-  .permissions-select .el-tag {
-    margin-right: 5px;
   }
 </style>
