@@ -53,11 +53,11 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
-    path: '/icon',
+    path: '/charts',
     component: Layout,
     children: [{
       path: 'index',
-      component: _import('svg-icons/index'),
+      component: _import('charts/line'),
       name: 'icons',
       meta: { title: 'icons', icon: 'icon', noCache: true }
     }]
@@ -134,22 +134,6 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: 'noredirect',
     children: [{ path: 'log', component: _import('errorLog/index'), name: 'errorLog', meta: { title: 'errorLog', icon: 'bug' }}]
-  },
-
-  {
-    path: '/excel',
-    component: Layout,
-    redirect: '/excel/export-excel',
-    name: 'excel',
-    meta: {
-      title: 'excel',
-      icon: 'excel'
-    },
-    children: [
-      { path: 'export-excel', component: _import('excel/exportExcel'), name: 'exportExcel', meta: { title: 'exportExcel' }},
-      { path: 'export-selected-excel', component: _import('excel/selectExcel'), name: 'selectExcel', meta: { title: 'selectExcel' }},
-      { path: 'upload-excel', component: _import('excel/uploadExcel'), name: 'uploadExcel', meta: { title: 'uploadExcel' }}
-    ]
   },
 
   {
