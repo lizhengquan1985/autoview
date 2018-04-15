@@ -15,3 +15,12 @@ export function fetchSpotRecordDTO(query) {
     params: query,
   });
 }
+
+export function fetchStatisticsLine(query) {
+  return request({
+    url: '/api/spotrecord/line',
+    method: 'get',
+    params: query,
+  });
+}
+
