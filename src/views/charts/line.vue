@@ -17,10 +17,10 @@
         <el-option value="qtum">qtum</el-option>
         <el-option value="iost">iost</el-option>
         <el-option value="neo">neo</el-option>
-        <el-option value="ont">ada</el-option>
+        <el-option value="ada">ada</el-option>
 
-        <el-option value="ont">act</el-option>
-        <el-option value="ont">btm</el-option>
+        <el-option value="act">act</el-option>
+        <el-option value="btm">btm</el-option>
         <el-option value="ont">ont</el-option>
         <el-option value="trx">trx</el-option>
         <el-option value="mds">mds</el-option>
