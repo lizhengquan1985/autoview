@@ -90,10 +90,8 @@ export const asyncRouterMap = [
         ]
       },
       { path: 'tab/index', icon: 'tab', component: _import('example/tab/index'), name: 'tab', meta: { title: 'tab' }},
-      { path: 'tab/spotRecord', icon: 'tab', component: _import('example/SpotRecord'), name: 'spotRecord', meta: { title: 'spotRecord' }},
-      { path: 'tab/spotRecordDTO', icon: 'tab', component: _import('example/SpotRecordDTO'), name: 'spotRecordDTO', meta: { title: 'spotRecordDTO' }},
-      { path: 'tab/tradeRecord', icon: 'tab', component: _import('example/TradeRecord'), name: 'tradeRecord', meta: { title: 'tradeRecord' }},
-      { path: 'tab/marginlzq', icon: 'tab', component: _import('example/marginlzq'), name: 'marginlzq', meta: { title: 'marginlzq' }}
+      { path: 'tab/pigMoreToday', icon: 'tab', component: _import('example/PigMoreToday'), name: 'spotRecord', meta: { title: 'spotRecord' }},
+      { path: 'tab/spotRecordDTO', icon: 'tab', component: _import('example/PigMoreStatisticsDay'), name: 'spotRecordDTO', meta: { title: 'spotRecordDTO' }},
     ]
   },
 
