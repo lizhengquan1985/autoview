@@ -46,7 +46,7 @@
         label="sAmount"
         width="90">
         <template slot-scope="scope">
-          {{scope.row.bAmount.toFixed(2) }}
+          {{scope.row.sAmount.toFixed(2) }}
         </template>
       </el-table-column>
       <el-table-column
