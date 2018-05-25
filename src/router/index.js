@@ -93,6 +93,8 @@ export const asyncRouterMap = [
       { path: 'tab/pigMoreToday', icon: 'tab', component: _import('example/PigMoreToday'), name: 'spotRecord', meta: { title: 'spotRecord' }},
       { path: 'tab/spotRecordDTO', icon: 'tab', component: _import('example/PigMoreStatisticsDay'), name: 'spotRecordDTO', meta: { title: 'spotRecordDTO' }},
       { path: 'tab/dogControl', icon: 'tab', component: _import('example/DogControl'), name: 'dogControl', meta: { title: 'dogControl' }},
+      { path: 'tab/dogMoreNotFinished', icon: 'tab', component: _import('example/DogMoreNotFinished'), name: 'dogMoreNotFinished', meta: { title: 'dogMoreNotFinished' }},
+      { path: 'tab/dogEmptyNotFinished', icon: 'tab', component: _import('example/DogEmptyNotFinished'), name: 'dogEmptyNotFinished', meta: { title: 'dogEmptyNotFinished' }},
     ]
   },
 
