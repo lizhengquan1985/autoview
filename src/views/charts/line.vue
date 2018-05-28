@@ -1,52 +1,8 @@
 <template>
   <div class='chart-container'>
     <div>
-      <el-select v-model="coin" filterable>
-        <el-option value="">全部</el-option>
-        <!--<el-option value="btc">btc</el-option>-->
-        <el-option value="bch">bch</el-option>
-        <el-option value="eth">eth</el-option>
-        <el-option value="etc">etc</el-option>
-        <el-option value="ltc">ltc</el-option>
-        <el-option value="eos">eos</el-option>
-        <el-option value="xrp">xrp</el-option>
-        <el-option value="dash">dash</el-option>
-        <el-option value="zec">zec</el-option>
-        <el-option value="omg">omg</el-option>
-        <el-option value="hsr">hsr</el-option>
-        <el-option value="qtum">qtum</el-option>
-        <el-option value="iost">iost</el-option>
-        <el-option value="neo">neo</el-option>
-        <el-option value="ada">ada</el-option>
-
-        <el-option value="act">act</el-option>
-        <el-option value="btm">btm</el-option>
-        <el-option value="ont">ont</el-option>
-        <el-option value="trx">trx</el-option>
-        <el-option value="mds">mds</el-option>
-        <el-option value="ht">ht</el-option>
-        <el-option value="ela">ela</el-option>
-        <el-option value="dta">dta</el-option>
-        <el-option value="itc">itc</el-option>
-        <el-option value="ruff">ruff</el-option>
-        <el-option value="theta">theta</el-option>
-        <el-option value="zil">zil</el-option>
-        <el-option value="let">let</el-option>
-        <el-option value="nas">nas</el-option>
-        <el-option value="smt">smt</el-option>
-        <el-option value="snt">snt</el-option>
-        <el-option value="xem">xem</el-option>
-        <el-option value="ven">ven</el-option>
-        <el-option value="elf">elf</el-option>
-        <el-option value="gnt">gnt</el-option>
-        <el-option value="cvc">cvc</el-option>
-        <el-option value="storj">storj</el-option>
-      </el-select>
-      <el-select v-model="username">
-        <el-option value="">全部</el-option>
-        <el-option value="lzq">lzq</el-option>
-        <el-option value="yxq">yxq</el-option>
-      </el-select>
+      <el-input v-model="symbolName" style="width:100px;"/>
+      <el-input v-model="userName" style="width:100px;" placeholder="qq/xx"/>
       <el-button @click="fetchStatisticsLine()" icon="search" type="primary">搜索</el-button>
     </div>
     <div style="width: 900px; overflow-x: auto;">
@@ -64,7 +20,7 @@
     data() {
       return {
         coin: '',
-        username: 'lzq',
+        userName: 'qq',
         zs: [],
         buy: [],
         sell: [],

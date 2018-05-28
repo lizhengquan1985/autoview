@@ -1,7 +1,7 @@
 <template>
-  <div class="role-manage">
+  <div class="app-container">
     <div>
-      <el-input v-model="symbolName"/>
+      <el-input v-model="symbolName" style="width: 200px;"/>
       <el-button @click="fetchDogMoreNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
     <br/>
@@ -108,8 +108,7 @@
     },
     created: function() {
     },
-    computed: {
-    },
+    computed: {},
     methods: {
       fetchDogMoreNotFinished: function() {
         const {symbolName} = this;
