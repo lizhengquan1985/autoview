@@ -1,123 +1,126 @@
 <template>
-  <div class="role-manage">
+  <div class="app-container">
     <div>
-      <el-input v-model="symbolName"/>
-      <el-button @click="fetchDogEmptyNotFinished()" icon="search" type="primary">搜索</el-button>
+      <el-input v-model="symbolName" style="width: 200px;"/>{{coinList.length}}
+      <el-button @click="listEmptySellIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
     <br/>
     <el-table
       border
-      :data="list"
+      :data="coinList"
       style="width: 100%">
       <el-table-column
-        label="bDate"
-        width="160">
-        <template slot-scope="scope">
-          {{scope.row.buyDate | formatDate}}
-        </template>
-      </el-table-column>
-      <el-table-column
         prop="userName"
-        label="name"
-        width="80">
-        <template slot-scope="scope">
-          {{scope.row.userName}}({{scope.row.coin}})
-        </template>
-      </el-table-column>
-      <template>
-        <el-table-column
-          label="sy"
-          width="70">
-          <template slot-scope="scope">
-            <el-tooltip effect="dark" :content="scope.row.coin" placement="top">
-              <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity -  scope.row.buyTradePrice * scope.row.buyTotalQuantity).toFixed(4):''}}</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="hasSell !== '2'"
-          label="syrate"
-          width="65">
-          <template slot-scope="scope">
-            <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity/(scope.row.buyTradePrice * scope.row.buyTotalQuantity)).toFixed(3):''}}</span>
-          </template>
-        </el-table-column>
-      </template>
-      <el-table-column
-        label="bop/btp"
+        label="userName"
         width="110">
+      </el-table-column>
+      <el-table-column
+        prop="sellTradePrice"
+        label="sellTradePrice"
+        width="115">
         <template slot-scope="scope">
-          <el-tooltip effect="dark" :content="scope.row.coin" placement="top">
-            <span>{{scope.row.buyOrderPrice}}/{{scope.row.buyTradePrice}}</span>
-          </el-tooltip>
+          {{scope.row.sellTradePrice.toFixed(4)}}
         </template>
       </el-table-column>
       <el-table-column
-        label="总数量/总金额"
-        width="120">
+        prop="sellState"
+        label="sellState"
+        width="110">
+      </el-table-column>
+      <el-table-column
+        prop="sellOrderId"
+        label="sellOrderId"
+        width="110">
+      </el-table-column>
+      <el-table-column
+        prop="sellDate"
+        label="sellDate"
+        width="110">
+      </el-table-column>
+      <el-table-column
+        prop="isFinished"
+        label="isFinished"
+        width="110">
+      </el-table-column>
+      <el-table-column
+        label="操作">
         <template slot-scope="scope">
-          <span>{{scope.row.buyTotalQuantity}}/{{(scope.row.buyTradePrice*scope.row.buyTotalQuantity).toFixed(2)}}</span>
+          <el-button size="mini" @click="shouge(scope.row.sellOrderId)">收割</el-button>
+          <el-button size="mini" @click="forceShouge(scope.row.sellOrderId)">强制收割</el-button>
+          <el-button size="mini" @click="orderShouge(scope.row.sellOrderId)">指令收割</el-button>
+          <el-button size="mini" @click="orderForceShouge(scope.row.sellOrderId)">指令强制收割</el-button>
+          <el-button size="mini" @click="orderHuiben(scope.row.sellOrderId)">指令强制收割</el-button>
         </template>
       </el-table-column>
-      <template>
-        <el-table-column
-          label="sDate"
-          width="160">
-          <template slot-scope="scope">
-            {{scope.row.sellDate | formatDate}}
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="sop/stp"
-          width="110">
-          <template slot-scope="scope">
-            <el-tooltip effect="dark" :content="scope.row.coin" placement="top">
-              <span>{{scope.row.sellOrderPrice}}/{{scope.row.sellTradePrice}}</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="总数量/总金额"
-          width="120">
-          <template slot-scope="scope">
-            <span>{{scope.row.sellTotalQuantity}}/{{(scope.row.sellTotalQuantity*scope.row.sellTradePrice).toFixed(2)}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="success"
-          width="80">
-          <template slot-scope="scope">
-            <span>{{scope.row.buySuccess?'yes':'no'}}/{{scope.row.sellSuccess?'yes':'no'}}</span>
-          </template>
-        </el-table-column>
-      </template>
     </el-table>
   </div>
 </template>
 
 <script>
-  import {fetchSpotRecord} from '../../api/spotrecord';
+  import {
+    listEmptySellIsNotFinished,
+    shouge,
+    forceShouge,
+  } from '../../api/empty';
+  import {
+    createOrderReap
+  } from '../../api/orderReap';
+  import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
 
   export default {
+    components: {ElButton},
     name: 'HelloWorld',
     data() {
       return {
         symbolName: '',
         emptyList: [],
+        coinList:[]
       };
     },
-    created: function() {
+    created: function () {
     },
-    computed: {
-    },
+    computed: {},
     methods: {
-      fetchDogEmptyNotFinished: function() {
+      listEmptySellIsNotFinished: function () {
         const {symbolName} = this;
-        fetchSpotRecord({symbolName}).then(data => {
+        listEmptySellIsNotFinished({symbolName}).then(data => {
           data = data.data || data;
           this.coinList = data;
         });
       },
+      shouge: function (orderId) {
+        shouge({orderId}).then(()=>{})
+      },
+      forceShouge: function (orderId) {
+        forceShouge({orderId}).then(()=>{})
+      },
+      orderShouge: function (orderId) {
+        createOrderReap({
+          reapType:0,
+          orderId,
+          isMore:false
+        }).then(()=>{
+
+        })
+      },
+      orderForceShouge: function (orderId) {
+        createOrderReap({
+          reapType:1,
+          orderId,
+          isMore:false
+        }).then(()=>{
+
+        })
+      },
+      orderHuiben: function (orderId) {
+        createOrderReap({
+          reapType:2,
+          orderId,
+          isMore:false
+        }).then(()=>{
+
+        })
+      }
     },
   };
 </script>
