@@ -1,7 +1,8 @@
 <template>
   <div class="app-container">
     <div>
-      <el-input v-model="symbolName" style="width: 200px;"/>{{coinList.length}}
+      <el-input v-model="symbolName" style="width: 200px;"/>
+      {{coinList.length}}
       <el-button @click="listEmptySellIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
     <br/>
@@ -63,64 +64,63 @@
     forceShouge,
   } from '../../api/empty';
   import {
-    createOrderReap
+    createOrderReap,
   } from '../../api/orderReap';
-  import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
 
   export default {
-    components: {ElButton},
+    components: {},
     name: 'HelloWorld',
     data() {
       return {
         symbolName: '',
         emptyList: [],
-        coinList:[]
+        coinList: [],
       };
     },
-    created: function () {
+    created: function() {
     },
     computed: {},
     methods: {
-      listEmptySellIsNotFinished: function () {
+      listEmptySellIsNotFinished: function() {
         const {symbolName} = this;
         listEmptySellIsNotFinished({symbolName}).then(data => {
           data = data.data || data;
           this.coinList = data;
         });
       },
-      shouge: function (orderId) {
-        shouge({orderId}).then(()=>{})
+      shouge: function(orderId) {
+        shouge({orderId}).then(() => {});
       },
-      forceShouge: function (orderId) {
-        forceShouge({orderId}).then(()=>{})
+      forceShouge: function(orderId) {
+        forceShouge({orderId}).then(() => {});
       },
-      orderShouge: function (orderId) {
+      orderShouge: function(orderId) {
         createOrderReap({
-          reapType:0,
+          reapType: 0,
           orderId,
-          isMore:false
-        }).then(()=>{
+          isMore: false,
+        }).then(() => {
 
-        })
+        });
       },
-      orderForceShouge: function (orderId) {
+      orderForceShouge: function(orderId) {
         createOrderReap({
-          reapType:1,
+          reapType: 1,
           orderId,
-          isMore:false
-        }).then(()=>{
+          isMore: false,
+        }).then(() => {
 
-        })
+        });
       },
-      orderHuiben: function (orderId) {
+      orderHuiben: function(orderId) {
         createOrderReap({
-          reapType:2,
+          reapType: 2,
           orderId,
-          isMore:false
-        }).then(()=>{
+          isMore: false,
+        }).then(() => {
 
-        })
-      }
+        });
+      },
     },
   };
 </script>
