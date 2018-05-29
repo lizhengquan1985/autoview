@@ -96,13 +96,13 @@ export const asyncRouterMap = [
         name: 'spotRecord',
         meta: {title: 'spotRecord'},
       },
-      {
-        path: 'tab/dogMoreFinished',
-        icon: 'tab',
-        component: _import('example/DogMoreFinished'),
-        name: 'dogMoreFinished',
-        meta: {title: 'dogMoreFinished'},
-      },
+      // {
+      //   path: 'tab/dogMoreFinished',
+      //   icon: 'tab',
+      //   component: _import('example/DogMoreFinished'),
+      //   name: 'dogMoreFinished',
+      //   meta: {title: 'dogMoreFinished'},
+      // },
       {
         path: 'tab/dogControl',
         icon: 'tab',
