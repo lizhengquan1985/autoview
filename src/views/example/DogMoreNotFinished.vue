@@ -2,101 +2,70 @@
   <div class="app-container">
     <div>
       <el-input v-model="symbolName" style="width: 200px;"/>
-      <el-button @click="fetchDogMoreNotFinished()" icon="search" type="primary">搜索</el-button>
+      <el-button @click="listMoreBuyIsNotFinished()" icon="search" type="primary">搜索</el-button>
+    </div>
+    <div>
+      <label>总次数：{{moreList.length}}</label>
+      <label>总额度：{{totalAmount}}</label>
     </div>
     <br/>
     <el-table
       border
-      :data="list"
+      :data="moreList"
       style="width: 100%">
       <el-table-column
-        label="bDate"
-        width="160">
+        prop="buyOrderId"
+        label="订单"
+        width="100">
+      </el-table-column>
+      <el-table-column
+        prop="userName"
+        label="userName"
+        width="90">
+      </el-table-column>
+      <el-table-column
+        prop="buyState"
+        label="buyState"
+        width="90">
+      </el-table-column>
+      <el-table-column
+        prop="buyTradePrice"
+        label="交易价"
+        width="90">
+      </el-table-column>
+      <el-table-column
+        prop="buyQuantity"
+        label="数量"
+        width="90">
+      </el-table-column>
+      <el-table-column
+        prop="buyQuantity"
+        label="总额度"
+        width="90">
+        <template slot-scope="scope">
+          {{(scope.row.buyQuantity * scope.row.buyTradePrice).toFixed(2, '')}}
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="buyDate"
+        label="buyDate"
+        width="155">
         <template slot-scope="scope">
           {{scope.row.buyDate | formatDate}}
         </template>
       </el-table-column>
       <el-table-column
-        prop="userName"
-        label="name"
-        width="80">
+        label="操作">
         <template slot-scope="scope">
-          {{scope.row.userName}}({{scope.row.coin}})
+          {{scope.row.buyDate | formatDate}}
         </template>
       </el-table-column>
-      <template>
-        <el-table-column
-          label="sy"
-          width="70">
-          <template slot-scope="scope">
-            <el-tooltip effect="dark" :content="scope.row.coin" placement="top">
-              <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity -  scope.row.buyTradePrice * scope.row.buyTotalQuantity).toFixed(4):''}}</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-        <el-table-column
-          v-if="hasSell !== '2'"
-          label="syrate"
-          width="65">
-          <template slot-scope="scope">
-            <span>{{scope.row.hasSell?(scope.row.sellTradePrice * scope.row.sellTotalQuantity/(scope.row.buyTradePrice * scope.row.buyTotalQuantity)).toFixed(3):''}}</span>
-          </template>
-        </el-table-column>
-      </template>
-      <el-table-column
-        label="bop/btp"
-        width="110">
-        <template slot-scope="scope">
-          <el-tooltip effect="dark" :content="scope.row.coin" placement="top">
-            <span>{{scope.row.buyOrderPrice}}/{{scope.row.buyTradePrice}}</span>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="总数量/总金额"
-        width="120">
-        <template slot-scope="scope">
-          <span>{{scope.row.buyTotalQuantity}}/{{(scope.row.buyTradePrice*scope.row.buyTotalQuantity).toFixed(2)}}</span>
-        </template>
-      </el-table-column>
-      <template>
-        <el-table-column
-          label="sDate"
-          width="160">
-          <template slot-scope="scope">
-            {{scope.row.sellDate | formatDate}}
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="sop/stp"
-          width="110">
-          <template slot-scope="scope">
-            <el-tooltip effect="dark" :content="scope.row.coin" placement="top">
-              <span>{{scope.row.sellOrderPrice}}/{{scope.row.sellTradePrice}}</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="总数量/总金额"
-          width="120">
-          <template slot-scope="scope">
-            <span>{{scope.row.sellTotalQuantity}}/{{(scope.row.sellTotalQuantity*scope.row.sellTradePrice).toFixed(2)}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="success"
-          width="80">
-          <template slot-scope="scope">
-            <span>{{scope.row.buySuccess?'yes':'no'}}/{{scope.row.sellSuccess?'yes':'no'}}</span>
-          </template>
-        </el-table-column>
-      </template>
     </el-table>
   </div>
 </template>
 
 <script>
-  import {fetchSpotRecord} from '../../api/spotrecord';
+  import {listMoreBuyIsNotFinished} from '../../api/more';
 
   export default {
     name: 'HelloWorld',
@@ -104,17 +73,23 @@
       return {
         symbolName: '',
         moreList: [],
+        totalAmount: 0
       };
     },
-    created: function() {
+    created: function () {
     },
     computed: {},
     methods: {
-      fetchDogMoreNotFinished: function() {
+      listMoreBuyIsNotFinished: function () {
         const {symbolName} = this;
-        fetchSpotRecord({symbolName}).then(data => {
+        listMoreBuyIsNotFinished({symbolName}).then(data => {
           data = data.data || data;
-          this.coinList = data;
+          this.moreList = data;
+          let totalAmount = 0;
+          for (var item of data) {
+            totalAmount += item.buyQuantity * item.buyTradePrice
+          }
+          this.totalAmount = totalAmount;
         });
       },
     },
