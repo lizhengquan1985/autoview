@@ -23,3 +23,25 @@ export function listMoreBuyIsNotFinished(data) {
     params: data
   });
 }
+
+export function listMoreBuyIsFinished(data) {
+  return request({
+    url: '/api/More/listMoreBuyIsFinished',
+    method: 'get',
+    params: data
+  });
+}
+export function getMoreBuyDetail(data) {
+  return request({
+    url: '/api/More/getMoreBuyDetail',
+    method: 'get',
+    params: data
+  });
+}
+export function deleteMore(data) {
+  return request({
+    url: '/api/More/delete',
+    method: 'get',
+    params: data
+  });
+}
