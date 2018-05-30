@@ -45,3 +45,10 @@ export function deleteMore(data) {
     params: data
   });
 }
+export function emptyInfo(data) {
+  return request({
+    url: '/api/Empty/emptyInfo',
+    method: 'get',
+    params: data
+  });
+}

@@ -125,6 +125,13 @@ export const asyncRouterMap = [
         meta: {title: 'dogMoreNotFinished'},
       },
       {
+        path: 'tab/dogMoreForEmpty',
+        icon: 'tab',
+        component: _import('example/DogMoreForEmpty'),
+        name: 'dogMoreNotFinished',
+        meta: {title: 'dogMoreForEmpty'},
+      },
+      {
         path: 'tab/dogEmptyNotFinished',
         icon: 'tab',
         component: _import('example/DogEmptyNotFinished'),
