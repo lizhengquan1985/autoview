@@ -124,13 +124,20 @@ export const asyncRouterMap = [
         name: 'dogMoreNotFinished',
         meta: {title: 'dogMoreNotFinished'},
       },
-      // {
-      //   path: 'tab/dogMoreForEmpty',
-      //   icon: 'tab',
-      //   component: _import('example/DogMoreForEmpty'),
-      //   name: 'dogMoreNotFinished',
-      //   meta: {title: 'dogMoreForEmpty'},
-      // },
+      {
+        path: 'tab/dogEmptyFinished',
+        icon: 'tab',
+        component: _import('example/DogEmptyFinished'),
+        name: 'dogEmptyFinished',
+        meta: {title: 'dogEmptyFinished'},
+      },
+      {
+        path: 'tab/dogMoreForEmpty',
+        icon: 'tab',
+        component: _import('example/DogMoreForEmpty'),
+        name: 'dogMoreNotFinished',
+        meta: {title: 'dogMoreForEmpty'},
+      },
       {
         path: 'tab/dogEmptyNotFinished',
         icon: 'tab',
