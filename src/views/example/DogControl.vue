@@ -1,60 +1,7 @@
 <template>
   <div style="padding: 5px;">
-    <div>
-      <el-input v-model="symbolName" style="width: 150px;"  @keyup.enter.native="search()"/>
-    </div>
-    <div v-if="controlObj" style="width: 600px;">
-      <div class="item">
-        <label>maxInputPrice:</label>
-        <el-input-number size="small" v-model="controlObj.maxInputPrice" style="width: 100px;"/>
-        <el-date-picker
-          size="mini"
-          v-model="controlObj.maxInputPriceExpiredTime"
-          type="datetime"
-          placeholder="选择日期时间">
-        </el-date-picker>
-      </div>
-
-      <div class="item">
-        <label>avgInputAmount:</label>
-        <el-input-number size="small" v-model="controlObj.avgInputAmount" style="width: 100px;"/>
-
-        <el-date-picker
-          size="mini"
-          v-model="controlObj.avgInputExpiredTime"
-          type="datetime"
-          placeholder="选择日期时间">
-        </el-date-picker>
-      </div>
-
-      <div class="item">
-        <label>doempty:</label>
-        <el-input-number size="small" v-model="controlObj.emptyPrice" style="width: 100px;"/>
-        <el-date-picker
-          size="mini"
-          v-model="controlObj.emptyExpiredTime"
-          type="datetime"
-          placeholder="选择日期时间">
-        </el-date-picker>
-      </div>
-
-      <div class="item">
-        <label>predictPrice:</label>
-        <el-input-number size="small" v-model="controlObj.predictPrice" style="width: 100px;"/>
-        <el-date-picker
-          size="mini"
-          v-model="controlObj.predictExpiredTime"
-          type="datetime"
-          placeholder="选择日期时间">
-        </el-date-picker>
-      </div>
-      <div style="text-align: center;">
-        <el-button type="primary" size="mini" @click="saveControlObj()">保存</el-button>
-      </div>
-    </div>
 
     <el-table
-      v-else
       border
       size="mini"
       :data="dataList"
@@ -66,63 +13,147 @@
       </el-table-column>
       <el-table-column
         label="最大投入价格"
-        width="240">
+        width="155">
         <template slot-scope="scope">
-          <el-input-number size="small" v-model="scope.row.maxInputPrice" style="margin-bottom: 2px;"/>
-          <el-date-picker
-            size="mini"
-            v-model="scope.row.maxInputPriceExpiredTime"
-            type="datetime"
-            placeholder="选择日期时间">
-          </el-date-picker>
+          <div>{{scope.row.maxInputPrice}}</div>
+          <div>{{scope.row.maxInputPriceExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
       <el-table-column
         label="平均投入额度"
-        width="240">
+        width="145">
         <template slot-scope="scope">
-          <el-input-number size="small" v-model="scope.row.avgInputAmount" style="margin-bottom: 2px;"/>
-          <el-date-picker
-            size="mini"
-            v-model="scope.row.avgInputExpiredTime"
-            type="datetime"
-            placeholder="选择日期时间">
-          </el-date-picker>
+          <div>{{scope.row.avgInputAmount}}</div>
+          <div>{{scope.row.avgInputExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
       <el-table-column
         label="做空价格"
-        width="240">
+        width="145">
         <template slot-scope="scope">
-          <el-input-number size="small" v-model="scope.row.emptyPrice" style="margin-bottom: 2px;"/>
-          <el-date-picker
-            size="mini"
-            v-model="scope.row.emptyExpiredTime"
-            type="datetime"
-            placeholder="选择日期时间">
-          </el-date-picker>
+          <div>{{scope.row.emptyPrice}}</div>
+          <div>{{scope.row.emptyExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
       <el-table-column
         label="预计价格"
-        width="240">
+        width="145">
         <template slot-scope="scope">
-          <el-input-number size="small" v-model="scope.row.predictPrice" style="margin-bottom: 2px;"/>
-          <el-date-picker
-            size="mini"
-            v-model="scope.row.predictExpiredTime"
-            type="datetime"
-            placeholder="选择日期时间">
-          </el-date-picker>
+          <div>{{scope.row.predictPrice}}</div>
+          <div>{{scope.row.predictExpiredTime | formatDate}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="阶梯购入比"
+        width="135">
+        <template slot-scope="scope">
+          <div>{{scope.row.ladderBuyPercent}}</div>
+          <div>{{scope.row.ladderBuyExpiredTime | formatDate}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="阶梯出售比"
+        width="135">
+        <template slot-scope="scope">
+          <div>{{scope.row.ladderSellPercent}}</div>
+          <div>{{scope.row.ladderSellExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
       <el-table-column
         label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="save(scope.$index)">保存</el-button>
+          <el-button size="mini" @click="showEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog title="编辑配置" :visible.sync="dialogFormVisible" :width="'520px'">
+      <el-form :model="form" :rules="rules" ref="ruleForm">
+        <el-form-item label="maxInputPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.maxInputPrice" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="maxInputExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-date-picker
+            size="mini"
+            v-model="form.maxInputPriceExpiredTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择日期时间">
+          </el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="avgInputAmount：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.avgInputAmount" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="avgInputExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-date-picker
+            size="mini"
+            v-model="form.avgInputExpiredTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择日期时间">
+          </el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="emptyPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.emptyPrice" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="emptyExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-date-picker
+            size="mini"
+            v-model="form.emptyExpiredTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择日期时间">
+          </el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="predictPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.predictPrice" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="predictExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-date-picker
+            size="mini"
+            v-model="form.predictExpiredTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择日期时间">
+          </el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="ladderBuyPercent：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.ladderBuyPercent" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="ladderBuyExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-date-picker
+            size="mini"
+            v-model="form.ladderBuyExpiredTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择日期时间">
+          </el-date-picker>
+        </el-form-item>
+
+        <el-form-item label="ladderSellPercent：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.ladderSellPercent" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="ladderSellExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-date-picker
+            size="mini"
+            v-model="form.ladderSellExpiredTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择日期时间">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">关 闭</el-button>
+        <el-button type="primary" @click="saveControlObj('ruleForm')">确 定
+        </el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -136,12 +167,10 @@
       return {
         symbolName: '',
         dataList: [],
-        tlCount: 0,
-        tlAmount: 0,
-        tlNowAmount: 0,
-        yxqDetail: [],
-        formLabelWidth: '100px',
-        controlObj: null,
+        formLabelWidth: '180px',
+        form: {},
+        dialogFormVisible: false,
+        rules: [],
       };
     },
     created: function() {
@@ -162,14 +191,15 @@
           this.dataList = data.data;
         });
       },
-      save: function(index) {
-        createDogControl(this.dataList[index]);
-      },
-      search: function() {
-        this.controlObj = this.dataList.find(it => it.symbolName === this.symbolName);
+      showEdit: function(row) {
+        this.dialogFormVisible = true;
+        this.form = {...row};
       },
       saveControlObj: function() {
-        createDogControl(this.controlObj);
+        createDogControl(this.form).then(() => {
+          this.dialogFormVisible = false;
+          this.listDogControl();
+        });
       },
     },
   };
