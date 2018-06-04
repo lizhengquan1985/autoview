@@ -23,3 +23,26 @@ export function listEmptySellIsNotFinished(data) {
     params: data
   });
 }
+
+
+export function listEmptySellIsFinished(data) {
+  return request({
+    url: '/api/Empty/listEmptySellIsFinished',
+    method: 'get',
+    params: data
+  });
+}
+export function getEmptySellDetail(data) {
+  return request({
+    url: '/api/Empty/getEmptySellDetail',
+    method: 'get',
+    params: data
+  });
+}
+export function deleteEmpty(data) {
+  return request({
+    url: '/api/Empty/delete',
+    method: 'get',
+    params: data
+  });
+}

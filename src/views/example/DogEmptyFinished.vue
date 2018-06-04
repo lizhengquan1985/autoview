@@ -6,60 +6,59 @@
         <el-option value="xx">xx</el-option>
       </el-select>
       <el-input v-model="symbolName" style="width: 200px;"/>
-      <el-button @click="listMoreBuyIsFinished()" icon="search" type="primary">搜索</el-button>
-      <span>{{moreList.length}}</span>
+      <el-button @click="listEmptySellIsFinished()" icon="search" type="primary">搜索</el-button>
+      <span>{{emptyList.length}}</span>
     </div>
     <br/>
     <el-table
       border
-      :data="moreList"
+      :data="emptyList"
       style="width: 100%">
       <el-table-column
-        prop="buyTradePrice"
-        label="buyTradePrice"
+        prop="sellTradePrice"
+        label="sellTradePrice"
         width="130">
       </el-table-column>
       <el-table-column
-        prop="buyQuantity"
-        label="buyQuantity"
+        prop="sellQuantity"
+        label="sellQuantity"
         width="120">
       </el-table-column>
       <el-table-column
         label="总额"
         width="90">
         <template slot-scope="scope">
-          {{(scope.row.buyTradePrice * scope.row.buyQuantity).toFixed(3) }}
+          {{(scope.row.sellTradePrice * scope.row.sellQuantity).toFixed(3) }}
         </template>
       </el-table-column>
       <el-table-column
-        prop="buyState"
-        label="buyState"
+        prop="sellState"
+        label="sellState"
         width="90">
       </el-table-column>
       <el-table-column
-        prop="buyDate"
-        label="buyDate"
+        prop="sellDate"
+        label="sellDate"
         width="155">
         <template slot-scope="scope">
-          {{scope.row.buyDate | formatDate }}
+          {{scope.row.sellDate | formatDate }}
         </template>
       </el-table-column>
       <el-table-column
         label="操作">
         <template slot-scope="scope">
-          <el-button @click="showDetail(scope.row.buyOrderId)">详情</el-button>
-          <el-button @click="deleteMore(scope.row.buyOrderId)">删除</el-button>
+          <el-button @click="showDetail(scope.row.sellOrderId)">详情</el-button>
+          <el-button @click="deleteEmpty(scope.row.sellOrderId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-
 
     <el-dialog title="详情" :visible.sync="dialogVisible" width="500px">
       <div>
         <div v-for="item in Object.keys(detail)"><span class="detail-item">{{item}}</span> {{detail[item]}}</div>
       </div>
       <div>
-        <el-button type="danger" @click="deleteMore(detail.buyOrderId)">删除</el-button>
+        <el-button type="danger" @click="deleteEmpty(detail.sellOrderId)">删除</el-button>
         <el-button type="primary" style="float: right;" @click="dialogVisible=false">关闭</el-button>
       </div>
     </el-dialog>
@@ -67,7 +66,7 @@
 </template>
 
 <script>
-  import {listMoreBuyIsFinished, getMoreBuyDetail, deleteMore} from '../../api/more';
+  import {listEmptySellIsFinished, getEmptySellDetail, deleteEmpty} from '../../api/empty';
   import echarts from 'echarts';
   import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
 
@@ -76,13 +75,9 @@
     name: 'HelloWorld',
     data() {
       return {
-        min: 0,
-        max: 0,
-        coin: '',
-        order: 'Id',
         userName: 'qq',
         symbolName: '',
-        moreList: [],
+        emptyList: [],
         hasSell: '0',
         dialogVisible: false,
         formLabelWidth: '100px',
@@ -90,32 +85,31 @@
       };
     },
     created: function () {
-      this.listMoreBuyIsFinished();
+      this.listEmptySellIsFinished();
     },
     computed: {},
     methods: {
-      listMoreBuyIsFinished: function () {
+      listEmptySellIsFinished: function () {
         const {userName, symbolName} = this;
-        listMoreBuyIsFinished({userName, symbolName}).then(data => {
+        listEmptySellIsFinished({userName, symbolName}).then(data => {
           data = data.data || data;
-          this.moreList = data;
+          this.emptyList = data;
         });
       },
-      showDetail: function (buyOrderId) {
-        getMoreBuyDetail({buyOrderId}).then(data => {
+      showDetail: function (sellOrderId) {
+        getEmptySellDetail({sellOrderId}).then(data => {
           this.detail = data.data;
-          this.detail.buyOrderId = buyOrderId;
           this.dialogVisible = true;
         })
       },
-      deleteMore: function (buyOrderId) {
+      deleteEmpty: function (sellOrderId) {
         this.$confirm('删除吗', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          deleteMore({buyOrderId}).then(data => {
-            this.listMoreBuyIsFinished();
+          deleteEmpty({sellOrderId}).then(data => {
+            this.listEmptySellIsFinished();
             this.dialogVisible = false;
           })
         })
