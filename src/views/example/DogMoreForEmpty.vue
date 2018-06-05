@@ -7,6 +7,9 @@
       </el-select>
       <el-input v-model="symbolName" style="width: 200px;"/>
       <el-button @click="emptyInfo()" icon="search" type="primary">搜索</el-button>
+
+      <el-button @click="doEmpty()" icon="search" type="primary">做空一次</el-button>
+
     </div>
     <div>
       <label>总次数：{{moreList.length}}</label>
@@ -72,6 +75,7 @@
 
 <script>
   import {emptyInfo} from '../../api/more';
+  import {doEmpty} from '../../api/empty';
 
   export default {
     name: 'HelloWorld',
@@ -103,6 +107,12 @@
           this.totalAmount = totalAmount;
         });
       },
+      doEmpty:function () {
+        const {symbolName, userName} = this;
+        doEmpty({userName,symbolName}).then(()=>{
+
+        })
+      }
     },
   };
 </script>

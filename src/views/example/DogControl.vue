@@ -1,6 +1,7 @@
 <template>
   <div style="padding: 5px;">
 
+    <el-button size="mini" @click="showEdit({})">新增</el-button>
     <el-table
       border
       size="mini"
@@ -69,6 +70,9 @@
 
     <el-dialog title="编辑配置" :visible.sync="dialogFormVisible" :width="'520px'">
       <el-form :model="form" :rules="rules" ref="ruleForm">
+        <el-form-item label="symbolName：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input size="small" v-model="form.symbolName" style="width: 200px;"/>
+        </el-form-item>
         <el-form-item label="maxInputPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input-number size="small" v-model="form.maxInputPrice" style="width: 200px;"/>
         </el-form-item>

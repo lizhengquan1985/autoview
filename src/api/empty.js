@@ -46,3 +46,12 @@ export function deleteEmpty(data) {
     params: data
   });
 }
+
+export function doEmpty(data) {
+  return request({
+    url: '/api/Empty/doEmpty',
+    method: 'post',
+    params: data
+  });
+}
+
