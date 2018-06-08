@@ -31,6 +31,15 @@ export function listMoreBuyIsFinished(data) {
     params: data
   });
 }
+
+export function listMoreBuyIsFinishedDetail(data) {
+  return request({
+    url: '/api/More/listMoreBuyIsFinishedDetail',
+    method: 'get',
+    params: data
+  });
+}
+
 export function getMoreBuyDetail(data) {
   return request({
     url: '/api/More/getMoreBuyDetail',

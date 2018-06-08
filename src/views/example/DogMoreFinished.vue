@@ -15,6 +15,16 @@
       :data="moreList"
       style="width: 100%">
       <el-table-column
+        prop="userName"
+        label="人"
+        width="40">
+      </el-table-column>
+      <el-table-column
+        prop="symbolName"
+        label="symbol"
+        width="90">
+      </el-table-column>
+      <el-table-column
         prop="buyTradePrice"
         label="buyTradePrice"
         width="130">
@@ -25,11 +35,9 @@
         width="120">
       </el-table-column>
       <el-table-column
+        prop="buyAmount"
         label="总额"
         width="90">
-        <template slot-scope="scope">
-          {{(scope.row.buyTradePrice * scope.row.buyQuantity).toFixed(3) }}
-        </template>
       </el-table-column>
       <el-table-column
         prop="buyState"
@@ -43,6 +51,36 @@
         <template slot-scope="scope">
           {{scope.row.buyDate | formatDate }}
         </template>
+      </el-table-column>
+      <el-table-column
+        prop="sellTradePrice"
+        label="sellTradePrice"
+        width="90">
+      </el-table-column>
+      <el-table-column
+        prop="sellDate"
+        label="sellDate"
+        width="90">
+      </el-table-column>
+      <el-table-column
+        prop="sellQuantity"
+        label="sellQuantity"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="sellAmount"
+        label="sellAmount"
+        width="90">
+      </el-table-column>
+      <el-table-column
+        prop="usdt"
+        label="usdt"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="baseSymbol"
+        label="baseSymbol"
+        width="90">
       </el-table-column>
       <el-table-column
         label="操作">
@@ -67,7 +105,7 @@
 </template>
 
 <script>
-  import {listMoreBuyIsFinished, getMoreBuyDetail, deleteMore} from '../../api/more';
+  import {listMoreBuyIsFinished, getMoreBuyDetail, deleteMore, listMoreBuyIsFinishedDetail} from '../../api/more';
   import echarts from 'echarts';
   import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
 
@@ -96,7 +134,7 @@
     methods: {
       listMoreBuyIsFinished: function () {
         const {userName, symbolName} = this;
-        listMoreBuyIsFinished({userName, symbolName}).then(data => {
+        listMoreBuyIsFinishedDetail({userName, symbolName, pageIndex:0, pageSize:10}).then(data => {
           data = data.data || data;
           this.moreList = data;
         });
