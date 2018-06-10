@@ -21,71 +21,66 @@
       </el-table-column>
       <el-table-column
         prop="symbolName"
-        label="symbol"
+        label="物"
+        width="70">
+      </el-table-column>
+      <el-table-column
+        label="usdt"
         width="90">
-      </el-table-column>
-      <el-table-column
-        prop="buyTradePrice"
-        label="buyTradePrice"
-        width="130">
-      </el-table-column>
-      <el-table-column
-        prop="buyQuantity"
-        label="buyQuantity"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        prop="buyAmount"
-        label="总额"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        prop="buyState"
-        label="buyState"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        prop="buyDate"
-        label="buyDate"
-        width="155">
         <template slot-scope="scope">
-          {{scope.row.buyDate | formatDate }}
+          {{scope.row.usdt.toFixed(4,'')}}
         </template>
       </el-table-column>
       <el-table-column
-        prop="sellTradePrice"
-        label="sellTradePrice"
+        label="symbol"
         width="90">
+        <template slot-scope="scope">
+          {{scope.row.baseSymbol.toFixed(4,'')}}
+        </template>
       </el-table-column>
       <el-table-column
-        prop="sellDate"
-        label="sellDate"
-        width="90">
+        label="波动"
+        width="130">
+        <template slot-scope="scope">
+          {{scope.row.sellTradePrice.toFixed(4,'')}}~
+          {{scope.row.buyTradePrice.toFixed(4,'')}}
+        </template>
       </el-table-column>
       <el-table-column
-        prop="sellQuantity"
-        label="sellQuantity"
+        prop="buyQuantity"
+        label="数量"
+        width="160">
+        <template slot-scope="scope">
+          {{scope.row.buyQuantity.toFixed(4,'')}}~
+          {{scope.row.sellQuantity.toFixed(4,'')}}
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="buyAmount"
+        label="总波动"
         width="120">
+        <template slot-scope="scope">
+          {{scope.row.buyAmount.toFixed(4,'')}}~
+          {{scope.row.sellAmount.toFixed(4,'')}}
+        </template>
       </el-table-column>
       <el-table-column
-        prop="sellAmount"
-        label="sellAmount"
-        width="90">
+        prop="buyDate"
+        label="from~to"
+        width="155">
+        <template slot-scope="scope">
+          {{scope.row.buyDate | formatDate }}
+          {{scope.row.sellDate | formatDate }}
+        </template>
       </el-table-column>
       <el-table-column
-        prop="usdt"
-        label="usdt"
-        width="120">
-      </el-table-column>
-      <el-table-column
-        prop="baseSymbol"
-        label="baseSymbol"
+        prop="buyState"
+        label="state"
         width="90">
       </el-table-column>
       <el-table-column
         label="操作">
         <template slot-scope="scope">
-          <el-button @click="showDetail(scope.row.buyOrderId)">详情</el-button>
           <el-button @click="deleteMore(scope.row.buyOrderId)">删除</el-button>
         </template>
       </el-table-column>

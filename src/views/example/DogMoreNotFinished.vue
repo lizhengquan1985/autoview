@@ -15,12 +15,17 @@
       style="width: 100%">
       <el-table-column
         prop="buyOrderId"
-        label="订单"
+        label="Id"
         width="100">
       </el-table-column>
       <el-table-column
         prop="userName"
-        label="userName"
+        label="name"
+        width="60">
+      </el-table-column>
+      <el-table-column
+        prop="symbolName"
+        label="symbol"
         width="90">
       </el-table-column>
       <el-table-column
@@ -34,10 +39,12 @@
         width="90">
       </el-table-column>
       <el-table-column
-        label="增长"
-        width="130">
+        label="now-more"
+        width="150">
         <template slot-scope="scope">
-          {{close}} --> {{(close/scope.row.buyTradePrice).toFixed(3, '')}}
+          <div v-if="closeDic[scope.row.symbolName]">
+            {{closeDic[scope.row.symbolName].toFixed(4, '')}} --> {{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3, '')}}
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -76,8 +83,9 @@
 </template>
 
 <script>
-  import {listMoreBuyIsNotFinished,
-  shouge,forceShouge
+  import {
+    listMoreBuyIsNotFinished,
+    shouge, forceShouge
   } from '../../api/more';
   import {
     createOrderReap,
@@ -89,7 +97,7 @@
       return {
         symbolName: '',
         moreList: [],
-        close:0,
+        closeDic: {},
         totalAmount: 0
       };
     },
@@ -102,21 +110,23 @@
         listMoreBuyIsNotFinished({symbolName}).then(data => {
           data = data.data || data;
           this.moreList = data.list;
-          this.close = data.close;
+          this.closeDic = data.closeDic;
           let totalAmount = 0;
-          for (var item of data) {
+          for (var item of this.moreList) {
             totalAmount += item.buyQuantity * item.buyTradePrice
           }
           this.totalAmount = totalAmount;
         });
       },
-      shouge: function(orderId) {
-        shouge({orderId}).then(() => {});
+      shouge: function (orderId) {
+        shouge({orderId}).then(() => {
+        });
       },
-      forceShouge: function(orderId) {
-        forceShouge({orderId}).then(() => {});
+      forceShouge: function (orderId) {
+        forceShouge({orderId}).then(() => {
+        });
       },
-      orderShouge: function(orderId) {
+      orderShouge: function (orderId) {
         createOrderReap({
           reapType: 0,
           orderId,
@@ -125,7 +135,7 @@
 
         });
       },
-      orderForceShouge: function(orderId) {
+      orderForceShouge: function (orderId) {
         createOrderReap({
           reapType: 0,
           orderId,
@@ -134,7 +144,7 @@
 
         });
       },
-      orderHuiben: function(orderId) {
+      orderHuiben: function (orderId) {
         createOrderReap({
           reapType: 0,
           orderId,
