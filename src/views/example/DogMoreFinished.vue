@@ -22,37 +22,44 @@
       <el-table-column
         prop="symbolName"
         label="物"
-        width="70">
+        width="68">
       </el-table-column>
       <el-table-column
         label="usdt"
-        width="90">
+        width="65">
         <template slot-scope="scope">
-          {{scope.row.usdt.toFixed(4,'')}}
+          <div :style="{color:scope.row.usdt>0.3?'red':'black'}">
+            {{scope.row.usdt.toFixed(4, '')}}
+          </div>
         </template>
       </el-table-column>
       <el-table-column
         label="symbol"
-        width="90">
+        width="80">
         <template slot-scope="scope">
-          {{scope.row.baseSymbol.toFixed(4,'')}}
+          {{scope.row.baseSymbol.toFixed(4, '')}}
         </template>
       </el-table-column>
       <el-table-column
         label="波动"
-        width="130">
+        width="135">
         <template slot-scope="scope">
-          {{scope.row.sellTradePrice.toFixed(4,'')}}~
-          {{scope.row.buyTradePrice.toFixed(4,'')}}
+          <div>
+            {{scope.row.buyTradePrice.toFixed(4, '')}}~
+            {{scope.row.sellTradePrice.toFixed(4, '')}}
+          </div>
+          <div :style="{color:(scope.row.sellTradePrice / scope.row.buyTradePrice)>1.05?'red':'black'}">
+            {{(scope.row.sellTradePrice / scope.row.buyTradePrice).toFixed(3, '')}}
+          </div>
         </template>
       </el-table-column>
       <el-table-column
         prop="buyQuantity"
-        label="数量"
-        width="160">
+        label="quantity"
+        width="140">
         <template slot-scope="scope">
-          {{scope.row.buyQuantity.toFixed(4,'')}}~
-          {{scope.row.sellQuantity.toFixed(4,'')}}
+          <div>入：{{scope.row.buyQuantity.toFixed(4, '')}}</div>
+          <div>出：{{scope.row.sellQuantity.toFixed(4, '')}}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -60,8 +67,8 @@
         label="总波动"
         width="120">
         <template slot-scope="scope">
-          {{scope.row.buyAmount.toFixed(4,'')}}~
-          {{scope.row.sellAmount.toFixed(4,'')}}
+          <div>入：{{scope.row.buyAmount.toFixed(4, '')}}</div>
+          <div>出：{{scope.row.sellAmount.toFixed(4, '')}}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -81,7 +88,7 @@
       <el-table-column
         label="操作">
         <template slot-scope="scope">
-          <el-button @click="deleteMore(scope.row.buyOrderId)">删除</el-button>
+          <el-button size="mini" type="danger" @click="deleteMore(scope.row.buyOrderId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -129,7 +136,7 @@
     methods: {
       listMoreBuyIsFinished: function () {
         const {userName, symbolName} = this;
-        listMoreBuyIsFinishedDetail({userName, symbolName, pageIndex:0, pageSize:10}).then(data => {
+        listMoreBuyIsFinishedDetail({userName, symbolName, pageIndex: 0, pageSize: 30}).then(data => {
           data = data.data || data;
           this.moreList = data;
         });

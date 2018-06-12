@@ -20,22 +20,17 @@
       </el-table-column>
       <el-table-column
         prop="userName"
-        label="name"
-        width="60">
+        label="人"
+        width="50">
       </el-table-column>
       <el-table-column
         prop="symbolName"
-        label="symbol"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        prop="buyState"
-        label="buyState"
-        width="90">
+        label="物"
+        width="68">
       </el-table-column>
       <el-table-column
         prop="buyTradePrice"
-        label="交易价"
+        label="入"
         width="90">
       </el-table-column>
       <el-table-column
@@ -43,7 +38,9 @@
         width="150">
         <template slot-scope="scope">
           <div v-if="closeDic[scope.row.symbolName]">
-            {{closeDic[scope.row.symbolName].toFixed(4, '')}} --> {{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3, '')}}
+            {{closeDic[scope.row.symbolName].toFixed(4, '')}} -->
+            <span
+              :style="{color:(closeDic[scope.row.symbolName] / scope.row.buyTradePrice)>=1.04?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3, '')}}</span>
           </div>
         </template>
       </el-table-column>
@@ -54,7 +51,7 @@
       </el-table-column>
       <el-table-column
         prop="buyQuantity"
-        label="总额度"
+        label="总"
         width="90">
         <template slot-scope="scope">
           {{(scope.row.buyQuantity * scope.row.buyTradePrice).toFixed(2, '')}}
@@ -62,11 +59,16 @@
       </el-table-column>
       <el-table-column
         prop="buyDate"
-        label="buyDate"
+        label="日期"
         width="155">
         <template slot-scope="scope">
           {{scope.row.buyDate | formatDate}}
         </template>
+      </el-table-column>
+      <el-table-column
+        prop="buyState"
+        label="state"
+        width="90">
       </el-table-column>
       <el-table-column
         label="操作">
