@@ -75,34 +75,13 @@ export const asyncRouterMap = [
   {
     path: '/example',
     component: Layout,
-    redirect: '/example/table/complex-table',
+    redirect: 'noredirect',
     name: 'example',
     meta: {
       title: 'example',
       icon: 'example',
     },
     children: [
-      {
-        path: 'tab/index',
-        icon: 'tab',
-        component: _import('example/tab/index'),
-        name: 'tab',
-        meta: {title: 'tab'},
-      },
-      {
-        path: 'tab/pigMoreToday',
-        icon: 'tab',
-        component: _import('example/PigMoreToday'),
-        name: 'spotRecord',
-        meta: {title: 'spotRecord'},
-      },
-      // {
-      //   path: 'tab/dogMoreFinished',
-      //   icon: 'tab',
-      //   component: _import('example/DogMoreFinished'),
-      //   name: 'dogMoreFinished',
-      //   meta: {title: 'dogMoreFinished'},
-      // },
       {
         path: 'tab/dogControl',
         icon: 'tab',
@@ -132,18 +111,25 @@ export const asyncRouterMap = [
         meta: {title: 'dogEmptyFinished'},
       },
       {
-        path: 'tab/dogMoreForEmpty',
-        icon: 'tab',
-        component: _import('example/DogMoreForEmpty'),
-        name: 'dogMoreNotFinished',
-        meta: {title: 'dogMoreForEmpty'},
-      },
-      {
         path: 'tab/dogEmptyNotFinished',
         icon: 'tab',
         component: _import('example/DogEmptyNotFinished'),
         name: 'dogEmptyNotFinished',
         meta: {title: 'dogEmptyNotFinished'},
+      },
+      {
+        path: 'tab/dogMoreForEmpty',
+        icon: 'tab',
+        component: _import('example/DogMoreForEmpty'),
+        name: 'dogMoreForEmpty',
+        meta: {title: 'dogMoreForEmpty'},
+      },
+      {
+        path: 'tab/dogEmptyForMore',
+        icon: 'tab',
+        component: _import('example/DogEmptyForMore'),
+        name: 'dogEmptyForMore',
+        meta: {title: 'dogEmptyForMore'},
       },
     ],
   },

@@ -25,6 +25,14 @@ export function listEmptySellIsNotFinished(data) {
 }
 
 
+export function listEmptySellIsFinishedDetail(data) {
+  return request({
+    url: '/api/Empty/listEmptySellIsFinishedDetail',
+    method: 'get',
+    params: data
+  });
+}
+
 export function listEmptySellIsFinished(data) {
   return request({
     url: '/api/Empty/listEmptySellIsFinished',
@@ -32,6 +40,7 @@ export function listEmptySellIsFinished(data) {
     params: data
   });
 }
+
 export function getEmptySellDetail(data) {
   return request({
     url: '/api/Empty/getEmptySellDetail',

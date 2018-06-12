@@ -10,8 +10,8 @@
     </div>
     <br/>
     <el-table
-      border
       :data="moreList"
+      :row-class-name="tableRowClassName"
       style="width: 100%">
       <el-table-column
         prop="buyOrderId"
@@ -38,20 +38,19 @@
         width="150">
         <template slot-scope="scope">
           <div v-if="closeDic[scope.row.symbolName]">
-            {{closeDic[scope.row.symbolName].toFixed(4, '')}} -->
-            <span
-              :style="{color:(closeDic[scope.row.symbolName] / scope.row.buyTradePrice)>=1.04?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3, '')}}</span>
+            {{closeDic[scope.row.symbolName].toFixed(4, '')}}
           </div>
+          <span
+            :style="{color:(closeDic[scope.row.symbolName] / scope.row.buyTradePrice)>=1.04?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3, '')}}</span>
         </template>
       </el-table-column>
       <el-table-column
         prop="buyQuantity"
-        label="数量"
+        label="quantity"
         width="90">
       </el-table-column>
       <el-table-column
-        prop="buyQuantity"
-        label="总"
+        label="amount"
         width="90">
         <template slot-scope="scope">
           {{(scope.row.buyQuantity * scope.row.buyTradePrice).toFixed(2, '')}}
@@ -59,25 +58,19 @@
       </el-table-column>
       <el-table-column
         prop="buyDate"
-        label="日期"
+        label="date"
         width="155">
         <template slot-scope="scope">
           {{scope.row.buyDate | formatDate}}
         </template>
       </el-table-column>
       <el-table-column
-        prop="buyState"
-        label="state"
-        width="90">
-      </el-table-column>
-      <el-table-column
         label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="shouge(scope.row.buyOrderId)">收割</el-button>
-          <el-button size="mini" @click="forceShouge(scope.row.buyOrderId)">强制收割</el-button>
-          <el-button size="mini" @click="orderShouge(scope.row.sellOrderId)">指令收割</el-button>
-          <el-button size="mini" @click="orderForceShouge(scope.row.sellOrderId)">指令强制收割</el-button>
-          <el-button size="mini" @click="orderHuiben(scope.row.sellOrderId)">指令回本收割</el-button>
+          <el-button size="mini" @click="shouge(scope.row.buyOrderId)">shou</el-button>
+          <el-button size="mini" @click="forceShouge(scope.row.buyOrderId)">force shou</el-button>
+          <!--<el-button size="mini" @click="orderShouge(scope.row.sellOrderId)">指令收割</el-button>-->
+          <!--<el-button size="mini" @click="orderForceShouge(scope.row.sellOrderId)">指令强制收割</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -87,7 +80,7 @@
 <script>
   import {
     listMoreBuyIsNotFinished,
-    shouge, forceShouge
+    shouge, forceShouge,
   } from '../../api/more';
   import {
     createOrderReap,
@@ -100,14 +93,14 @@
         symbolName: '',
         moreList: [],
         closeDic: {},
-        totalAmount: 0
+        totalAmount: 0,
       };
     },
-    created: function () {
+    created: function() {
     },
     computed: {},
     methods: {
-      listMoreBuyIsNotFinished: function () {
+      listMoreBuyIsNotFinished: function() {
         const {symbolName} = this;
         listMoreBuyIsNotFinished({symbolName}).then(data => {
           data = data.data || data;
@@ -115,20 +108,20 @@
           this.closeDic = data.closeDic;
           let totalAmount = 0;
           for (var item of this.moreList) {
-            totalAmount += item.buyQuantity * item.buyTradePrice
+            totalAmount += item.buyQuantity * item.buyTradePrice;
           }
           this.totalAmount = totalAmount;
         });
       },
-      shouge: function (orderId) {
+      shouge: function(orderId) {
         shouge({orderId}).then(() => {
         });
       },
-      forceShouge: function (orderId) {
+      forceShouge: function(orderId) {
         forceShouge({orderId}).then(() => {
         });
       },
-      orderShouge: function (orderId) {
+      orderShouge: function(orderId) {
         createOrderReap({
           reapType: 0,
           orderId,
@@ -137,7 +130,7 @@
 
         });
       },
-      orderForceShouge: function (orderId) {
+      orderForceShouge: function(orderId) {
         createOrderReap({
           reapType: 0,
           orderId,
@@ -146,20 +139,40 @@
 
         });
       },
-      orderHuiben: function (orderId) {
-        createOrderReap({
-          reapType: 0,
-          orderId,
-          percent: 1.008,
-        }).then(() => {
-
-        });
+      tableRowClassName({row, rowIndex}) {
+        const close = this.closeDic[row.symbolName];
+        if (!close) {
+          return '';
+        }
+        if (close / row.buyTradePrice > 1.05) {
+          return 'row-red';
+        }
+        if (close / row.buyTradePrice > 1.03) {
+          return 'row-blue';
+        }
+        if (close / row.buyTradePrice > 1.01) {
+          return 'row-green';
+        }
+        if (row.customerType === 1) {
+          return 'customer-probation';
+        }
+        return '';
       },
     },
   };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
+  .row-red {
+    background-color: rgba(255, 0, 0, 0.2) !important;
+  }
 
+  .row-blue {
+    background-color: rgba(0, 0, 255, 0.2) !important;
+  }
+
+  .row-green {
+    background-color: rgba(0, 255, 0, 0.1) !important;
+  }
 </style>

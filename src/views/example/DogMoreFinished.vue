@@ -63,7 +63,6 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="buyAmount"
         label="总波动"
         width="120">
         <template slot-scope="scope">

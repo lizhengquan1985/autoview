@@ -7,14 +7,12 @@
       </el-select>
       <el-input v-model="symbolName" style="width: 200px;"/>
       <el-button @click="emptyInfo()" icon="search" type="primary">搜索</el-button>
-
-      <el-button @click="doEmpty()" icon="search" type="primary">做空一次</el-button>
-
+      <el-button @click="doEmpty()" icon="search" type="primary">empty once</el-button>
     </div>
     <div>
-      <label>总次数：{{moreList.length}}</label>
-      <label>总额度：{{totalAmount}}</label>
-      <label>总数量：{{totalQuantity}}</label>
+      <label>count：{{moreList.length}}</label>
+      <label>amount：{{totalAmount}}</label>
+      <label>quantity：{{totalQuantity}}</label>
       <label>{{JSON.stringify(balance)}}</label>
     </div>
     <br/>
@@ -24,50 +22,41 @@
       style="width: 100%">
       <el-table-column
         prop="buyOrderId"
-        label="订单"
+        label="order"
         width="100">
       </el-table-column>
       <el-table-column
         prop="userName"
-        label="userName"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        prop="buyState"
-        label="buyState"
-        width="90">
+        label="人"
+        width="58">
       </el-table-column>
       <el-table-column
         prop="buyTradePrice"
-        label="交易价"
+        label="入"
         width="90">
       </el-table-column>
       <el-table-column
         prop="buyQuantity"
-        label="数量"
+        label="quantity"
         width="90">
       </el-table-column>
       <el-table-column
-        prop="buyQuantity"
-        label="总额度"
+        label="amount"
         width="90">
         <template slot-scope="scope">
           {{(scope.row.buyQuantity * scope.row.buyTradePrice).toFixed(2, '')}}
         </template>
       </el-table-column>
       <el-table-column
-        prop="buyDate"
-        label="buyDate"
+        label="date"
         width="155">
         <template slot-scope="scope">
           {{scope.row.buyDate | formatDate}}
         </template>
       </el-table-column>
       <el-table-column
-        label="操作">
-        <template slot-scope="scope">
-          {{scope.row.buyDate | formatDate}}
-        </template>
+        prop="buyState"
+        label="state">
       </el-table-column>
     </el-table>
   </div>
@@ -85,34 +74,34 @@
         symbolName: '',
         moreList: [],
         totalAmount: 0,
-        totalQuantity:0,
-        balance:null
+        totalQuantity: 0,
+        balance: null,
       };
     },
-    created: function () {
+    created: function() {
     },
     computed: {},
     methods: {
-      emptyInfo: function () {
+      emptyInfo: function() {
         const {symbolName, userName} = this;
-        emptyInfo({symbolName,userName}).then(data => {
+        emptyInfo({symbolName, userName}).then(data => {
           data = data.data || data;
           this.moreList = data.list;
           this.balance = data.balanceItem;
           this.totalQuantity = data.totalQuantity;
           let totalAmount = 0;
           for (var item of this.moreList) {
-            totalAmount += item.buyQuantity * item.buyTradePrice
+            totalAmount += item.buyQuantity * item.buyTradePrice;
           }
           this.totalAmount = totalAmount;
         });
       },
-      doEmpty:function () {
+      doEmpty: function() {
         const {symbolName, userName} = this;
-        doEmpty({userName,symbolName}).then(()=>{
+        doEmpty({userName, symbolName}).then(() => {
 
-        })
-      }
+        });
+      },
     },
   };
 </script>
