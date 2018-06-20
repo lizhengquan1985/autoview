@@ -16,7 +16,7 @@
         label="最大投入价格"
         width="155">
         <template slot-scope="scope">
-          <div>{{scope.row.maxInputPrice}}</div>
+          <div>{{scope.row.maxInputPrice || ''}}</div>
           <div>{{scope.row.maxInputPriceExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
@@ -24,15 +24,15 @@
         label="平均投入额度"
         width="145">
         <template slot-scope="scope">
-          <div>{{scope.row.avgInputAmount}}</div>
+          <div>{{scope.row.avgInputAmount || ''}}</div>
           <div>{{scope.row.avgInputExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
       <el-table-column
-        label="做空价格"
+        label="empty"
         width="145">
         <template slot-scope="scope">
-          <div>{{scope.row.emptyPrice}}</div>
+          <div>{{scope.row.emptyPrice || ''}}</div>
           <div>{{scope.row.emptyExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
@@ -40,7 +40,7 @@
         label="预计价格"
         width="145">
         <template slot-scope="scope">
-          <div>{{scope.row.predictPrice}}</div>
+          <div>{{scope.row.predictPrice || ''}}</div>
           <div>{{scope.row.predictExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
@@ -48,7 +48,7 @@
         label="阶梯购入比"
         width="135">
         <template slot-scope="scope">
-          <div>{{scope.row.ladderBuyPercent}}</div>
+          <div>{{scope.row.ladderBuyPercent || ''}}</div>
           <div>{{scope.row.ladderBuyExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
@@ -56,7 +56,7 @@
         label="阶梯出售比"
         width="135">
         <template slot-scope="scope">
-          <div>{{scope.row.ladderSellPercent}}</div>
+          <div>{{scope.row.ladderSellPercent || ''}}</div>
           <div>{{scope.row.ladderSellExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
