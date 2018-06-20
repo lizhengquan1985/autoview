@@ -150,6 +150,15 @@
             placeholder="选择日期时间">
           </el-date-picker>
         </el-form-item>
+
+
+        <el-form-item label="historyMax：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.historyMax" style="width: 200px;"/>
+        </el-form-item>
+
+        <el-form-item label="historyMin：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.historyMin" style="width: 200px;"/>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">关 闭</el-button>
