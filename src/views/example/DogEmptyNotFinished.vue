@@ -41,7 +41,7 @@
             {{closeDic[scope.row.symbolName].toFixed(4, '')}}
           </div>
           <span
-            :style="{color:(closeDic[scope.row.symbolName] / scope.row.sellTradePrice)>=1.04?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.sellTradePrice).toFixed(3, '')}}</span>
+            :style="{color:(scope.row.sellTradePrice / closeDic[scope.row.symbolName])>=1.04?'red':'black'}">{{(scope.row.sellTradePrice / closeDic[scope.row.symbolName]).toFixed(3, '')}}</span>
         </template>
       </el-table-column>
       <el-table-column
