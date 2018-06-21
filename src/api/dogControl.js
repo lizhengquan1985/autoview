@@ -1,9 +1,9 @@
-import request from '@/utils/request'
+import request from '@/utils/request';
 
 export function listDogControl() {
   return request({
     url: '/api/Control/list',
-    method: 'get'
+    method: 'get',
   });
 }
 
@@ -11,6 +11,14 @@ export function createDogControl(data) {
   return request({
     url: '/api/Control/new',
     method: 'post',
-    data
+    data,
+  });
+}
+
+export function refreshHistoryMaxMin(data) {
+  return request({
+    url: '/api/Control/refreshHistoryMaxMin',
+    method: 'get',
+    params: data,
   });
 }

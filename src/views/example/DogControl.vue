@@ -13,7 +13,17 @@
         width="60">
       </el-table-column>
       <el-table-column
-        label="最大投入价格"
+        label="历史最大最小"
+        width="155">
+        <template slot-scope="scope">
+          <div>
+            <div v-if="scope.row.historyMin>0">{{scope.row.historyMin}} ~ {{scope.row.historyMax}}</div>
+            <el-button size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="maxInputPrice"
         width="155">
         <template slot-scope="scope">
           <div>{{scope.row.maxInputPrice || ''}}</div>
@@ -21,7 +31,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="平均投入额度"
+        label="avgInputAmount"
         width="145">
         <template slot-scope="scope">
           <div>{{scope.row.avgInputAmount || ''}}</div>
@@ -37,7 +47,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="预计价格"
+        label="predictPrice"
         width="145">
         <template slot-scope="scope">
           <div>{{scope.row.predictPrice || ''}}</div>
@@ -45,7 +55,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="阶梯购入比"
+        label="ladderBuyPercent"
         width="135">
         <template slot-scope="scope">
           <div>{{scope.row.ladderBuyPercent || ''}}</div>
@@ -171,7 +181,7 @@
 </template>
 
 <script>
-  import {listDogControl, createDogControl} from '../../api/dogControl';
+  import {listDogControl, createDogControl, refreshHistoryMaxMin} from '../../api/dogControl';
 
   export default {
     components: {},
@@ -211,6 +221,11 @@
       saveControlObj: function() {
         createDogControl(this.form).then(() => {
           this.dialogFormVisible = false;
+          this.listDogControl();
+        });
+      },
+      refreshHistoryMaxMin: function(symbolName) {
+        refreshHistoryMaxMin({symbolName}).then(() => {
           this.listDogControl();
         });
       },
