@@ -10,15 +10,31 @@
       <el-table-column
         prop="symbolName"
         label="名称"
-        width="60">
+        width="75">
+        <template slot-scope="scope">
+          <div style="line-height: 14px;">
+            <div>{{scope.row.symbolName}}</div>
+            <div style="color: red;"
+                 v-if="(scope.row.historyMin + (scope.row.historyMax - scope.row.historyMin)*0.2) < closeDic[scope.row.symbolName]">
+              {{closeDic[scope.row.symbolName]}}
+            </div>
+            <div v-else>{{closeDic[scope.row.symbolName]}}</div>
+          </div>
+        </template>
       </el-table-column>
       <el-table-column
         label="历史最大最小"
-        width="155">
+        width="165">
         <template slot-scope="scope">
           <div>
-            <div v-if="scope.row.historyMin>0">{{scope.row.historyMin}} ~ {{scope.row.historyMax}}</div>
-            <el-button size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
+            <div v-if="scope.row.historyMin>0">
+              <div>
+                {{scope.row.historyMin}} ~ {{scope.row.historyMax}}
+              </div>
+              推荐:{{(scope.row.historyMin + (scope.row.historyMax - scope.row.historyMin)*0.2).toFixed(4,'')}}
+              <el-button size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
+            </div>
+            <el-button v-else size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
           </div>
         </template>
       </el-table-column>
@@ -211,7 +227,8 @@
       listDogControl: function() {
         listDogControl({}).then(data => {
           console.log(3333333333, data.data);
-          this.dataList = data.data;
+          this.dataList = data.data.list;
+          this.closeDic = data.data.closeDic;
         });
       },
       showEdit: function(row) {
