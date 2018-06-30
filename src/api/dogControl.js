@@ -22,3 +22,12 @@ export function refreshHistoryMaxMin(data) {
     params: data,
   });
 }
+
+export function initEmptyPrice(data) {
+  return request({
+    url: '/api/Control/initEmpty30Percent',
+    method: 'put',
+    params: data,
+  });
+}
+

@@ -15,7 +15,7 @@
           <div style="line-height: 14px;">
             <div>{{scope.row.symbolName}}</div>
             <div style="color: red;"
-                 v-if="(scope.row.historyMin + (scope.row.historyMax - scope.row.historyMin)*0.2) < closeDic[scope.row.symbolName]">
+                 v-if="canEmpty(scope.row)">
               {{closeDic[scope.row.symbolName]}}
             </div>
             <div v-else>{{closeDic[scope.row.symbolName]}}</div>
@@ -31,7 +31,7 @@
               <div>
                 {{scope.row.historyMin}} ~ {{scope.row.historyMax}}
               </div>
-              推荐:{{(scope.row.historyMin + (scope.row.historyMax - scope.row.historyMin)*0.2).toFixed(4,'')}}
+              推荐:{{getRecommend(scope.row)}}
               <el-button size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
             </div>
             <el-button v-else size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
@@ -58,7 +58,7 @@
         label="empty"
         width="145">
         <template slot-scope="scope">
-          <div>{{scope.row.emptyPrice || ''}}</div>
+          <div>{{scope.row.emptyPrice || ''}}<el-button size="mini" @click="initEmptyPrice(scope.row.symbolName)">初始</el-button></div>
           <div>{{scope.row.emptyExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
@@ -197,10 +197,14 @@
 </template>
 
 <script>
-  import {listDogControl, createDogControl, refreshHistoryMaxMin} from '../../api/dogControl';
+  import {listDogControl, createDogControl, refreshHistoryMaxMin,initEmptyPrice} from '../../api/dogControl';
+  import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
+  import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
 
   export default {
-    components: {},
+    components: {
+      ElButton,
+      ElInput},
     name: 'HelloWorld',
     data() {
       return {
@@ -221,6 +225,26 @@
       },
     },
     methods: {
+      getRecommend: function (row) {
+        var recommend = (row.historyMin + (row.historyMax - row.historyMin)*0.2)
+        if(recommend< row.historyMin * 1.4){
+          recommend = row.historyMin * 1.4
+        }
+        return recommend.toFixed(4,'');
+      },
+      initEmptyPrice:function (symbolName) {
+        initEmptyPrice({symbolName}).then(()=>{
+          this.listDogControl();
+        })
+      },
+      canEmpty:function (row) {
+        var recommend = (row.historyMin + (row.historyMax - row.historyMin)*0.2)
+        if(recommend< row.historyMin * 1.4){
+          recommend = row.historyMin * 1.4
+        }
+        const nowPrice = this.closeDic[row.symbolName] || 0;
+        return nowPrice >= recommend && nowPrice >= row.emptyPrice;
+      },
       init: function() {
         this.listDogControl();
       },
