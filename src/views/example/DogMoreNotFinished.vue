@@ -40,8 +40,13 @@
           <div v-if="closeDic[scope.row.symbolName]">
             {{closeDic[scope.row.symbolName].toFixed(4, '')}}
           </div>
+          <div>
           <span
             :style="{color:(closeDic[scope.row.symbolName] / scope.row.buyTradePrice)>=1.04?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3, '')}}</span>
+            --<span>
+            {{ladderDic[scope.row.symbolName].toFixed(4, '')}}
+          </span>
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -93,19 +98,21 @@
         symbolName: '',
         moreList: [],
         closeDic: {},
+        ladderDic: {},
         totalAmount: 0,
       };
     },
-    created: function() {
+    created: function () {
     },
     computed: {},
     methods: {
-      listMoreBuyIsNotFinished: function() {
+      listMoreBuyIsNotFinished: function () {
         const {symbolName} = this;
         listMoreBuyIsNotFinished({symbolName}).then(data => {
           data = data.data || data;
           this.moreList = data.list;
           this.closeDic = data.closeDic;
+          this.ladderDic = data.ladderDic;
           let totalAmount = 0;
           for (var item of this.moreList) {
             totalAmount += item.buyQuantity * item.buyTradePrice;
@@ -113,15 +120,15 @@
           this.totalAmount = totalAmount;
         });
       },
-      shouge: function(orderId) {
+      shouge: function (orderId) {
         shouge({orderId}).then(() => {
         });
       },
-      forceShouge: function(orderId) {
+      forceShouge: function (orderId) {
         forceShouge({orderId}).then(() => {
         });
       },
-      orderShouge: function(orderId) {
+      orderShouge: function (orderId) {
         createOrderReap({
           reapType: 0,
           orderId,
@@ -130,7 +137,7 @@
 
         });
       },
-      orderForceShouge: function(orderId) {
+      orderForceShouge: function (orderId) {
         createOrderReap({
           reapType: 0,
           orderId,
