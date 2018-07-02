@@ -3,6 +3,12 @@
     <div>
       <el-input v-model="symbolName" style="width:100px;"/>
       <el-input v-model="userName" style="width:100px;" placeholder="qq/xx"/>
+      <el-date-picker
+        v-model="date"
+        type="datetime"
+        value-format="yyyy-MM-dd HH:mm:ss"
+        placeholder="">
+      </el-date-picker>
       <el-button @click="fetchStatisticsLine()" icon="search" type="primary">搜索</el-button>
     </div>
     <div style="width: 900px; overflow-x: auto;">
@@ -13,51 +19,54 @@
 
 <script>
   import {fetchStatisticsLine} from '../../api/spotrecord';
+  import {kline} from '../../api/day';
   import echarts from 'echarts';
 
   export default {
     name: 'lineChart',
     data() {
       return {
-        coin: '',
+        date: null,
+        symbolName: '',
         userName: 'qq',
-        zs: [],
-        buy: [],
-        sell: [],
+        klineList: [],
+        buyList: [],
+        sellList: [],
         min: 0,
         max: 9999,
       };
     },
     methods: {
       fetchStatisticsLine: function() {
-        const {coin, username,} = this;
-        fetchStatisticsLine({coin, username}).then(data => {
+        const {symbolName, userName, date = new Date()} = this;
+        kline({name: symbolName, userName, date}).then(data => {
           data = data.data || data;
-          this.zs = data.zs;
-          this.buy = data.buy;
-          this.sell = data.sell;
+          this.klineList = data.klineList;
+          this.buyList = data.buyList;
+          this.sellList = data.sellList;
           this.min = data.min;
           this.max = data.max;
           const list = [];
-          for (const s of this.sell) {
-            const dt = new Date(s.date);
+          for (const s of this.sellList) {
+            const dt = new Date(s.sellDate);
             const item = {
               name: '出售',
-              value: 's:' + s.price,
-              xAxis: dt.getHours() + ':' + dt.getMinutes(),
-              yAxis: s.price, itemStyle: {
+              value: 's:' + s.sellTradePrice,
+              xAxis: dt.getDate() + ':' + dt.getHours() + ':' + dt.getMinutes(),
+              yAxis: s.sellTradePrice,
+              itemStyle: {
                 normal: {color: 'red'},
               },
             };
             list.push(item);
           }
-          for (const b of this.buy) {
-            const dt = new Date(b.date);
+          for (const b of this.buyList) {
+            const dt = new Date(b.buyDate);
             const item = {
               name: '购买',
-              value: 'b:' + b.price,
-              xAxis: dt.getHours() + ':' + dt.getMinutes(),
-              yAxis: b.price,
+              value: 'b:' + b.buyTradePrice,
+              xAxis: dt.getDate() + ':' + dt.getHours() + ':' + dt.getMinutes(),
+              yAxis: b.buyTradePrice,
               label: {color: '#999999'},
             };
             list.push(item);
@@ -68,15 +77,15 @@
           const open = [];
           const low = [];
           const dtList = [];
-          for (var i = this.zs.length - 1; i >= 0; i--) {
-            const item = this.zs[i];
+          for (let i = 0; i < this.klineList.length; i++) {
+            const item = this.klineList[i];
             close.push(item.close);
             high.push(item.high);
-            open.push(item.open);
-            low.push(item.low);
+            open.push(item.close);
+            low.push(item.close);
 
             const itemDt = new Date(item.id * 1000);
-            dtList.push(itemDt.getHours() + ':' + itemDt.getMinutes());
+            dtList.push(itemDt.getDate() + ':' + itemDt.getHours() + ':' + itemDt.getMinutes());
           }
 
           this.initChart(dtList, open, list);
