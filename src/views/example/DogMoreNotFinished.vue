@@ -29,9 +29,12 @@
         width="68">
       </el-table-column>
       <el-table-column
-        prop="buyTradePrice"
         label="入"
         width="90">
+        <template slot-scope="scope">
+          <div>{{scope.row.buyTradePrice}}</div>
+          <div v-if="ladderBuyDic[scope.row.symbolName]">{{ladderBuyDic[scope.row.symbolName].toFixed(4,'')}}</div>
+        </template>
       </el-table-column>
       <el-table-column
         label="now-more"
@@ -100,6 +103,7 @@
         closeDic: {},
         ladderDic: {},
         totalAmount: 0,
+        ladderBuyDic: {}
       };
     },
     created: function () {
@@ -112,6 +116,7 @@
           data = data.data || data;
           this.moreList = data.list;
           this.closeDic = data.closeDic;
+          this.ladderBuyDic = data.ladderBuyDic || {};
           this.ladderDic = data.ladderDic;
           let totalAmount = 0;
           for (var item of this.moreList) {
