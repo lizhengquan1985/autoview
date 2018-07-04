@@ -42,8 +42,10 @@
           </div>
           <div>
           <span
+            v-if="closeDic[scope.row.symbolName]"
             :style="{color:(closeDic[scope.row.symbolName] / scope.row.buyTradePrice)>=1.04?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3, '')}}</span>
-            --<span>
+            --
+            <span v-if="ladderDic[scope.row.symbolName]">
             {{ladderDic[scope.row.symbolName].toFixed(4, '')}}
           </span>
           </div>
