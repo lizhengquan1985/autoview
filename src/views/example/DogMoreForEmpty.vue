@@ -44,7 +44,9 @@
         label="amount"
         width="90">
         <template slot-scope="scope">
-          {{(scope.row.buyQuantity * scope.row.buyTradePrice).toFixed(2, '')}}
+          <span v-if="scope.row.buyQuantity">
+            {{(scope.row.buyQuantity * scope.row.buyTradePrice).toFixed(2, '')}}
+          </span>
         </template>
       </el-table-column>
       <el-table-column
