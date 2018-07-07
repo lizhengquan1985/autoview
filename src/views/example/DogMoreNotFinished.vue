@@ -30,10 +30,15 @@
       </el-table-column>
       <el-table-column
         label="入"
-        width="90">
+        width="150">
         <template slot-scope="scope">
           <div>{{scope.row.buyTradePrice}}</div>
-          <div v-if="ladderBuyDic[scope.row.symbolName]">{{ladderBuyDic[scope.row.symbolName].toFixed(4,'')}}</div>
+          <div>
+          <span
+            v-if="ladderBuyDic[scope.row.symbolName] && closeDic[scope.row.symbolName]"
+            :style="{color:( scope.row.buyTradePrice / closeDic[scope.row.symbolName])>=ladderBuyDic[scope.row.symbolName]?'red':'black'}">{{(scope.row.buyTradePrice / closeDic[scope.row.symbolName]).toFixed(3, '')}}</span>
+             -- <span v-if="ladderBuyDic[scope.row.symbolName]">{{ladderBuyDic[scope.row.symbolName].toFixed(4,'')}}</span>
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -46,7 +51,7 @@
           <div>
           <span
             v-if="closeDic[scope.row.symbolName]"
-            :style="{color:(closeDic[scope.row.symbolName] / scope.row.buyTradePrice)>=1.04?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3, '')}}</span>
+            :style="{color:(closeDic[scope.row.symbolName] / scope.row.buyTradePrice)>=1.05?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3, '')}}</span>
             --
             <span v-if="ladderDic[scope.row.symbolName]">
             {{ladderDic[scope.row.symbolName].toFixed(4, '')}}
