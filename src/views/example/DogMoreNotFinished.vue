@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <div>
+      <el-input v-model="userName" style="width: 200px;"/>
       <el-input v-model="symbolName" style="width: 200px;"/>
       <el-button @click="listMoreBuyIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
@@ -37,7 +38,8 @@
           <span
             v-if="ladderBuyDic[scope.row.symbolName] && closeDic[scope.row.symbolName]"
             :style="{color:( scope.row.buyTradePrice / closeDic[scope.row.symbolName])>=ladderBuyDic[scope.row.symbolName]?'red':'black'}">{{(scope.row.buyTradePrice / closeDic[scope.row.symbolName]).toFixed(3, '')}}</span>
-             -- <span v-if="ladderBuyDic[scope.row.symbolName]">{{ladderBuyDic[scope.row.symbolName].toFixed(4,'')}}</span>
+            -- <span
+            v-if="ladderBuyDic[scope.row.symbolName]">{{ladderBuyDic[scope.row.symbolName].toFixed(4,'')}}</span>
           </div>
         </template>
       </el-table-column>
@@ -110,16 +112,16 @@
         closeDic: {},
         ladderDic: {},
         totalAmount: 0,
-        ladderBuyDic: {}
+        ladderBuyDic: {},
       };
     },
-    created: function () {
+    created: function() {
     },
     computed: {},
     methods: {
-      listMoreBuyIsNotFinished: function () {
-        const {symbolName} = this;
-        listMoreBuyIsNotFinished({symbolName}).then(data => {
+      listMoreBuyIsNotFinished: function() {
+        const {symbolName, userName} = this;
+        listMoreBuyIsNotFinished({symbolName, userName}).then(data => {
           data = data.data || data;
           this.moreList = data.list;
           this.closeDic = data.closeDic;
@@ -132,15 +134,15 @@
           this.totalAmount = totalAmount;
         });
       },
-      shouge: function (orderId) {
+      shouge: function(orderId) {
         shouge({orderId}).then(() => {
         });
       },
-      forceShouge: function (orderId) {
+      forceShouge: function(orderId) {
         forceShouge({orderId}).then(() => {
         });
       },
-      orderShouge: function (orderId) {
+      orderShouge: function(orderId) {
         createOrderReap({
           reapType: 0,
           orderId,
@@ -149,7 +151,7 @@
 
         });
       },
-      orderForceShouge: function (orderId) {
+      orderForceShouge: function(orderId) {
         createOrderReap({
           reapType: 0,
           orderId,

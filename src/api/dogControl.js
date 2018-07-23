@@ -31,3 +31,11 @@ export function initEmptyPrice(data) {
   });
 }
 
+export function getFlexCount(data) {
+  return request({
+    url: '/api/Control/getFlexCount',
+    method: 'get',
+    params: data,
+  });
+}
+
