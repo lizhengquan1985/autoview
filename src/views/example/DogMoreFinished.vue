@@ -135,7 +135,7 @@
     methods: {
       listMoreBuyIsFinished: function () {
         const {userName, symbolName} = this;
-        listMoreBuyIsFinishedDetail({userName, symbolName, pageIndex: 0, pageSize: 30}).then(data => {
+        listMoreBuyIsFinishedDetail({userName, symbolName, pageIndex: 0, pageSize: 60}).then(data => {
           data = data.data || data;
           this.moreList = data;
         });
