@@ -275,6 +275,7 @@
       },
       getFlexCount: function(symbolName) {
         getFlexCount({symbolName}).then(() => {
+          this.listDogControl();
         });
       },
     },

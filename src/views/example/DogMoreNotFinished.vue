@@ -37,7 +37,7 @@
           <div>
           <span
             v-if="ladderBuyDic[scope.row.symbolName] && closeDic[scope.row.symbolName]"
-            :style="{color:( scope.row.buyTradePrice / closeDic[scope.row.symbolName])>=ladderBuyDic[scope.row.symbolName]?'red':'black'}">{{(scope.row.buyTradePrice / closeDic[scope.row.symbolName]).toFixed(3, '')}}</span>
+            :style="{color:( scope.row.buyTradePrice / closeDic[scope.row.symbolName])>=ladderBuyDic[scope.row.symbolName]?'red':(( scope.row.buyTradePrice / closeDic[scope.row.symbolName]) > 1.04?'deeppink':'black')}">{{(scope.row.buyTradePrice / closeDic[scope.row.symbolName]).toFixed(3, '')}}</span>
             -- <span
             v-if="ladderBuyDic[scope.row.symbolName]">{{ladderBuyDic[scope.row.symbolName].toFixed(4,'')}}</span>
           </div>
@@ -107,6 +107,7 @@
     name: 'HelloWorld',
     data() {
       return {
+        userName: 'qq',
         symbolName: '',
         moreList: [],
         closeDic: {},
@@ -116,6 +117,7 @@
       };
     },
     created: function() {
+      this.listMoreBuyIsNotFinished();
     },
     computed: {},
     methods: {
