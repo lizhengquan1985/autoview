@@ -86,6 +86,8 @@
         <template slot-scope="scope">
           <el-button size="mini" @click="shouge(scope.row.buyOrderId)">shou</el-button>
           <el-button size="mini" @click="forceShouge(scope.row.buyOrderId)">force shou</el-button>
+          <el-button size="mini" @click="doMore(scope.row.symbolName)">doMore</el-button>
+
           <!--<el-button size="mini" @click="orderShouge(scope.row.sellOrderId)">指令收割</el-button>-->
           <!--<el-button size="mini" @click="orderForceShouge(scope.row.sellOrderId)">指令强制收割</el-button>-->
         </template>
@@ -102,6 +104,7 @@
   import {
     createOrderReap,
   } from '../../api/orderReap';
+  import {doMore} from '../../api/empty';
 
   export default {
     name: 'HelloWorld',
@@ -180,6 +183,12 @@
           return 'customer-probation';
         }
         return '';
+      },
+      doMore: function(symbolName) {
+        const {userName} = this;
+        doMore({userName, symbolName}).then(() => {
+
+        });
       },
     },
   };

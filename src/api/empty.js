@@ -64,3 +64,10 @@ export function doEmpty(data) {
   });
 }
 
+export function doMore(data) {
+  return request({
+    url: '/api/More/doMore',
+    method: 'post',
+    params: data
+  });
+}
