@@ -86,7 +86,7 @@
         <template slot-scope="scope">
           <el-button size="mini" @click="shouge(scope.row.buyOrderId)">shou</el-button>
           <el-button size="mini" @click="forceShouge(scope.row.buyOrderId)">force shou</el-button>
-          <el-button size="mini" @click="doMore(scope.row.symbolName)">doMore</el-button>
+          <el-button size="mini" @click="doMore(scope.row.symbolName, scope.row.userName)">doMore</el-button>
 
           <!--<el-button size="mini" @click="orderShouge(scope.row.sellOrderId)">指令收割</el-button>-->
           <!--<el-button size="mini" @click="orderForceShouge(scope.row.sellOrderId)">指令强制收割</el-button>-->
@@ -184,8 +184,7 @@
         }
         return '';
       },
-      doMore: function(symbolName) {
-        const {userName} = this;
+      doMore: function(symbolName, userName) {
         doMore({userName, symbolName}).then(() => {
 
         });
