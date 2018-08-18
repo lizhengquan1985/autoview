@@ -28,6 +28,13 @@
         prop="symbolName"
         label="物"
         width="68">
+        <template slot-scope="scope">
+          <div>{{scope.row.symbolName}}</div>
+          <div>
+          <span
+            v-if="symbolName && scope.$index>0">{{(scope.row.buyTradePrice / moreList[scope.$index - 1].buyTradePrice).toFixed(3, '')}}</span>
+          </div>
+        </template>
       </el-table-column>
       <el-table-column
         label="入"

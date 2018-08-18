@@ -2,6 +2,14 @@
   <div class="app-container">
     <div>
       <el-input v-model="userName" style="width:150px;"/>
+      <el-select v-model="sort">
+        <el-option label="zimu" value="zimu"/>
+        <el-option label="count" value="count"/>
+        <el-option label="maxmin" value="maxmin"/>
+        <el-option label="amount" value="amount"/>
+        <el-option label="nowamount" value="nowamount"/>
+        <el-option label="diffamount" value="diffamount"/>
+      </el-select>
       <el-button @click="listDogMoreBuyNotFinishedStatistics()">搜索</el-button>
       {{list.length}}
     </div>
@@ -73,6 +81,7 @@
     name: 'HelloWorld',
     data() {
       return {
+        sort: '',
         userName: '',
         list: [],
         totalAmount: 0,
@@ -94,13 +103,13 @@
         this.listDogMoreBuyNotFinishedStatistics();
       },
       listDogMoreBuyNotFinishedStatistics: function() {
-        const {userName} = this;
-        listDogMoreBuyNotFinishedStatistics({userName}).then(data => {
+        const {userName, sort} = this;
+        listDogMoreBuyNotFinishedStatistics({userName, sort}).then(data => {
           data = data.data || data;
           this.list = data;
           let nowTotalAmount = 0;
           let totalAmount = 0;
-          for (let item of data) {
+          for (const item of data) {
             nowTotalAmount += item.nowTotalAmount;
             totalAmount += item.totalAmount;
           }
