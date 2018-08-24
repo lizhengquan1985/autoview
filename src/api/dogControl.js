@@ -39,3 +39,10 @@ export function getFlexCount(data) {
   });
 }
 
+export function initAccountInfo(data) {
+  return request({
+    url: '/api/Control/initAccountInfo',
+    method: 'get',
+    params: data,
+  });
+}

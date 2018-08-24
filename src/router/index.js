@@ -90,6 +90,13 @@ export const asyncRouterMap = [
         meta: {title: 'dogControl'},
       },
       {
+        path: 'tab/dogAccount',
+        icon: 'tab',
+        component: _import('example/DogAccount'),
+        name: 'dogAccount',
+        meta: {title: 'dogAccount'},
+      },
+      {
         path: 'tab/dogMoreFinished',
         icon: 'tab',
         component: _import('example/DogMoreFinished'),

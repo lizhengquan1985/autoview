@@ -19,6 +19,9 @@
               {{closeDic[scope.row.symbolName]}}
             </div>
             <div v-else>{{closeDic[scope.row.symbolName]}}</div>
+            <div>
+              <span>{{(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName]).toFixed(4,'')}}</span>
+            </div>
           </div>
         </template>
       </el-table-column>
@@ -39,6 +42,16 @@
         </template>
       </el-table-column>
       <el-table-column
+        label="empty"
+        width="145">
+        <template slot-scope="scope">
+          <div>{{scope.row.emptyPrice || ''}}
+            <el-button size="mini" @click="initEmptyPrice(scope.row.symbolName)">初始</el-button>
+          </div>
+          <div>{{scope.row.emptyExpiredTime | formatDate}}</div>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="maxInputPrice"
         width="155">
         <template slot-scope="scope">
@@ -52,16 +65,6 @@
         <template slot-scope="scope">
           <div>{{scope.row.avgInputAmount || ''}}</div>
           <div>{{scope.row.avgInputExpiredTime | formatDate}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="empty"
-        width="145">
-        <template slot-scope="scope">
-          <div>{{scope.row.emptyPrice || ''}}
-            <el-button size="mini" @click="initEmptyPrice(scope.row.symbolName)">初始</el-button>
-          </div>
-          <div>{{scope.row.emptyExpiredTime | formatDate}}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -274,6 +277,7 @@
         });
       },
       getFlexCount: function(symbolName) {
+        return;
         getFlexCount({symbolName}).then(() => {
           this.listDogControl();
         });
