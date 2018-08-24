@@ -50,13 +50,13 @@
   import {
     initAccountInfo,
   } from '../../api/dogControl';
-  import ElSelect from 'element-ui/packages/select/src/select';
 
   export default {
-    components: {ElSelect},
+    components: {},
     name: 'HelloWorld',
     data() {
       return {
+        order: '',
         asc: true,
         userName: '',
         list: [],
@@ -67,6 +67,7 @@
     computed: {},
     methods: {
       initAccountInfo: function() {
+        console.log(this.order)
         const userName = this.userName;
         if (this.list.length > 0) {
           this.list.sort((a, b) => {
