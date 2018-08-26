@@ -8,14 +8,6 @@ export function shouge(data) {
   });
 }
 
-export function forceShouge(data) {
-  return request({
-    url: '/api/More/forceShouge',
-    method: 'get',
-    params: data,
-  });
-}
-
 export function listMoreBuyIsNotFinished(data) {
   return request({
     url: '/api/More/listMoreBuyIsNotFinished',

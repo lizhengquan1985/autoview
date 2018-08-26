@@ -92,11 +92,8 @@
         label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="shouge(scope.row.buyOrderId)">shou</el-button>
-          <el-button size="mini" @click="forceShouge(scope.row.buyOrderId)">force shou</el-button>
           <el-button size="mini" @click="doMore(scope.row.symbolName, scope.row.userName)">doMore</el-button>
 
-          <!--<el-button size="mini" @click="orderShouge(scope.row.sellOrderId)">指令收割</el-button>-->
-          <!--<el-button size="mini" @click="orderForceShouge(scope.row.sellOrderId)">指令强制收割</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -106,7 +103,7 @@
 <script>
   import {
     listMoreBuyIsNotFinished,
-    shouge, forceShouge,
+    shouge
   } from '../../api/more';
   import {
     createOrderReap,
@@ -148,28 +145,6 @@
       },
       shouge: function(orderId) {
         shouge({orderId}).then(() => {
-        });
-      },
-      forceShouge: function(orderId) {
-        forceShouge({orderId}).then(() => {
-        });
-      },
-      orderShouge: function(orderId) {
-        createOrderReap({
-          reapType: 0,
-          orderId,
-          percent: 1.02,
-        }).then(() => {
-
-        });
-      },
-      orderForceShouge: function(orderId) {
-        createOrderReap({
-          reapType: 0,
-          orderId,
-          percent: 1.01,
-        }).then(() => {
-
         });
       },
       tableRowClassName({row, rowIndex}) {
