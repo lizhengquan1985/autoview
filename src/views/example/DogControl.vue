@@ -20,7 +20,8 @@
             </div>
             <div v-else>{{closeDic[scope.row.symbolName]}}</div>
             <div>
-              <span>{{(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName]).toFixed(4,'')}}</span>
+              <span v-if="(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName])<1.6" style="color: red;">{{(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName]).toFixed(4,'')}}</span>
+              <span v-else>{{(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName]).toFixed(4,'')}}</span>
             </div>
           </div>
         </template>
