@@ -7,7 +7,8 @@
       </el-select>
       <el-input v-model="symbolName" style="width: 200px;"/>
       <el-button @click="listMoreBuyIsFinished()" icon="search" type="primary">搜索</el-button>
-      <span>{{moreList.length}}</span>
+      <span style="margin-right: 10px;">数量：{{moreList.length}}</span>
+      <span>USDT：{{usdtAmount.toFixed(4, '')}}</span>
     </div>
     <br/>
     <el-table
@@ -108,7 +109,7 @@
 <script>
   import {listMoreBuyIsFinished, getMoreBuyDetail, deleteMore, listMoreBuyIsFinishedDetail} from '../../api/more';
   import echarts from 'echarts';
-  import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
+  import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue';
 
   export default {
     components: {ElButton},
@@ -125,40 +126,46 @@
         hasSell: '0',
         dialogVisible: false,
         formLabelWidth: '100px',
-        detail: {}
+        detail: {},
+        usdtAmount: 0,
       };
     },
-    created: function () {
+    created: function() {
       this.listMoreBuyIsFinished();
     },
     computed: {},
     methods: {
-      listMoreBuyIsFinished: function () {
+      listMoreBuyIsFinished: function() {
         const {userName, symbolName} = this;
         listMoreBuyIsFinishedDetail({userName, symbolName, pageIndex: 0, pageSize: 60}).then(data => {
           data = data.data || data;
           this.moreList = data;
+          let usdtAmount = 0;
+          data.forEach(it => {
+            usdtAmount += it.usdt;
+          });
+          this.usdtAmount = usdtAmount;
         });
       },
-      showDetail: function (buyOrderId) {
+      showDetail: function(buyOrderId) {
         getMoreBuyDetail({buyOrderId}).then(data => {
           this.detail = data.data;
           this.detail.buyOrderId = buyOrderId;
           this.dialogVisible = true;
-        })
+        });
       },
-      deleteMore: function (buyOrderId) {
+      deleteMore: function(buyOrderId) {
         this.$confirm('删除吗', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
+          type: 'warning',
         }).then(() => {
           deleteMore({buyOrderId}).then(data => {
             this.listMoreBuyIsFinished();
             this.dialogVisible = false;
-          })
-        })
-      }
+          });
+        });
+      },
     },
   };
 </script>
