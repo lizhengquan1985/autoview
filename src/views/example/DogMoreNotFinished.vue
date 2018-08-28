@@ -15,9 +15,13 @@
       :row-class-name="tableRowClassName"
       style="width: 100%">
       <el-table-column
-        prop="buyOrderId"
         label="Id"
-        width="100">
+        width="120">
+        <template slot-scope="scope">
+          <div>{{scope.row.buyOrderId}}</div>
+          <div v-if="todayDic[scope.row.symbolName]">{{todayDic[scope.row.symbolName].toFixed(4,'')}}</div>
+          <div v-if="todayDic[scope.row.symbolName+'-']">{{todayDic[scope.row.symbolName+'-'].toFixed(4,'')}}</div>
+        </template>
       </el-table-column>
       <el-table-column
         prop="userName"
@@ -103,11 +107,8 @@
 <script>
   import {
     listMoreBuyIsNotFinished,
-    shouge
+    shouge,
   } from '../../api/more';
-  import {
-    createOrderReap,
-  } from '../../api/orderReap';
   import {doMore} from '../../api/empty';
 
   export default {
@@ -118,6 +119,7 @@
         symbolName: '',
         moreList: [],
         closeDic: {},
+        todayDic: {},
         ladderDic: {},
         totalAmount: 0,
         ladderBuyDic: {},
@@ -134,6 +136,7 @@
           data = data.data || data;
           this.moreList = data.list;
           this.closeDic = data.closeDic;
+          this.todayDic = data.todayDic;
           this.ladderBuyDic = data.ladderBuyDic || {};
           this.ladderDic = data.ladderDic;
           let totalAmount = 0;
