@@ -67,8 +67,12 @@
     computed: {},
     methods: {
       initAccountInfo: function() {
-        console.log(this.order)
+        console.log(this.order);
         const userName = this.userName;
+        if (!userName) {
+          this.list = [];
+          return;
+        }
         if (this.list.length > 0) {
           this.list.sort((a, b) => {
             if (this.asc) {
