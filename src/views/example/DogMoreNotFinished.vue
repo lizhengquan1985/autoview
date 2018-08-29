@@ -26,7 +26,12 @@
       <el-table-column
         prop="userName"
         label="人"
-        width="50">
+        width="80">
+        <template slot-scope="scope">
+          <div>{{scope.row.userName}}</div>
+          <div style="color: blue;" v-if="todayDic[scope.row.symbolName+'+']>1.005">{{todayDic[scope.row.symbolName+'+'].toFixed(4,'')}}</div>
+          <div v-else-if="todayDic[scope.row.symbolName+'+']">{{todayDic[scope.row.symbolName+'+'].toFixed(4,'')}}</div>
+        </template>
       </el-table-column>
       <el-table-column
         prop="symbolName"
