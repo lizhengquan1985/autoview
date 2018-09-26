@@ -1,6 +1,10 @@
 <template>
   <div class="app-container">
     <div>
+      <el-select v-model="userName">
+        <el-option value="qq">qq</el-option>
+        <el-option value="xx">xx</el-option>
+      </el-select>
       <el-input v-model="symbolName" style="width: 200px;"/>
       <el-button @click="listEmptySellIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
@@ -90,6 +94,7 @@
     name: 'HelloWorld',
     data() {
       return {
+        userName: 'qq',
         symbolName: '',
         emptyList: [],
         closeDic: {},
@@ -102,8 +107,8 @@
     computed: {},
     methods: {
       listEmptySellIsNotFinished: function() {
-        const {symbolName} = this;
-        listEmptySellIsNotFinished({symbolName}).then(data => {
+        const {symbolName, userName} = this;
+        listEmptySellIsNotFinished({symbolName, userName}).then(data => {
           data = data.data || data;
           this.emptyList = data.list;
           this.closeDic = data.closeDic;

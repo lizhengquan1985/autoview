@@ -7,7 +7,7 @@
       </el-select>
       <el-input v-model="symbolName" style="width: 200px;"/>
       <el-button @click="emptyInfo()" icon="search" type="primary">搜索</el-button>
-      <!--<el-button @click="doEmpty()" icon="search" type="primary">empty once</el-button>-->
+      <el-button @click="doEmpty()" icon="search" type="primary">empty once</el-button>
     </div>
     <div>
       <label>count：{{moreList.length}}</label>
@@ -100,8 +100,14 @@
       },
       doEmpty: function() {
         const {symbolName, userName} = this;
-        doEmpty({userName, symbolName}).then(() => {
+        this.$confirm('确定空吗', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(() => {
+          doEmpty({userName, symbolName}).then(() => {
 
+          });
         });
       },
     },
