@@ -1,7 +1,12 @@
 <template>
   <div class="app-container">
     <div>
-      <el-input v-model="userName" style="width: 200px;"/>
+      <el-radio-group v-model="sort" size="mini" @change="changeLidu()">
+        <el-radio-button label="lastbuy">时间顺序</el-radio-button>
+        <el-radio-button label="more">多</el-radio-button>
+        <el-radio-button label="shou">收</el-radio-button>
+      </el-radio-group>
+      <el-input v-model="userName" style="width: 200px;" @focus="userName=(userName==='qq'?'xx':'qq')"/>
       <el-input v-model="symbolName" style="width: 200px;"/>
       <el-button @click="listMoreBuyIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
@@ -29,7 +34,9 @@
         width="80">
         <template slot-scope="scope">
           <div>{{scope.row.userName}}</div>
-          <div style="color: blue;" v-if="todayDic[scope.row.symbolName+'+']>1.005">{{todayDic[scope.row.symbolName+'+'].toFixed(4,'')}}</div>
+          <div style="color: blue;" v-if="todayDic[scope.row.symbolName+'+']>1.005">
+            {{todayDic[scope.row.symbolName+'+'].toFixed(4,'')}}
+          </div>
           <div v-else-if="todayDic[scope.row.symbolName+'+']">{{todayDic[scope.row.symbolName+'+'].toFixed(4,'')}}</div>
         </template>
       </el-table-column>
@@ -49,13 +56,14 @@
         label="入"
         width="150">
         <template slot-scope="scope">
-          <div>{{scope.row.buyTradePrice}}</div>
+          <div>{{scope.row.buyTradePrice | fixedPrice}}</div>
           <div>
           <span
             v-if="ladderBuyDic[scope.row.symbolName] && closeDic[scope.row.symbolName]"
-            :style="{color:( scope.row.buyTradePrice / closeDic[scope.row.symbolName])>=ladderBuyDic[scope.row.symbolName]?'red':(( scope.row.buyTradePrice / closeDic[scope.row.symbolName]) > 1.04?'deeppink':'black')}">{{(scope.row.buyTradePrice / closeDic[scope.row.symbolName]).toFixed(3, '')}}</span>
-            -- <span
-            v-if="ladderBuyDic[scope.row.symbolName]">{{ladderBuyDic[scope.row.symbolName].toFixed(4,'')}}</span>
+            :style="{color:( scope.row.buyTradePrice / closeDic[scope.row.symbolName])>=ladderBuyDic[scope.row.symbolName]?'red':(( scope.row.buyTradePrice / closeDic[scope.row.symbolName]) > 1.04?'deeppink':'black')}">
+            {{(scope.row.buyTradePrice / closeDic[scope.row.symbolName]).toFixed(3,'')}}</span>
+            -- <span style="color: gray;"
+                     v-if="ladderBuyDic[scope.row.symbolName]">{{ladderBuyDic[scope.row.symbolName].toFixed(3,'')}}</span>
           </div>
         </template>
       </el-table-column>
@@ -64,15 +72,15 @@
         width="150">
         <template slot-scope="scope">
           <div v-if="closeDic[scope.row.symbolName]">
-            {{closeDic[scope.row.symbolName].toFixed(4, '')}}
+            {{closeDic[scope.row.symbolName] | fixedPrice}}
           </div>
           <div>
           <span
             v-if="closeDic[scope.row.symbolName]"
-            :style="{color:(closeDic[scope.row.symbolName] / scope.row.buyTradePrice)>=1.05?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3, '')}}</span>
+            :style="{color:(closeDic[scope.row.symbolName] / scope.row.buyTradePrice)>=1.05?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3,'')}}</span>
             --
-            <span v-if="ladderDic[scope.row.symbolName]">
-            {{ladderDic[scope.row.symbolName].toFixed(4, '')}}
+            <span style="color: gray;" v-if="ladderDic[scope.row.symbolName]">
+            {{ladderDic[scope.row.symbolName].toFixed(3, '')}}
           </span>
           </div>
         </template>
@@ -120,6 +128,7 @@
     name: 'HelloWorld',
     data() {
       return {
+        sort: 'lastbuy',
         userName: 'qq',
         symbolName: '',
         moreList: [],
@@ -136,8 +145,8 @@
     computed: {},
     methods: {
       listMoreBuyIsNotFinished: function() {
-        const {symbolName, userName} = this;
-        listMoreBuyIsNotFinished({symbolName, userName}).then(data => {
+        const {symbolName, userName, sort} = this;
+        listMoreBuyIsNotFinished({symbolName, userName, sort}).then(data => {
           data = data.data || data;
           this.moreList = data.list;
           this.closeDic = data.closeDic;

@@ -149,3 +149,19 @@ export function formatDate(dt, format = 'yyyy-MM-dd hh:mm:ss') {
 
   return dt;
 }
+
+export function fixedPrice(price, p) {
+  if(p){
+    return price.toFixed(p, '');
+  }
+  if (price >= 100) {
+    return price.toFixed(2, '');
+  }
+  if (price >= 10) {
+    return price.toFixed(2, '');
+  }
+  if (price < 0.01) {
+    return price.toFixed(5, '');
+  }
+  return price.toFixed(4, '');
+}
