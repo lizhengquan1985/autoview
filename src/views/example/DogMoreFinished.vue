@@ -5,7 +5,7 @@
         <el-option value="qq">qq</el-option>
         <el-option value="xx">xx</el-option>
       </el-select>
-      <el-input v-model="symbolName" style="width: 200px;"/>
+      <el-input size="mini" v-model="symbolName" style="width: 200px;"/>
       <el-button @click="listMoreBuyIsFinished()" icon="search" type="primary">搜索</el-button>
       <span style="margin-right: 10px;">数量：{{moreList.length}}</span>
       <span>USDT：{{usdtAmount.toFixed(4, '')}}</span>
@@ -107,8 +107,7 @@
 </template>
 
 <script>
-  import {listMoreBuyIsFinished, getMoreBuyDetail, deleteMore, listMoreBuyIsFinishedDetail} from '../../api/more';
-  import echarts from 'echarts';
+  import {getMoreBuyDetail, deleteMore, listMoreBuyIsFinishedDetail} from '../../api/more';
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue';
 
   export default {

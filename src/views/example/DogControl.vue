@@ -1,110 +1,106 @@
 <template>
   <div style="padding: 5px;">
-
-    <el-button size="mini" @click="showEdit({})">新增</el-button>
-    <el-table
-      border
-      size="mini"
-      :data="dataList"
-      style="width: 100%">
-      <el-table-column
-        prop="symbolName"
-        label="名称"
-        width="75">
-        <template slot-scope="scope">
-          <div style="line-height: 14px;">
-            <div>{{scope.row.symbolName}}</div>
-            <div style="color: red;"
-                 v-if="canEmpty(scope.row)">
-              {{closeDic[scope.row.symbolName]}}
-            </div>
-            <div v-else>{{closeDic[scope.row.symbolName]}}</div>
-            <div>
-              <span v-if="(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName])<1.6" style="color: red;">{{(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName]).toFixed(4,'')}}</span>
-              <span v-else>{{(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName]).toFixed(4,'')}}</span>
-            </div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="历史最大最小"
-        width="165">
-        <template slot-scope="scope">
-          <div>
-            <div v-if="scope.row.historyMin>0">
+    <el-card>
+      <el-input v-model="quoteCurrency" size="mini" style="width: 120px;"/>
+      <el-button size="mini" @click="listDogControl()" type="primary">搜搜</el-button>
+      <el-button size="mini" @click="showEdit({})" type="primary">新增</el-button>
+    </el-card>
+    <div style="margin-top: 3px;">
+      <el-table
+        border
+        size="mini"
+        :data="dataList"
+        style="width: 100%">
+        <el-table-column
+          prop="symbolName"
+          label="名称"
+          width="125">
+          <template slot-scope="scope">
+            <div style="line-height: 14px;">
               <div>
-                {{scope.row.historyMin}} ~ {{scope.row.historyMax}}
+                <el-button size="mini" @click="showEdit(scope.row)">
+                  {{scope.row.symbolName}}{{scope.row.quoteCurrency}}
+                </el-button>
               </div>
-              推荐:{{getRecommend(scope.row)}}
-              <el-button size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
+              <div style="color: red;"
+                   v-if="canEmpty(scope.row)">
+                {{closeDic[scope.row.symbolName]}}
+              </div>
+              <div v-else>{{closeDic[scope.row.symbolName]}}</div>
+              <div>
+              <span v-if="(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName])<1.6"
+                    style="color: red;">{{(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName]).toFixed(4,'')}}</span>
+                <span v-else>{{(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName]).toFixed(4,'')}}</span>
+              </div>
             </div>
-            <el-button v-else size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="empty"
-        width="145">
-        <template slot-scope="scope">
-          <div>{{scope.row.emptyPrice || ''}}
-            <el-button size="mini" @click="initEmptyPrice(scope.row.symbolName)">初始</el-button>
-          </div>
-          <div>{{scope.row.emptyExpiredTime | formatDate}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="maxInputPrice"
-        width="155">
-        <template slot-scope="scope">
-          <div>{{scope.row.maxInputPrice || ''}}</div>
-          <div>{{scope.row.maxInputPriceExpiredTime | formatDate}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="avgInputAmount"
-        width="145">
-        <template slot-scope="scope">
-          <div>{{scope.row.avgInputAmount || ''}}</div>
-          <div>{{scope.row.avgInputExpiredTime | formatDate}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="predictPrice"
-        width="145">
-        <template slot-scope="scope">
-          <div>{{scope.row.predictPrice || ''}}</div>
-          <div>{{scope.row.predictExpiredTime | formatDate}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="ladderBuyPercent"
-        width="135">
-        <template slot-scope="scope">
-          <div>{{scope.row.ladderBuyPercent || ''}}</div>
-          <div>{{scope.row.ladderBuyExpiredTime | formatDate}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="阶梯出售比"
-        width="135">
-        <template slot-scope="scope">
-          <div>{{scope.row.ladderSellPercent || ''}}</div>
-          <div>{{scope.row.ladderSellExpiredTime | formatDate}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="操作">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="showEdit(scope.row)">编辑</el-button>
-          <el-button size="mini" @click="getFlexCount(scope.row.symbolName)">flex</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="历史最大最小"
+          width="165">
+          <template slot-scope="scope">
+            <div>
+              <div v-if="scope.row.historyMin>0">
+                <div>
+                  {{scope.row.historyMin}} ~ {{scope.row.historyMax}}
+                </div>
+                推荐:{{getRecommend(scope.row)}}
+                <el-button size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
+              </div>
+              <el-button v-else size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="empty"
+          width="145">
+          <template slot-scope="scope">
+            <div>{{scope.row.emptyPrice || ''}}
+              <el-button size="mini" @click="initEmptyPrice(scope.row.symbolName)">初始</el-button>
+            </div>
+            <div>{{scope.row.emptyExpiredTime | formatDate}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="maxInputPrice"
+          width="135">
+          <template slot-scope="scope">
+            <div>{{scope.row.maxInputPrice || ''}}</div>
+            <div>{{scope.row.maxInputPriceExpiredTime | formatDate}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="ladderBuyPercent"
+          width="135">
+          <template slot-scope="scope">
+            <div>{{scope.row.ladderBuyPercent || ''}}</div>
+            <div>{{scope.row.ladderBuyExpiredTime | formatDate}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="阶梯出售比"
+          width="135">
+          <template slot-scope="scope">
+            <div>{{scope.row.ladderSellPercent || ''}}</div>
+            <div>{{scope.row.ladderSellExpiredTime | formatDate}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" @click="getFlexCount(scope.row.symbolName)">flex</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <el-dialog title="编辑配置" :visible.sync="dialogFormVisible" :width="'520px'">
       <el-form :model="form" :rules="rules" ref="ruleForm">
         <el-form-item label="symbolName：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input size="small" v-model="form.symbolName" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="quoteCurrency：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input size="small" v-model="form.quoteCurrency" style="width: 200px;"/>
         </el-form-item>
         <el-form-item label="maxInputPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input-number size="small" v-model="form.maxInputPrice" style="width: 200px;"/>
@@ -212,26 +208,35 @@
 
   export default {
     components: {},
-    name: 'HelloWorld',
+    name: 'DogControl',
     data() {
       return {
+        quoteCurrency: 'usdt',
         symbolName: '',
         dataList: [],
         formLabelWidth: '180px',
         form: {},
         dialogFormVisible: false,
         rules: [],
+        closeDic: {},
       };
     },
     created: function() {
       this.init();
     },
-    computed: {
-      controlObj: function() {
-        return;
-      },
-    },
+    computed: {},
     methods: {
+      init: function() {
+        this.listDogControl();
+      },
+      listDogControl: function() {
+        const {quoteCurrency} = this;
+        listDogControl({quoteCurrency}).then(data => {
+          this.dataList = data.data;
+          console.log(this.dataList);
+          // this.closeDic = data.data.closeDic || {};
+        });
+      },
       getRecommend: function(row) {
         var recommend = (row.historyMin + (row.historyMax - row.historyMin) * 0.2);
         if (recommend < row.historyMin * 1.4) {
@@ -240,7 +245,8 @@
         return recommend.toFixed(4, '');
       },
       initEmptyPrice: function(symbolName) {
-        initEmptyPrice({symbolName}).then(() => {
+        const {quoteCurrency} = this;
+        initEmptyPrice({symbolName, quoteCurrency}).then(() => {
           this.listDogControl();
         });
       },
@@ -251,16 +257,6 @@
         }
         const nowPrice = this.closeDic[row.symbolName] || 0;
         return nowPrice >= recommend && nowPrice >= row.emptyPrice;
-      },
-      init: function() {
-        this.listDogControl();
-      },
-      listDogControl: function() {
-        listDogControl({}).then(data => {
-          console.log(3333333333, data.data);
-          this.dataList = data.data.list;
-          this.closeDic = data.data.closeDic;
-        });
       },
       showEdit: function(row) {
         this.dialogFormVisible = true;
@@ -273,7 +269,8 @@
         });
       },
       refreshHistoryMaxMin: function(symbolName) {
-        refreshHistoryMaxMin({symbolName}).then(() => {
+        const {quoteCurrency} = this;
+        refreshHistoryMaxMin({symbolName, quoteCurrency}).then(() => {
           this.listDogControl();
         });
       },

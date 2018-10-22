@@ -16,14 +16,6 @@ export function listMoreBuyIsNotFinished(data) {
   });
 }
 
-export function listMoreBuyIsFinished(data) {
-  return request({
-    url: '/api/More/listMoreBuyIsFinished',
-    method: 'get',
-    params: data,
-  });
-}
-
 export function listMoreBuyIsFinishedDetail(data) {
   return request({
     url: '/api/More/listMoreBuyIsFinishedDetail',

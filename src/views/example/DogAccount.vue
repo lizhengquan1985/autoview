@@ -13,7 +13,7 @@
       :data="list"
       style="width: 100%">
       <el-table-column
-        prop="coin"
+        prop="currency"
         label="名称"
         width="75">
       </el-table-column>

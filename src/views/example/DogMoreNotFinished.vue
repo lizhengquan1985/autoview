@@ -6,8 +6,9 @@
         <el-radio-button label="more">多</el-radio-button>
         <el-radio-button label="shou">收</el-radio-button>
       </el-radio-group>
-      <el-input v-model="userName" style="width: 200px;" @focus="userName=(userName==='qq'?'xx':'qq')"/>
-      <el-input v-model="symbolName" style="width: 200px;"/>
+      <el-input v-model="userName" size="mini" style="width: 80px;" @focus="userName=(userName==='qq'?'xx':'qq')"/>
+      <el-input v-model="symbolName" size="mini" style="width: 100px;"/>
+      <el-input v-model="quoteCurrency" size="mini" style="width: 80px;"/>
       <el-button @click="listMoreBuyIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
     <div>
@@ -109,7 +110,7 @@
         label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="shouge(scope.row.buyOrderId)">shou</el-button>
-          <el-button size="mini" @click="doMore(scope.row.symbolName, scope.row.userName)">doMore</el-button>
+          <el-button size="mini" @click="doMore(scope.row.symbolName, scope.row.quoteCurrency, scope.row.userName)">doMore</el-button>
 
         </template>
       </el-table-column>
@@ -131,6 +132,7 @@
         sort: 'lastbuy',
         userName: 'qq',
         symbolName: '',
+        quoteCurrency: 'usdt',
         moreList: [],
         closeDic: {},
         todayDic: {},
@@ -145,8 +147,8 @@
     computed: {},
     methods: {
       listMoreBuyIsNotFinished: function() {
-        const {symbolName, userName, sort} = this;
-        listMoreBuyIsNotFinished({symbolName, userName, sort}).then(data => {
+        const {symbolName, userName, sort, quoteCurrency} = this;
+        listMoreBuyIsNotFinished({symbolName, quoteCurrency, userName, sort}).then(data => {
           data = data.data || data;
           this.moreList = data.list;
           this.closeDic = data.closeDic;
@@ -183,8 +185,8 @@
         }
         return '';
       },
-      doMore: function(symbolName, userName) {
-        doMore({userName, symbolName}).then(() => {
+      doMore: function(symbolName, quoteCurrency, userName) {
+        doMore({userName, symbolName, quoteCurrency}).then(() => {
 
         });
       },

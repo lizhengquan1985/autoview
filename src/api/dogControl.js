@@ -1,9 +1,10 @@
 import request from '@/utils/request';
 
-export function listDogControl() {
+export function listDogControl(params) {
   return request({
     url: '/api/Control/list',
     method: 'get',
+    params,
   });
 }
 
