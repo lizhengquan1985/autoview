@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 5px;">
     <el-card>
-      <el-input v-model="quoteCurrency" size="mini" style="width: 120px;"/>
+      <el-input v-model="quoteCurrency" size="mini" style="width: 120px;" @click.native="changeQuoteCurrency"/>
       <el-button size="mini" @click="listDogControl()" type="primary">搜搜</el-button>
       <el-button size="mini" @click="showEdit({})" type="primary">新增</el-button>
     </el-card>
@@ -19,7 +19,7 @@
             <div style="line-height: 14px;">
               <div>
                 <el-button size="mini" @click="showEdit(scope.row)">
-                  {{scope.row.symbolName}}{{scope.row.quoteCurrency}}
+                  {{scope.row.symbolName}}
                 </el-button>
               </div>
               <div style="color: red;"
@@ -58,7 +58,6 @@
             <div>{{scope.row.emptyPrice || ''}}
               <el-button size="mini" @click="initEmptyPrice(scope.row.symbolName)">初始</el-button>
             </div>
-            <div>{{scope.row.emptyExpiredTime | formatDate}}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -66,23 +65,14 @@
           width="135">
           <template slot-scope="scope">
             <div>{{scope.row.maxInputPrice || ''}}</div>
-            <div>{{scope.row.maxInputPriceExpiredTime | formatDate}}</div>
           </template>
         </el-table-column>
         <el-table-column
-          label="ladderBuyPercent"
-          width="135">
+          label="buy/sell"
+          width="100">
           <template slot-scope="scope">
-            <div>{{scope.row.ladderBuyPercent || ''}}</div>
-            <div>{{scope.row.ladderBuyExpiredTime | formatDate}}</div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="阶梯出售比"
-          width="135">
-          <template slot-scope="scope">
-            <div>{{scope.row.ladderSellPercent || ''}}</div>
-            <div>{{scope.row.ladderSellExpiredTime | formatDate}}</div>
+            <div>buy: {{scope.row.ladderBuyPercent.toFixed(4,'')}}</div>
+            <div>sell: {{scope.row.ladderSellPercent.toFixed(4,'')}}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -95,7 +85,7 @@
     </div>
 
     <el-dialog title="编辑配置" :visible.sync="dialogFormVisible" :width="'520px'">
-      <el-form :model="form" :rules="rules" ref="ruleForm">
+      <el-form :model="form" ref="ruleForm">
         <el-form-item label="symbolName：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input size="small" v-model="form.symbolName" style="width: 200px;"/>
         </el-form-item>
@@ -105,86 +95,19 @@
         <el-form-item label="maxInputPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input-number size="small" v-model="form.maxInputPrice" style="width: 200px;"/>
         </el-form-item>
-        <el-form-item label="maxInputExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-date-picker
-            size="mini"
-            v-model="form.maxInputPriceExpiredTime"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间">
-          </el-date-picker>
-        </el-form-item>
-
-        <el-form-item label="avgInputAmount：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-input-number size="small" v-model="form.avgInputAmount" style="width: 200px;"/>
-        </el-form-item>
-        <el-form-item label="avgInputExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-date-picker
-            size="mini"
-            v-model="form.avgInputExpiredTime"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间">
-          </el-date-picker>
-        </el-form-item>
-
         <el-form-item label="emptyPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input-number size="small" v-model="form.emptyPrice" style="width: 200px;"/>
         </el-form-item>
-        <el-form-item label="emptyExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-date-picker
-            size="mini"
-            v-model="form.emptyExpiredTime"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间">
-          </el-date-picker>
-        </el-form-item>
-
-        <el-form-item label="predictPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-input-number size="small" v-model="form.predictPrice" style="width: 200px;"/>
-        </el-form-item>
-        <el-form-item label="predictExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-date-picker
-            size="mini"
-            v-model="form.predictExpiredTime"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间">
-          </el-date-picker>
-        </el-form-item>
-
         <el-form-item label="ladderBuyPercent：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input-number size="small" v-model="form.ladderBuyPercent" style="width: 200px;"/>
         </el-form-item>
-        <el-form-item label="ladderBuyExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-date-picker
-            size="mini"
-            v-model="form.ladderBuyExpiredTime"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间">
-          </el-date-picker>
-        </el-form-item>
-
         <el-form-item label="ladderSellPercent：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input-number size="small" v-model="form.ladderSellPercent" style="width: 200px;"/>
         </el-form-item>
-        <el-form-item label="ladderSellExpiredTime：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-date-picker
-            size="mini"
-            v-model="form.ladderSellExpiredTime"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期时间">
-          </el-date-picker>
-        </el-form-item>
-
 
         <el-form-item label="historyMax：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input-number size="small" v-model="form.historyMax" style="width: 200px;"/>
         </el-form-item>
-
         <el-form-item label="historyMin：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input-number size="small" v-model="form.historyMin" style="width: 200px;"/>
         </el-form-item>
@@ -217,7 +140,6 @@
         formLabelWidth: '180px',
         form: {},
         dialogFormVisible: false,
-        rules: [],
         closeDic: {},
       };
     },
@@ -226,15 +148,25 @@
     },
     computed: {},
     methods: {
+      changeQuoteCurrency() {
+        if (this.quoteCurrency === 'usdt') {
+          this.quoteCurrency = 'btc';
+        } else if (this.quoteCurrency === 'btc') {
+          this.quoteCurrency = 'eth';
+        } else if (this.quoteCurrency === 'eth') {
+          this.quoteCurrency = 'ht';
+        } else if (this.quoteCurrency === 'ht') {
+          this.quoteCurrency = 'usdt';
+        }
+      },
       init: function() {
         this.listDogControl();
       },
       listDogControl: function() {
         const {quoteCurrency} = this;
         listDogControl({quoteCurrency}).then(data => {
-          this.dataList = data.data;
-          console.log(this.dataList);
-          // this.closeDic = data.data.closeDic || {};
+          this.dataList = data.data.list;
+          this.closeDic = data.data.closeDic || {};
         });
       },
       getRecommend: function(row) {

@@ -8,7 +8,7 @@
       </el-radio-group>
       <el-input v-model="userName" size="mini" style="width: 80px;" @focus="userName=(userName==='qq'?'xx':'qq')"/>
       <el-input v-model="symbolName" size="mini" style="width: 100px;"/>
-      <el-input v-model="quoteCurrency" size="mini" style="width: 80px;"/>
+      <el-input v-model="quoteCurrency" size="mini" style="width: 80px;" @click.native="changeQuoteCurrency"/>
       <el-button @click="listMoreBuyIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
     <div>
@@ -146,6 +146,17 @@
     },
     computed: {},
     methods: {
+      changeQuoteCurrency() {
+        if (this.quoteCurrency === 'usdt') {
+          this.quoteCurrency = 'btc';
+        } else if (this.quoteCurrency === 'btc') {
+          this.quoteCurrency = 'eth';
+        } else if (this.quoteCurrency === 'eth') {
+          this.quoteCurrency = 'ht';
+        } else if (this.quoteCurrency === 'ht') {
+          this.quoteCurrency = 'usdt';
+        }
+      },
       listMoreBuyIsNotFinished: function() {
         const {symbolName, userName, sort, quoteCurrency} = this;
         listMoreBuyIsNotFinished({symbolName, quoteCurrency, userName, sort}).then(data => {
