@@ -5,7 +5,8 @@
         <el-option value="qq">qq</el-option>
         <el-option value="xx">xx</el-option>
       </el-select>
-      <el-input v-model="symbolName" style="width: 200px;"/>
+      <el-input v-model="symbolName" style="width: 120px;"/>
+      <el-input v-model="quoteCurrency" style="width: 100px;" @click.native="changeQuoteCurrency"/>
       <el-button @click="listEmptySellIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
     <div>
@@ -96,6 +97,7 @@
       return {
         userName: 'qq',
         symbolName: '',
+        quoteCurrency: 'usdt',
         emptyList: [],
         closeDic: {},
         ladderDic: {},
@@ -106,9 +108,20 @@
     },
     computed: {},
     methods: {
+      changeQuoteCurrency() {
+        if (this.quoteCurrency === 'usdt') {
+          this.quoteCurrency = 'btc';
+        } else if (this.quoteCurrency === 'btc') {
+          this.quoteCurrency = 'eth';
+        } else if (this.quoteCurrency === 'eth') {
+          this.quoteCurrency = 'ht';
+        } else if (this.quoteCurrency === 'ht') {
+          this.quoteCurrency = 'usdt';
+        }
+      },
       listEmptySellIsNotFinished: function() {
-        const {symbolName, userName} = this;
-        listEmptySellIsNotFinished({symbolName, userName}).then(data => {
+        const {symbolName, userName, quoteCurrency} = this;
+        listEmptySellIsNotFinished({symbolName, userName, quoteCurrency}).then(data => {
           data = data.data || data;
           this.emptyList = data.list;
           this.closeDic = data.closeDic;

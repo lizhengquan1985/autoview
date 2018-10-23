@@ -47,6 +47,13 @@ export function emptyInfo(data) {
     params: data,
   });
 }
+export function moreInfo(data) {
+  return request({
+    url: '/api/More/moreInfo',
+    method: 'get',
+    params: data,
+  });
+}
 
 export function listDogMoreBuyNotFinishedStatistics(data) {
   return request({

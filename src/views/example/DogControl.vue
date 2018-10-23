@@ -4,6 +4,7 @@
       <el-input v-model="quoteCurrency" size="mini" style="width: 120px;" @click.native="changeQuoteCurrency"/>
       <el-button size="mini" @click="listDogControl()" type="primary">搜搜</el-button>
       <el-button size="mini" @click="showEdit({})" type="primary">新增</el-button>
+      {{dataList.length}}
     </el-card>
     <div style="margin-top: 3px;">
       <el-table
@@ -27,11 +28,6 @@
                 {{closeDic[scope.row.symbolName]}}
               </div>
               <div v-else>{{closeDic[scope.row.symbolName]}}</div>
-              <div>
-              <span v-if="(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName])<1.6"
-                    style="color: red;">{{(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName]).toFixed(4,'')}}</span>
-                <span v-else>{{(Math.max(scope.row.emptyPrice, getRecommend(scope.row))/closeDic[scope.row.symbolName]).toFixed(4,'')}}</span>
-              </div>
             </div>
           </template>
         </el-table-column>
@@ -40,14 +36,15 @@
           width="165">
           <template slot-scope="scope">
             <div>
-              <div v-if="scope.row.historyMin>0">
+              <div style="line-height: 14px;">
                 <div>
-                  {{scope.row.historyMin}} ~ {{scope.row.historyMax}}
+                  min:{{scope.row.historyMin}}
                 </div>
-                推荐:{{getRecommend(scope.row)}}
-                <el-button size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
+                <div>
+                  max:{{scope.row.historyMax}}
+                  <i class="el-icon-refresh" @click="refreshHistoryMaxMin(scope.row.symbolName)"></i>
+                </div>
               </div>
-              <el-button v-else size="mini" @click="refreshHistoryMaxMin(scope.row.symbolName)">刷新</el-button>
             </div>
           </template>
         </el-table-column>
@@ -55,24 +52,22 @@
           label="empty"
           width="145">
           <template slot-scope="scope">
-            <div>{{scope.row.emptyPrice || ''}}
-              <el-button size="mini" @click="initEmptyPrice(scope.row.symbolName)">初始</el-button>
+            <div style="line-height: 14px;">
+              <div>多:<span :style="{color:closeDic[scope.row.symbolName]>scope.row.maxInputPrice?'black':'blue'}">{{scope.row.maxInputPrice}}</span></div>
+              <div>空:<span :style="{color:closeDic[scope.row.symbolName]<scope.row.emptyPrice?'black':'red'}">{{scope.row.emptyPrice}}</span>
+                <i class="el-icon-refresh" @click="initEmptyPrice(scope.row.symbolName)"></i>
+              </div>
             </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="maxInputPrice"
-          width="135">
-          <template slot-scope="scope">
-            <div>{{scope.row.maxInputPrice || ''}}</div>
           </template>
         </el-table-column>
         <el-table-column
           label="buy/sell"
           width="100">
           <template slot-scope="scope">
-            <div>buy: {{scope.row.ladderBuyPercent.toFixed(4,'')}}</div>
-            <div>sell: {{scope.row.ladderSellPercent.toFixed(4,'')}}</div>
+            <div style="line-height: 14px;">
+              <div>buy: {{scope.row.ladderBuyPercent.toFixed(4,'')}}</div>
+              <div>sell: {{scope.row.ladderSellPercent.toFixed(4,'')}}</div>
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -169,13 +164,6 @@
           this.closeDic = data.data.closeDic || {};
         });
       },
-      getRecommend: function(row) {
-        var recommend = (row.historyMin + (row.historyMax - row.historyMin) * 0.2);
-        if (recommend < row.historyMin * 1.4) {
-          recommend = row.historyMin * 1.4;
-        }
-        return recommend.toFixed(4, '');
-      },
       initEmptyPrice: function(symbolName) {
         const {quoteCurrency} = this;
         initEmptyPrice({symbolName, quoteCurrency}).then(() => {
@@ -232,5 +220,10 @@
   .item > .el-input-number {
     width: 180px !important;
     margin-right: 10px;
+  }
+</style>
+<style>
+  .el-table--mini td, .el-table--mini th{
+    padding: 2px 0 !important;
   }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div>
-      <el-input v-model="userName" style="width:150px;"/>
+      <el-input v-model="userName" style="width:120px;" @focus="userName=(userName==='qq'?'xx':'qq')"/>
       <el-select v-model="sort">
         <el-option label="zimu" value="zimu"/>
         <el-option label="count" value="count"/>
@@ -10,6 +10,7 @@
         <el-option label="nowamount" value="nowamount"/>
         <el-option label="diffamount" value="diffamount"/>
       </el-select>
+      <el-input v-model="quoteCurrency" style="width: 100px;" @click.native="changeQuoteCurrency"/>
       <el-button @click="listDogMoreBuyNotFinishedStatistics()">搜索</el-button>
       {{list.length}}
     </div>
@@ -81,8 +82,9 @@
     name: 'HelloWorld',
     data() {
       return {
-        sort: '',
-        userName: '',
+        sort: 'maxmin',
+        userName: 'qq',
+        quoteCurrency: 'usdt',
         list: [],
         totalAmount: 0,
         nowTotalAmount: 0,
@@ -99,12 +101,23 @@
     },
     computed: {},
     methods: {
+      changeQuoteCurrency() {
+        if (this.quoteCurrency === 'usdt') {
+          this.quoteCurrency = 'btc';
+        } else if (this.quoteCurrency === 'btc') {
+          this.quoteCurrency = 'eth';
+        } else if (this.quoteCurrency === 'eth') {
+          this.quoteCurrency = 'ht';
+        } else if (this.quoteCurrency === 'ht') {
+          this.quoteCurrency = 'usdt';
+        }
+      },
       init: function() {
         this.listDogMoreBuyNotFinishedStatistics();
       },
       listDogMoreBuyNotFinishedStatistics: function() {
-        const {userName, sort} = this;
-        listDogMoreBuyNotFinishedStatistics({userName, sort}).then(data => {
+        const {userName, sort, quoteCurrency} = this;
+        listDogMoreBuyNotFinishedStatistics({userName, sort, quoteCurrency}).then(data => {
           data = data.data || data;
           this.list = data;
           let nowTotalAmount = 0;

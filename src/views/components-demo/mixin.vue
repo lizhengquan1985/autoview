@@ -21,9 +21,6 @@
           <el-col :span="4" class="text-center">
             <router-link class="pan-btn tiffany-btn" to="/form/edit-form">Form</router-link>
           </el-col>
-          <el-col :span="4" class="text-center">
-            <router-link class="pan-btn yellow-btn" to="/theme/index">Theme</router-link>
-          </el-col>
         </div>
       </el-card>
     </el-row>

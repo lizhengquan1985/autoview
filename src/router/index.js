@@ -125,68 +125,27 @@ export const asyncRouterMap = [
         meta: {title: 'dogEmptyNotFinished'},
       },
       {
-        path: 'tab/dogMoreForEmpty',
-        icon: 'tab',
-        component: _import('example/DogMoreForEmpty'),
-        name: 'dogMoreForEmpty',
-        meta: {title: 'dogMoreForEmpty'},
-      },
-      {
         path: 'tab/dogMoreNotFinishedStatistics',
         icon: 'tab',
         component: _import('example/DogMoreNotFinishedStatistics'),
         name: 'dogMoreNotFinishedStatistics',
-        meta: {title: 'dogMoreNotFinishedStatistics'},
+        meta: {title: 'notFinishedStatistics'},
       },
       {
-        path: 'tab/dogEmptyForMore',
+        path: 'tab/doEmpty',
         icon: 'tab',
-        component: _import('example/DogEmptyForMore'),
-        name: 'dogEmptyForMore',
-        meta: {title: 'dogEmptyForMore'},
+        component: _import('example/OnceDoEmpty'),
+        name: 'doEmpty',
+        meta: {title: 'doEmpty'},
+      },
+      {
+        path: 'tab/doMore',
+        icon: 'tab',
+        component: _import('example/OnceDoMore'),
+        name: 'doMore',
+        meta: {title: 'doMore'},
       },
     ],
-  },
-
-  {
-    path: '/zip',
-    component: Layout,
-    redirect: '/zip/download',
-    alwaysShow: true,
-    meta: {title: 'zip', icon: 'zip'},
-    children: [
-      {
-        path: 'download',
-        component: _import('zip/index'),
-        name: 'exportZip',
-        meta: {title: 'exportZip'},
-      }],
-  },
-
-  {
-    path: '/theme',
-    component: Layout,
-    redirect: 'noredirect',
-    children: [
-      {
-        path: 'index',
-        component: _import('theme/index'),
-        name: 'theme',
-        meta: {title: 'theme', icon: 'theme'},
-      }],
-  },
-
-  {
-    path: '/clipboard',
-    component: Layout,
-    redirect: 'noredirect',
-    children: [
-      {
-        path: 'index',
-        component: _import('clipboard/index'),
-        name: 'clipboardDemo',
-        meta: {title: 'clipboardDemo', icon: 'clipboard'},
-      }],
   },
 
   {

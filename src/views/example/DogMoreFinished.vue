@@ -1,113 +1,103 @@
 <template>
   <div class="role-manage">
-    <div>
-      <el-select v-model="userName" clearable>
+    <el-card>
+      <el-select v-model="userName" clearable size="mini">
         <el-option value="qq">qq</el-option>
         <el-option value="xx">xx</el-option>
       </el-select>
-      <el-input size="mini" v-model="symbolName" style="width: 200px;"/>
-      <el-button @click="listMoreBuyIsFinished()" icon="search" type="primary">搜索</el-button>
+      <el-input size="mini" v-model="symbolName" style="width: 150px;"/>
+      <el-button size="mini" @click="listMoreBuyIsFinished()" icon="search" type="primary">搜索</el-button>
       <span style="margin-right: 10px;">数量：{{moreList.length}}</span>
       <span>USDT：{{usdtAmount.toFixed(4, '')}}</span>
+    </el-card>
+    <div style="margin-top: 2px;">
+      <el-table
+        border
+        :data="moreList"
+        style="width: 100%">
+        <el-table-column
+          prop="userName"
+          label="人"
+          width="40">
+        </el-table-column>
+        <el-table-column
+          prop="symbolName"
+          label="物"
+          width="68">
+        </el-table-column>
+        <el-table-column
+          label="usdt"
+          width="65">
+          <template slot-scope="scope">
+            <div :style="{color:scope.row.usdt>0.3?'red':'black'}">
+              {{scope.row.usdt.toFixed(4, '')}}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="symbol"
+          width="80">
+          <template slot-scope="scope">
+            {{scope.row.baseSymbol.toFixed(4, '')}}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="波动"
+          width="135">
+          <template slot-scope="scope">
+            <div>
+              {{scope.row.buyTradePrice.toFixed(4, '')}}~
+              {{scope.row.sellTradePrice.toFixed(4, '')}}
+            </div>
+            <div :style="{color:(scope.row.sellTradePrice / scope.row.buyTradePrice)>1.05?'red':'black'}">
+              {{(scope.row.sellTradePrice / scope.row.buyTradePrice).toFixed(3, '')}}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="buyQuantity"
+          label="quantity"
+          width="140">
+          <template slot-scope="scope">
+            <div>入：{{scope.row.buyQuantity.toFixed(4, '')}}</div>
+            <div>出：{{scope.row.sellQuantity.toFixed(4, '')}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="总波动"
+          width="120">
+          <template slot-scope="scope">
+            <div>入：{{scope.row.buyAmount.toFixed(4, '')}}</div>
+            <div>出：{{scope.row.sellAmount.toFixed(4, '')}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="buyDate"
+          label="from~to"
+          width="155">
+          <template slot-scope="scope">
+            {{scope.row.buyDate | formatDate }}
+            {{scope.row.sellDate | formatDate }}
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="buyState"
+          label="state"
+          width="90">
+        </el-table-column>
+        <el-table-column
+          label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" type="danger" @click="deleteMore(scope.row.buyOrderId)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
-    <br/>
-    <el-table
-      border
-      :data="moreList"
-      style="width: 100%">
-      <el-table-column
-        prop="userName"
-        label="人"
-        width="40">
-      </el-table-column>
-      <el-table-column
-        prop="symbolName"
-        label="物"
-        width="68">
-      </el-table-column>
-      <el-table-column
-        label="usdt"
-        width="65">
-        <template slot-scope="scope">
-          <div :style="{color:scope.row.usdt>0.3?'red':'black'}">
-            {{scope.row.usdt.toFixed(4, '')}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="symbol"
-        width="80">
-        <template slot-scope="scope">
-          {{scope.row.baseSymbol.toFixed(4, '')}}
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="波动"
-        width="135">
-        <template slot-scope="scope">
-          <div>
-            {{scope.row.buyTradePrice.toFixed(4, '')}}~
-            {{scope.row.sellTradePrice.toFixed(4, '')}}
-          </div>
-          <div :style="{color:(scope.row.sellTradePrice / scope.row.buyTradePrice)>1.05?'red':'black'}">
-            {{(scope.row.sellTradePrice / scope.row.buyTradePrice).toFixed(3, '')}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="buyQuantity"
-        label="quantity"
-        width="140">
-        <template slot-scope="scope">
-          <div>入：{{scope.row.buyQuantity.toFixed(4, '')}}</div>
-          <div>出：{{scope.row.sellQuantity.toFixed(4, '')}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="总波动"
-        width="120">
-        <template slot-scope="scope">
-          <div>入：{{scope.row.buyAmount.toFixed(4, '')}}</div>
-          <div>出：{{scope.row.sellAmount.toFixed(4, '')}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="buyDate"
-        label="from~to"
-        width="155">
-        <template slot-scope="scope">
-          {{scope.row.buyDate | formatDate }}
-          {{scope.row.sellDate | formatDate }}
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="buyState"
-        label="state"
-        width="90">
-      </el-table-column>
-      <el-table-column
-        label="操作">
-        <template slot-scope="scope">
-          <el-button size="mini" type="danger" @click="deleteMore(scope.row.buyOrderId)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-
-    <el-dialog title="详情" :visible.sync="dialogVisible" width="500px">
-      <div>
-        <div v-for="item in Object.keys(detail)"><span class="detail-item">{{item}}</span> {{detail[item]}}</div>
-      </div>
-      <div>
-        <el-button type="danger" @click="deleteMore(detail.buyOrderId)">删除</el-button>
-        <el-button type="primary" style="float: right;" @click="dialogVisible=false">关闭</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-  import {getMoreBuyDetail, deleteMore, listMoreBuyIsFinishedDetail} from '../../api/more';
+  import {deleteMore, listMoreBuyIsFinishedDetail} from '../../api/more';
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue';
 
   export default {
@@ -123,7 +113,6 @@
         symbolName: '',
         moreList: [],
         hasSell: '0',
-        dialogVisible: false,
         formLabelWidth: '100px',
         detail: {},
         usdtAmount: 0,
@@ -146,13 +135,6 @@
           this.usdtAmount = usdtAmount;
         });
       },
-      showDetail: function(buyOrderId) {
-        getMoreBuyDetail({buyOrderId}).then(data => {
-          this.detail = data.data;
-          this.detail.buyOrderId = buyOrderId;
-          this.dialogVisible = true;
-        });
-      },
       deleteMore: function(buyOrderId) {
         this.$confirm('删除吗', '提示', {
           confirmButtonText: '确定',
@@ -161,7 +143,6 @@
         }).then(() => {
           deleteMore({buyOrderId}).then(data => {
             this.listMoreBuyIsFinished();
-            this.dialogVisible = false;
           });
         });
       },
