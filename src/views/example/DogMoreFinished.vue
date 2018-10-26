@@ -26,11 +26,11 @@
           width="68">
         </el-table-column>
         <el-table-column
-          label="usdt"
+          label="quote"
           width="65">
           <template slot-scope="scope">
             <div :style="{color:scope.row.usdt>0.3?'red':'black'}">
-              {{scope.row.usdt.toFixed(4, '')}}
+              {{scope.row.usdt.toFixed(4, '')}}{{scope.row.quoteCurrency}}
             </div>
           </template>
         </el-table-column>

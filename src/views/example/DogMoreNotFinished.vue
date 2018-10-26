@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div>
-      <el-radio-group v-model="sort" size="mini" @change="changeLidu()">
+      <el-radio-group v-model="sort" size="mini">
         <el-radio-button label="lastbuy">时间顺序</el-radio-button>
         <el-radio-button label="more">多</el-radio-button>
         <el-radio-button label="shou">收</el-radio-button>
