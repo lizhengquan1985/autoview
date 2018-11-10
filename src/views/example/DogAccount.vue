@@ -11,6 +11,7 @@
       <el-input size="mini" v-model="userName" style="width: 80px;" @click.native="changeUserName"/>
       <el-input size="mini" v-model="quoteCurrency" style="width: 100px;" @click.native="changeQuoteCurrency"/>
       <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
+      <span>{{totalAmount}}</span>
     </el-card>
     <div style="margin-top: 5px;">
       <el-table
@@ -67,13 +68,14 @@
         quoteCurrency: 'usdt',
         userName: 'qq',
         list: [],
+        totalAmount: 0,
       };
     },
-    created: function() {
+    created: function () {
     },
     computed: {},
     methods: {
-      initAccountInfo: function() {
+      initAccountInfo: function () {
         console.log(this.order);
         const {userName, sort, quoteCurrency} = this;
         if (!userName || !quoteCurrency) {
@@ -83,6 +85,14 @@
         initAccountInfo({userName, sort, quoteCurrency}).then(data => {
           console.log(data);
           this.list = data.data;
+          let totalAmount = 0;
+          for (const item of this.list) {
+            if (item.currency === 'usdt' || item.currency === 'btc' || item.currency === 'eth' || item.currency === 'ht' || item.currency === 'usdt') {
+              continue;
+            }
+            totalAmount += item.canEmptyAmount;
+          }
+          this.totalAmount = totalAmount;
         });
       },
       changeUserName() {
