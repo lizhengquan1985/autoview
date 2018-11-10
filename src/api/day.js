@@ -24,13 +24,6 @@ export function listMoreBuyIsFinishedDetail(data) {
   });
 }
 
-export function getMoreBuyDetail(data) {
-  return request({
-    url: '/api/More/getMoreBuyDetail',
-    method: 'get',
-    params: data
-  });
-}
 export function deleteMore(data) {
   return request({
     url: '/api/More/delete',
