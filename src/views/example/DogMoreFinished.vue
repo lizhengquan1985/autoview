@@ -27,10 +27,11 @@
         </el-table-column>
         <el-table-column
           label="quote"
-          width="65">
+          width="85">
           <template slot-scope="scope">
             <div :style="{color:scope.row.usdt>0.3?'red':'black'}">
-              {{scope.row.usdt.toFixed(4, '')}}{{scope.row.quoteCurrency}}
+              {{scope.row.usdt.toFixed(6, '')}}
+              <div>{{scope.row.quoteCurrency}}</div>
             </div>
           </template>
         </el-table-column>
@@ -39,15 +40,16 @@
           width="80">
           <template slot-scope="scope">
             {{scope.row.baseSymbol.toFixed(4, '')}}
+            <div>{{scope.row.symbolName}}</div>
           </template>
         </el-table-column>
         <el-table-column
           label="波动"
-          width="135">
+          width="155">
           <template slot-scope="scope">
             <div>
-              {{scope.row.buyTradePrice.toFixed(4, '')}}~
-              {{scope.row.sellTradePrice.toFixed(4, '')}}
+              {{scope.row.buyTradePrice.toFixed(scope.row.buyTradePrice>1?3:6, '')}}~
+              {{scope.row.sellTradePrice.toFixed(scope.row.buyTradePrice>1?3:6, '')}}
             </div>
             <div :style="{color:(scope.row.sellTradePrice / scope.row.buyTradePrice)>1.05?'red':'black'}">
               {{(scope.row.sellTradePrice / scope.row.buyTradePrice).toFixed(3, '')}}
