@@ -38,6 +38,9 @@
           prop="canEmptyQuantity"
           label="剩Q"
           width="155">
+          <template slot-scope="scope">
+            {{scope.row.canEmptyQuantity}}<span style="color:blue;">({{(scope.row.canEmptyQuantity/scope.row.balance).toFixed(3,'')}})</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="canEmptyAmount"
