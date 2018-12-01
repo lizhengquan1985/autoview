@@ -45,9 +45,10 @@
       <el-table-column
         prop="symbolName"
         label="物"
-        width="68">
+        width="85">
         <template slot-scope="scope">
-          <div>{{scope.row.symbolName}}(<span :style="{color:scope.row.count>10?'':'red'}">{{scope.row.count}})</span></div>
+          <div>{{scope.row.symbolName}}(<span :style="{color:scope.row.count>10?'':'red'}">{{scope.row.count}})</span>
+          </div>
           <div>
           <span
             v-if="symbolName && scope.$index>0">{{(scope.row.buyTradePrice / moreList[scope.$index - 1].buyTradePrice).toFixed(3, '')}}</span>
@@ -96,13 +97,13 @@
         label="amount"
         width="90">
         <template slot-scope="scope">
-          {{(scope.row.buyQuantity * scope.row.buyTradePrice).toFixed(2, '')}}
+          {{(scope.row.buyQuantity * scope.row.buyTradePrice).toFixed(4, '')}}
         </template>
       </el-table-column>
       <el-table-column
         prop="buyDate"
         label="date"
-        width="155">
+        width="95">
         <template slot-scope="scope">
           {{scope.row.buyDate | formatDate}}
         </template>
@@ -110,11 +111,14 @@
       <el-table-column
         label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="shouge(scope.row.buyOrderId)">shou</el-button>
-          <el-button size="mini" @click="doMore(scope.row.symbolName, scope.row.quoteCurrency, scope.row.userName)">
-            doMore
-          </el-button>
-
+          <div style="margin-bottom: 5px;">
+            <el-button size="mini" @click="shouge(scope.row.buyOrderId)">shou</el-button>
+          </div>
+          <div>
+            <el-button size="mini" @click="doMore(scope.row.symbolName, scope.row.quoteCurrency, scope.row.userName)">
+              doMore
+            </el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
