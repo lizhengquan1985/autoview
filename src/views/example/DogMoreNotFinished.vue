@@ -12,7 +12,8 @@
       <el-button @click="listMoreBuyIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
     <div>
-      <label>总次数：{{moreList.length}}</label>
+      <label>种类数量：{{moreList.length}}</label>
+      <label>总笔数：{{totalBiShu}}</label>
       <label>总额度：{{totalAmount}}</label>
     </div>
     <br/>
@@ -46,7 +47,7 @@
         label="物"
         width="68">
         <template slot-scope="scope">
-          <div>{{scope.row.symbolName}}</div>
+          <div>{{scope.row.symbolName}}(<span :style="{color:scope.row.count>10?'':'red'}">{{scope.row.count}})</span></div>
           <div>
           <span
             v-if="symbolName && scope.$index>0">{{(scope.row.buyTradePrice / moreList[scope.$index - 1].buyTradePrice).toFixed(3, '')}}</span>
@@ -110,7 +111,9 @@
         label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="shouge(scope.row.buyOrderId)">shou</el-button>
-          <el-button size="mini" @click="doMore(scope.row.symbolName, scope.row.quoteCurrency, scope.row.userName)">doMore</el-button>
+          <el-button size="mini" @click="doMore(scope.row.symbolName, scope.row.quoteCurrency, scope.row.userName)">
+            doMore
+          </el-button>
 
         </template>
       </el-table-column>
@@ -144,7 +147,15 @@
     created: function() {
       this.listMoreBuyIsNotFinished();
     },
-    computed: {},
+    computed: {
+      totalBiShu() {
+        let bishu = 0;
+        for (const item of this.moreList) {
+          bishu += item.count;
+        }
+        return bishu;
+      },
+    },
     methods: {
       changeQuoteCurrency() {
         if (this.quoteCurrency === 'usdt') {

@@ -55,7 +55,6 @@
             <div style="line-height: 14px;">
               <div>多:<span :style="{color:closeDic[scope.row.symbolName]>scope.row.maxInputPrice?'black':'blue'}">{{scope.row.maxInputPrice}}</span></div>
               <div>空:<span :style="{color:closeDic[scope.row.symbolName]<scope.row.emptyPrice?'black':'red'}">{{scope.row.emptyPrice}}</span>
-                <i class="el-icon-refresh" @click="initEmptyPrice(scope.row.symbolName)"></i>
               </div>
             </div>
           </template>
@@ -73,7 +72,6 @@
         <el-table-column
           label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" @click="getFlexCount(scope.row.symbolName)">flex</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -120,8 +118,6 @@
 <script>
   import {
     listDogControl, createDogControl, refreshHistoryMaxMin,
-    getFlexCount,
-    initEmptyPrice,
   } from '../../api/dogControl';
 
   export default {
@@ -164,12 +160,6 @@
           this.closeDic = data.data.closeDic || {};
         });
       },
-      initEmptyPrice: function(symbolName) {
-        const {quoteCurrency} = this;
-        initEmptyPrice({symbolName, quoteCurrency}).then(() => {
-          this.listDogControl();
-        });
-      },
       canEmpty: function(row) {
         var recommend = (row.historyMin + (row.historyMax - row.historyMin) * 0.2);
         if (recommend < row.historyMin * 1.4) {
@@ -191,12 +181,6 @@
       refreshHistoryMaxMin: function(symbolName) {
         const {quoteCurrency} = this;
         refreshHistoryMaxMin({symbolName, quoteCurrency}).then(() => {
-          this.listDogControl();
-        });
-      },
-      getFlexCount: function(symbolName) {
-        return;
-        getFlexCount({symbolName}).then(() => {
           this.listDogControl();
         });
       },
