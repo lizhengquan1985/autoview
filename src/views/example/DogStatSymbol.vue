@@ -1,0 +1,86 @@
+<template>
+  <div style="padding: 5px;">
+    <el-card>
+      <el-input size="mini" v-model="userName" style="width: 80px;" @click.native="changeUserName"/>
+      <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
+    </el-card>
+    <div style="margin-top: 5px;">
+      <el-table
+        border
+        size="mini"
+        :data="list"
+        height="800"
+        style="width: 100%">
+        <el-table-column
+          prop="symbolName"
+          label="名称"
+          width="75">
+        </el-table-column>
+        <template v-for="date in dateList">
+          <el-table-column
+            :prop="date"
+            :label="date"
+            width="110">
+          </el-table-column>
+        </template>
+      </el-table>
+    </div>
+  </div>
+</template>
+
+<script>
+  import {
+    listDogStatCurrency,
+  } from '../../api/dogControl';
+
+  export default {
+    components: {},
+    name: 'HelloWorld',
+    data() {
+      return {
+        userName: 'qq',
+        list: [],
+        dateList: []
+      };
+    },
+    created: function () {
+    },
+    computed: {},
+    methods: {
+      initAccountInfo: function () {
+        const userName = this.userName;
+        listDogStatCurrency({userName}).then(({data}) => {
+          console.log(data, 33333333333)
+          this.list = data.data;
+          this.dateList = data.dateList;
+        });
+      },
+      changeUserName() {
+        if (this.userName === 'qq') {
+          this.userName = 'xx';
+        } else if (this.userName === 'xx') {
+          this.userName = 'qq';
+        }
+      },
+    },
+  };
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+  .item {
+    margin-bottom: 10px;
+  }
+
+  .item > label {
+    display: inline-block;
+    width: 160px;
+    margin-right: 10px;
+    text-align: right;
+  }
+
+  .item > .el-input-number {
+    width: 180px !important;
+    margin-right: 10px;
+  }
+</style>

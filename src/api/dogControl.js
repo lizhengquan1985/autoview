@@ -8,6 +8,14 @@ export function listDogControl(params) {
   });
 }
 
+export function listDogStatCurrency(params) {
+  return request({
+    url: '/api/Control/listDogStatCurrency',
+    method: 'get',
+    params,
+  });
+}
+
 export function createDogControl(data) {
   return request({
     url: '/api/Control/new',

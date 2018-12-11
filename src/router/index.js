@@ -83,6 +83,13 @@ export const asyncRouterMap = [
     },
     children: [
       {
+        path: 'tab/dogStatSymbol',
+        icon: 'tab',
+        component: _import('example/DogStatSymbol'),
+        name: 'dogStatSymbol',
+        meta: {title: 'dogStatSymbol'},
+      },
+      {
         path: 'tab/dogControl',
         icon: 'tab',
         component: _import('example/DogControl'),

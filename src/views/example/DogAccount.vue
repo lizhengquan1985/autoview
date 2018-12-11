@@ -11,6 +11,7 @@
       <el-input size="mini" v-model="userName" style="width: 80px;" @click.native="changeUserName"/>
       <el-input size="mini" v-model="quoteCurrency" style="width: 100px;" @click.native="changeQuoteCurrency"/>
       <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
+      <el-button size="mini" @click="initAccountInfo(true)" type="primary">查询并统计</el-button>
       <span>{{totalAmount}}</span>
     </el-card>
     <div style="margin-top: 5px;">
@@ -39,7 +40,8 @@
           label="剩Q"
           width="155">
           <template slot-scope="scope">
-            {{scope.row.canEmptyQuantity}}<span style="color:blue;">({{(scope.row.canEmptyQuantity/scope.row.balance).toFixed(3,'')}})</span>
+            {{scope.row.canEmptyQuantity}}<span
+            style="color:blue;">({{(scope.row.canEmptyQuantity / scope.row.balance).toFixed(3, '')}})</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -78,14 +80,14 @@
     },
     computed: {},
     methods: {
-      initAccountInfo: function () {
+      initAccountInfo: function (bl = false) {
         console.log(this.order);
         const {userName, sort, quoteCurrency} = this;
         if (!userName || !quoteCurrency) {
           this.list = [];
           return;
         }
-        initAccountInfo({userName, sort, quoteCurrency}).then(data => {
+        initAccountInfo({userName, sort, quoteCurrency, stat:bl}).then(data => {
           console.log(data);
           this.list = data.data;
           let totalAmount = 0;
