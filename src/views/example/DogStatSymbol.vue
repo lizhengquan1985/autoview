@@ -9,18 +9,28 @@
         border
         size="mini"
         :data="list"
-        height="800"
+        height="700"
         style="width: 100%">
         <el-table-column
           prop="symbolName"
           label="名称"
           width="75">
         </el-table-column>
-        <template v-for="date in dateList">
+        <template v-for="(date, index) in dateList">
           <el-table-column
             :prop="date"
             :label="date"
-            width="110">
+            width="105">
+            <template slot-scope="scope">
+              <span v-if="scope.row[date]">
+              {{(parseFloat(scope.row[date])).toFixed(5, '')}}
+              </span>
+              <span
+                style="color: red;"
+                v-if="dateList.length > (index + 1) && parseFloat(scope.row[date]) > parseFloat(scope.row[dateList[index + 1] || 0])">
+              {{(parseFloat(scope.row[date])).toFixed(5, '')}}
+              </span>
+            </template>
           </el-table-column>
         </template>
       </el-table>
@@ -40,17 +50,16 @@
       return {
         userName: 'qq',
         list: [],
-        dateList: []
+        dateList: [],
       };
     },
-    created: function () {
+    created: function() {
     },
     computed: {},
     methods: {
-      initAccountInfo: function () {
+      initAccountInfo: function() {
         const userName = this.userName;
         listDogStatCurrency({userName}).then(({data}) => {
-          console.log(data, 33333333333)
           this.list = data.data;
           this.dateList = data.dateList;
         });
