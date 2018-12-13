@@ -3,6 +3,7 @@
     <el-card>
       <el-input size="mini" v-model="userName" style="width: 80px;" @click.native="changeUserName"/>
       <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
+      <span>{{list.length}}</span>
     </el-card>
     <div style="margin-top: 5px;">
       <el-table
