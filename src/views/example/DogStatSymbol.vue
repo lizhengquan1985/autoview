@@ -1,6 +1,7 @@
 <template>
   <div style="padding: 5px;">
     <el-card>
+      <el-input-number size="mini" v-model="intervalDay" style="width: 80px;"/>
       <el-input size="mini" v-model="userName" style="width: 80px;" @click.native="changeUserName"/>
       <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
       <span>{{list.length}}</span>
@@ -55,6 +56,7 @@
     data() {
       return {
         userName: 'qq',
+        intervalDay: 1,
         list: [],
         dateList: [],
       };
@@ -65,7 +67,8 @@
     methods: {
       initAccountInfo: function() {
         const userName = this.userName;
-        listDogStatCurrency({userName}).then(({data}) => {
+        const intervalDay = this.intervalDay;
+        listDogStatCurrency({userName, intervalDay}).then(({data}) => {
           this.list = data.data;
           this.dateList = data.dateList;
         });
