@@ -22,14 +22,19 @@
             :label="date"
             width="105">
             <template slot-scope="scope">
-              <span v-if="scope.row[date]">
-              {{(parseFloat(scope.row[date])).toFixed(5, '')}}
-              </span>
+              <div style="line-height: 14px;">
               <span
                 style="color: red;"
-                v-if="dateList.length > (index + 1) && parseFloat(scope.row[date]) > parseFloat(scope.row[dateList[index + 1] || 0])">
+                v-if="dateList.length > (index + 1) && parseFloat(scope.row[date]) > parseFloat(scope.row[dateList[index + 1]])">
+              {{(parseFloat(scope.row[date])).toFixed(5, '')}}
+                <div>
+                增:{{(parseFloat(scope.row[date])-parseFloat(scope.row[dateList[index + 1]])).toFixed(5,'')}}
+                  </div>
+              </span>
+                <span v-else-if="scope.row[date]">
               {{(parseFloat(scope.row[date])).toFixed(5, '')}}
               </span>
+              </div>
             </template>
           </el-table-column>
         </template>
