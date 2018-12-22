@@ -53,7 +53,8 @@
           width="145">
           <template slot-scope="scope">
             <div style="line-height: 14px;">
-              <div>多:<span :style="{color:closeDic[scope.row.symbolName]>scope.row.maxInputPrice?'black':'blue'}">{{scope.row.maxInputPrice}}</span></div>
+              <div>多:<span :style="{color:closeDic[scope.row.symbolName]>scope.row.maxInputPrice?'black':'blue'}">{{scope.row.maxInputPrice}}</span>
+              </div>
               <div>空:<span :style="{color:closeDic[scope.row.symbolName]<scope.row.emptyPrice?'black':'red'}">{{scope.row.emptyPrice}}</span>
               </div>
             </div>
@@ -67,6 +68,23 @@
               <div>buy: {{scope.row.ladderBuyPercent.toFixed(4,'')}}</div>
               <div>sell: {{scope.row.ladderSellPercent.toFixed(4,'')}}</div>
             </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="up/down"
+          width="100">
+          <template slot-scope="scope">
+            <div style="line-height: 14px;">
+              <div>upIndex: {{scope.row.upIndex}}</div>
+              <div>downIndex: {{scope.row.downIndex}}</div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="symbolLevel"
+          width="100">
+          <template slot-scope="scope">
+            <div>{{scope.row.symbolLevel}}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -103,6 +121,15 @@
         </el-form-item>
         <el-form-item label="historyMin：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input-number size="small" v-model="form.historyMin" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="upIndex：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.upIndex" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="downIndex：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.downIndex" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="symbolLevel：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.symbolLevel" style="width: 200px;"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -207,7 +234,7 @@
   }
 </style>
 <style>
-  .el-table--mini td, .el-table--mini th{
+  .el-table--mini td, .el-table--mini th {
     padding: 2px 0 !important;
   }
 </style>
