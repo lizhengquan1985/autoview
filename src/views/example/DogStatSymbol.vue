@@ -18,6 +18,15 @@
           label="名称"
           width="75">
         </el-table-column>
+        <el-table-column
+          label="in"
+          width="75">
+          <template slot-scope="scope">
+            <div>
+              {{(parseFloat(scope.row[dateList[0]]) * closeDic[scope.row.symbolName]).toFixed(3, '')}}
+            </div>
+          </template>
+        </el-table-column>
         <template v-for="(date, index) in dateList">
           <el-table-column
             :prop="date"
@@ -30,7 +39,7 @@
                 v-if="dateList.length > (index + 1) && parseFloat(scope.row[date]) > parseFloat(scope.row[dateList[index + 1]])">
               {{(parseFloat(scope.row[date])).toFixed(5, '')}}
                 <div>
-                增:{{(parseFloat(scope.row[date])-parseFloat(scope.row[dateList[index + 1]])).toFixed(5,'')}}
+                增:{{(parseFloat(scope.row[date]) - parseFloat(scope.row[dateList[index + 1]])).toFixed(5, '')}}
                   </div>
               </span>
                 <span v-else-if="scope.row[date]">
@@ -59,18 +68,20 @@
         intervalDay: 1,
         list: [],
         dateList: [],
+        closeDic: {}
       };
     },
-    created: function() {
+    created: function () {
     },
     computed: {},
     methods: {
-      initAccountInfo: function() {
+      initAccountInfo: function () {
         const userName = this.userName;
         const intervalDay = this.intervalDay;
         listDogStatCurrency({userName, intervalDay}).then(({data}) => {
           this.list = data.data;
           this.dateList = data.dateList;
+          this.closeDic = data.closeDic;
         });
       },
       changeUserName() {
