@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 5px;">
     <el-card>
-      <el-input-number size="mini" v-model="intervalDay" style="width: 80px;"/>
+      <el-input-number size="mini" v-model="intervalDay" style="width: 120px;"/>
       <el-input size="mini" v-model="userName" style="width: 80px;" @click.native="changeUserName"/>
       <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
       <span>{{list.length}}</span>

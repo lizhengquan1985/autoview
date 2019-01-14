@@ -1,6 +1,7 @@
 <template>
   <div class='chart-container'>
     <div>
+      <el-input v-model="quoteCurrency" style="width:100px;" @change="changeQuoteCurrency"/>
       <el-input v-model="symbolName" style="width:100px;"/>
       <el-input v-model="userName" style="width:100px;" placeholder="qq/xx"/>
       <el-date-picker
@@ -18,7 +19,6 @@
 </template>
 
 <script>
-  import {fetchStatisticsLine} from '../../api/spotrecord';
   import {kline} from '../../api/day';
   import echarts from 'echarts';
 
@@ -27,6 +27,7 @@
     data() {
       return {
         date: null,
+        quoteCurrency: 'usdt',
         symbolName: '',
         userName: 'qq',
         klineList: [],
@@ -37,9 +38,20 @@
       };
     },
     methods: {
+      changeQuoteCurrency() {
+        if (this.quoteCurrency === 'usdt') {
+          this.quoteCurrency = 'btc';
+        } else if (this.quoteCurrency === 'btc') {
+          this.quoteCurrency = 'eth';
+        } else if (this.quoteCurrency === 'eth') {
+          this.quoteCurrency = 'ht';
+        } else if (this.quoteCurrency === 'ht') {
+          this.quoteCurrency = 'usdt';
+        }
+      },
       fetchStatisticsLine: function() {
-        const {symbolName, userName, date = new Date()} = this;
-        kline({name: symbolName, userName, date}).then(data => {
+        const {symbolName, userName, date = new Date(), quoteCurrency} = this;
+        kline({symbolName, userName, date, quoteCurrency}).then(data => {
           data = data.data || data;
           this.klineList = data.klineList;
           this.buyList = data.buyList;
@@ -52,7 +64,7 @@
             const item = {
               name: '出售',
               value: 's:' + s.sellTradePrice,
-              xAxis: dt.getDate() + ':' + dt.getHours() + ':' + dt.getMinutes(),
+              xAxis: dt.getDate() + '日' + dt.getHours() + '时' + dt.getMinutes(),
               yAxis: s.sellTradePrice,
               itemStyle: {
                 normal: {color: 'red'},
@@ -65,7 +77,7 @@
             const item = {
               name: '购买',
               value: 'b:' + b.buyTradePrice,
-              xAxis: dt.getDate() + ':' + dt.getHours() + ':' + dt.getMinutes(),
+              xAxis: dt.getDate() + '日' + dt.getHours() + '时' + dt.getMinutes(),
               yAxis: b.buyTradePrice,
               label: {color: '#999999'},
             };
@@ -85,7 +97,7 @@
             low.push(item.close);
 
             const itemDt = new Date(item.id * 1000);
-            dtList.push(itemDt.getDate() + ':' + itemDt.getHours() + ':' + itemDt.getMinutes());
+            dtList.push(itemDt.getDate() + '日' + itemDt.getHours() + '时' + itemDt.getMinutes());
           }
 
           this.initChart(dtList, open, list);

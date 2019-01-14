@@ -5,6 +5,7 @@
       <el-button size="mini" @click="listDogControl()" type="primary">搜搜</el-button>
       <el-button size="mini" @click="showEdit({})" type="primary">新增</el-button>
       {{dataList.length}}
+      <el-button size="mini" @click="refreshEmpty()" type="primary">刷新空</el-button>
     </el-card>
     <div style="margin-top: 3px;">
       <el-table
@@ -144,7 +145,7 @@
 
 <script>
   import {
-    listDogControl, createDogControl, refreshHistoryMaxMin,
+    listDogControl, createDogControl, refreshHistoryMaxMin,refreshEmpty
   } from '../../api/dogControl';
 
   export default {
@@ -208,6 +209,12 @@
       refreshHistoryMaxMin: function(symbolName) {
         const {quoteCurrency} = this;
         refreshHistoryMaxMin({symbolName, quoteCurrency}).then(() => {
+          this.listDogControl();
+        });
+      },
+      refreshEmpty: function(symbolName) {
+        const {quoteCurrency} = this;
+        refreshEmpty({symbolName, quoteCurrency}).then(() => {
           this.listDogControl();
         });
       },
