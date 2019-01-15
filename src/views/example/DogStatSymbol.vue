@@ -5,6 +5,8 @@
       <el-input size="mini" v-model="userName" style="width: 80px;" @click.native="changeUserName"/>
       <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
       <span>{{list.length}}</span>
+      <span>总in：{{totalAmount.toFixed(2, '')}}</span>
+      <span>上次总in：{{preTotalAmount.toFixed(2, '')}}</span>
     </el-card>
     <div style="margin-top: 5px;">
       <el-table
@@ -14,9 +16,16 @@
         height="700"
         style="width: 100%">
         <el-table-column
+          label="id"
+          width="42">
+          <template slot-scope="scope">
+            {{scope.$index}}
+          </template>
+        </el-table-column>
+        <el-table-column
           prop="symbolName"
           label="名称"
-          width="75">
+          width="65">
         </el-table-column>
         <el-table-column
           label="in"
@@ -68,20 +77,34 @@
         intervalDay: 1,
         list: [],
         dateList: [],
-        closeDic: {}
+        closeDic: {},
+        totalAmount: 0,
+        preTotalAmount:0
       };
     },
-    created: function () {
+    created: function() {
     },
     computed: {},
     methods: {
-      initAccountInfo: function () {
+      initAccountInfo: function() {
         const userName = this.userName;
         const intervalDay = this.intervalDay;
         listDogStatCurrency({userName, intervalDay}).then(({data}) => {
           this.list = data.data;
           this.dateList = data.dateList;
           this.closeDic = data.closeDic;
+          let totalAmount = 0;
+          let preTotalAmount = 0;
+          for (const item of this.list) {
+            if (item.symbolName === 'usdt' || item.symbolName === 'btc' || item.symbolName === 'eth' ||
+              item.symbolName === 'ht') {
+              continue;
+            }
+            totalAmount += parseFloat(item[this.dateList[0]]) * this.closeDic[item.symbolName];
+            preTotalAmount += parseFloat(item[this.dateList[1]]) * this.closeDic[item.symbolName];
+          }
+          this.totalAmount = totalAmount;
+          this.preTotalAmount = preTotalAmount;
         });
       },
       changeUserName() {
