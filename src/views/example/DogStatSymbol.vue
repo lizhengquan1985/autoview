@@ -79,7 +79,7 @@
         dateList: [],
         closeDic: {},
         totalAmount: 0,
-        preTotalAmount:0
+        preTotalAmount: 0,
       };
     },
     created: function() {
@@ -100,8 +100,12 @@
               item.symbolName === 'ht') {
               continue;
             }
-            totalAmount += parseFloat(item[this.dateList[0]]) * this.closeDic[item.symbolName];
-            preTotalAmount += parseFloat(item[this.dateList[1]]) * this.closeDic[item.symbolName];
+            if (this.closeDic[item.symbolName] && item[this.dateList[0]]) {
+              totalAmount += parseFloat(item[this.dateList[0]]) * this.closeDic[item.symbolName];
+            }
+            if (this.closeDic[item.symbolName] && item[this.dateList[1]]) {
+              preTotalAmount += parseFloat(item[this.dateList[1]]) * this.closeDic[item.symbolName];
+            }
           }
           this.totalAmount = totalAmount;
           this.preTotalAmount = preTotalAmount;
