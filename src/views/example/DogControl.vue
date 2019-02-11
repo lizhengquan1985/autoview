@@ -54,7 +54,8 @@
           width="145">
           <template slot-scope="scope">
             <div style="line-height: 14px;">
-              <div>多:<span :style="{color:closeDic[scope.row.symbolName]>scope.row.maxInputPrice?'black':'blue'}">{{scope.row.maxInputPrice}}</span>
+              <div>多:<span v-if="closeDic[scope.row.symbolName]>scope.row.maxInputPrice">{{scope.row.maxInputPrice}}<span style="color: red;">---不可狗--</span></span>
+                <span v-else style="color:blue;">{{scope.row.maxInputPrice}}</span>
               </div>
               <div>空:<span :style="{color:closeDic[scope.row.symbolName]<scope.row.emptyPrice?'black':'red'}">{{scope.row.emptyPrice}}</span>
               </div>
@@ -85,7 +86,8 @@
           label="symbolLevel"
           width="100">
           <template slot-scope="scope">
-            <div>{{scope.row.symbolLevel}}</div>
+            <div v-if="scope.row.symbolLevel > 10" style="color:red;font-size: 20px;">{{scope.row.symbolLevel}}</div>
+            <div v-else>{{scope.row.symbolLevel}}</div>
           </template>
         </el-table-column>
         <el-table-column
