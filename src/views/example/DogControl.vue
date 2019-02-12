@@ -93,6 +93,7 @@
         <el-table-column
           label="操作">
           <template slot-scope="scope">
+            <div>{{scope.row.memo}}</div>
           </template>
         </el-table-column>
       </el-table>
