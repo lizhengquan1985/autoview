@@ -97,7 +97,8 @@
           let preTotalAmount = 0;
           for (const item of this.list) {
             if (item.symbolName === 'usdt' || item.symbolName === 'btc' || item.symbolName === 'eth' ||
-              item.symbolName === 'ht') {
+              item.symbolName === 'ht' ||
+              item.symbolName === 'hpt') {
               continue;
             }
             if (this.closeDic[item.symbolName] && item[this.dateList[0]]) {
