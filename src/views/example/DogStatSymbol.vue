@@ -51,6 +51,14 @@
                 增:{{(parseFloat(scope.row[date]) - parseFloat(scope.row[dateList[index + 1]])).toFixed(5, '')}}
                   </div>
               </span>
+                <span
+                  style="color: blue;"
+                  v-else-if="dateList.length > (index + 1) && parseFloat(scope.row[date]) < parseFloat(scope.row[dateList[index + 1]])">
+              {{(parseFloat(scope.row[date])).toFixed(5, '')}}
+                <div>
+                减:{{(parseFloat(scope.row[date]) - parseFloat(scope.row[dateList[index + 1]])).toFixed(5, '')}}
+                  </div>
+              </span>
                 <span v-else-if="scope.row[date]">
               {{(parseFloat(scope.row[date])).toFixed(5, '')}}
               </span>
