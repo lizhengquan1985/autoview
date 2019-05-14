@@ -51,7 +51,8 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="empty">
+          label="empty"
+          width="165">
           <template slot-scope="scope">
             <div style="line-height: 14px;">
               <div>多:<span
@@ -63,6 +64,10 @@
               </div>
             </div>
           </template>
+        </el-table-column>
+        <el-table-column
+          prop="avgPrice"
+          label="empty">
         </el-table-column>
       </el-table>
     </div>
