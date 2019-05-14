@@ -62,11 +62,9 @@
           <div>{{scope.row.buyTradePrice | fixedPrice}}</div>
           <div>
           <span
-            v-if="ladderBuyDic[scope.row.symbolName] && closeDic[scope.row.symbolName]"
-            :style="{color:( scope.row.buyTradePrice / closeDic[scope.row.symbolName])>=ladderBuyDic[scope.row.symbolName]?'red':(( scope.row.buyTradePrice / closeDic[scope.row.symbolName]) > 1.04?'deeppink':'black')}">
+            v-if="closeDic[scope.row.symbolName]"
+            :style="{color:( scope.row.buyTradePrice / closeDic[scope.row.symbolName])>=1.06?'red':(( scope.row.buyTradePrice / closeDic[scope.row.symbolName]) > 1.04?'deeppink':'black')}">
             {{(scope.row.buyTradePrice / closeDic[scope.row.symbolName]).toFixed(3,'')}}</span>
-            -- <span style="color: gray;"
-                     v-if="ladderBuyDic[scope.row.symbolName]">{{ladderBuyDic[scope.row.symbolName].toFixed(3,'')}}</span>
           </div>
         </template>
       </el-table-column>
@@ -81,10 +79,6 @@
           <span
             v-if="closeDic[scope.row.symbolName]"
             :style="{color:(closeDic[scope.row.symbolName] / scope.row.buyTradePrice)>=1.05?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3,'')}}</span>
-            --
-            <span style="color: gray;" v-if="ladderDic[scope.row.symbolName]">
-            {{ladderDic[scope.row.symbolName].toFixed(3, '')}}
-          </span>
           </div>
         </template>
       </el-table-column>
@@ -143,9 +137,7 @@
         moreList: [],
         closeDic: {},
         todayDic: {},
-        ladderDic: {},
         totalAmount: 0,
-        ladderBuyDic: {},
       };
     },
     created: function() {
@@ -179,8 +171,6 @@
           this.moreList = data.list;
           this.closeDic = data.closeDic;
           this.todayDic = data.todayDic;
-          this.ladderBuyDic = data.ladderBuyDic || {};
-          this.ladderDic = data.ladderDic;
           let totalAmount = 0;
           for (var item of this.moreList) {
             totalAmount += item.buyQuantity * item.buyTradePrice;
