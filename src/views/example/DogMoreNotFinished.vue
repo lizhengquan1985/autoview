@@ -53,6 +53,10 @@
           <span
             v-if="symbolName && scope.$index>0">{{(scope.row.buyTradePrice / moreList[scope.$index - 1].buyTradePrice).toFixed(3, '')}}</span>
           </div>
+          <div v-if="maxInputPrice[scope.row.symbolName] > closeDic[scope.row.symbolName]">{{maxInputPrice[scope.row.symbolName]}}</div>
+          <div v-else style="color: red;">{{maxInputPrice[scope.row.symbolName]}}</div>
+          <div v-if="emptyPrice[scope.row.symbolName] > closeDic[scope.row.symbolName]">{{emptyPrice[scope.row.symbolName]}}</div>
+          <div v-else style="color: red;">{{emptyPrice[scope.row.symbolName]}}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -137,6 +141,8 @@
         moreList: [],
         closeDic: {},
         todayDic: {},
+        maxInputPrice: {},
+        emptyPrice: {},
         totalAmount: 0,
       };
     },
@@ -171,6 +177,8 @@
           this.moreList = data.list;
           this.closeDic = data.closeDic;
           this.todayDic = data.todayDic;
+          this.maxInputPrice = data.maxInputPrice;
+          this.emptyPrice = data.emptyPrice;
           let totalAmount = 0;
           for (var item of this.moreList) {
             totalAmount += item.buyQuantity * item.buyTradePrice;
