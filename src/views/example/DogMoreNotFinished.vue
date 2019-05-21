@@ -26,8 +26,10 @@
         width="120">
         <template slot-scope="scope">
           <div>{{scope.row.buyOrderId}}</div>
-          <div v-if="todayDic[scope.row.symbolName]">{{todayDic[scope.row.symbolName].toFixed(4,'')}}</div>
-          <div v-if="todayDic[scope.row.symbolName+'-']">{{todayDic[scope.row.symbolName+'-'].toFixed(4,'')}}</div>
+          <div style="line-height: 14px;">
+            <div v-if="todayDic[scope.row.symbolName]">{{todayDic[scope.row.symbolName].toFixed(4,'')}}</div>
+            <div v-if="todayDic[scope.row.symbolName+'-']">{{todayDic[scope.row.symbolName+'-'].toFixed(4,'')}}</div>
+          </div>
         </template>
       </el-table-column>
       <el-table-column
@@ -36,16 +38,19 @@
         width="80">
         <template slot-scope="scope">
           <div>{{scope.row.userName}}</div>
-          <div style="color: blue;" v-if="todayDic[scope.row.symbolName+'+']>1.005">
-            {{todayDic[scope.row.symbolName+'+'].toFixed(4,'')}}
+          <div style="line-height: 14px;">
+            <div style="color: blue;" v-if="todayDic[scope.row.symbolName+'+']>1.005">
+              {{todayDic[scope.row.symbolName+'+'].toFixed(4,'')}}
+            </div>
+            <div v-else-if="todayDic[scope.row.symbolName+'+']">{{todayDic[scope.row.symbolName+'+'].toFixed(4,'')}}
+            </div>
           </div>
-          <div v-else-if="todayDic[scope.row.symbolName+'+']">{{todayDic[scope.row.symbolName+'+'].toFixed(4,'')}}</div>
         </template>
       </el-table-column>
       <el-table-column
         prop="symbolName"
         label="物"
-        width="125">
+        width="135">
         <template slot-scope="scope">
           <div>{{scope.row.symbolName}}(<span :style="{color:scope.row.count>10?'':'red'}">{{scope.row.count}})</span>
           </div>
@@ -53,10 +58,16 @@
           <span
             v-if="symbolName && scope.$index>0">{{(scope.row.buyTradePrice / moreList[scope.$index - 1].buyTradePrice).toFixed(3, '')}}</span>
           </div>
-          <div v-if="maxInputPrice[scope.row.symbolName] > closeDic[scope.row.symbolName]">{{maxInputPrice[scope.row.symbolName]}}</div>
-          <div v-else style="color: red;">{{maxInputPrice[scope.row.symbolName]}}</div>
-          <div v-if="emptyPrice[scope.row.symbolName] > closeDic[scope.row.symbolName]">{{emptyPrice[scope.row.symbolName]}}</div>
-          <div v-else style="color: red;">{{emptyPrice[scope.row.symbolName]}}</div>
+          <div style="line-height: 14px;">
+            <div v-if="maxInputPrice[scope.row.symbolName] > closeDic[scope.row.symbolName]">
+              多：{{maxInputPrice[scope.row.symbolName]}}
+            </div>
+            <div v-else style="color: red;">多：{{maxInputPrice[scope.row.symbolName]}}</div>
+            <div v-if="emptyPrice[scope.row.symbolName] > closeDic[scope.row.symbolName]">
+              空：{{emptyPrice[scope.row.symbolName]}}
+            </div>
+            <div v-else style="color: red;"> 空：{{emptyPrice[scope.row.symbolName]}}</div>
+          </div>
         </template>
       </el-table-column>
       <el-table-column
