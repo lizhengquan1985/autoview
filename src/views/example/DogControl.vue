@@ -16,13 +16,14 @@
         <el-table-column
           prop="symbolName"
           label="名称"
-          width="125">
+          width="135">
           <template slot-scope="scope">
             <div style="line-height: 14px;">
               <div>
                 <el-button size="mini" @click="showEdit(scope.row)">
                   {{scope.row.symbolName}}
                 </el-button>
+                <span v-if="scope.row.willDelist" style="color:red;">将要退市</span>
               </div>
               <div style="color: red;"
                    v-if="canEmpty(scope.row)">
@@ -59,7 +60,8 @@
                 style="color: red;">---不可狗--</span></span>
                 <span v-else style="color:blue;">{{scope.row.maxInputPrice}}</span>
               </div>
-              <div>空:<span :style="{color:closeDic[scope.row.symbolName]<scope.row.emptyPrice?'black':'red'}">{{scope.row.emptyPrice}}</span>
+              <div>空:<span
+                :style="{color:closeDic[scope.row.symbolName]<scope.row.emptyPrice?'black':'red'}">{{scope.row.emptyPrice}}</span>
               </div>
             </div>
           </template>
@@ -85,6 +87,9 @@
         <el-form-item label="emptyPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input-number size="small" v-model="form.emptyPrice" style="width: 200px;"/>
         </el-form-item>
+        <el-form-item label="willDelist：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-checkbox size="small" v-model="form.willDelist" style="width: 200px;"/>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">关 闭</el-button>
@@ -99,9 +104,10 @@
   import {
     listDogControl, createDogControl, refreshHistoryMaxMin,
   } from '../../api/dogControl';
+  import ElCheckbox from "../../../node_modules/element-ui/packages/checkbox/src/checkbox.vue";
 
   export default {
-    components: {},
+    components: {ElCheckbox},
     name: 'DogControl',
     data() {
       return {
@@ -114,7 +120,7 @@
         closeDic: {},
       };
     },
-    created: function() {
+    created: function () {
       this.init();
     },
     computed: {},
@@ -130,17 +136,17 @@
           this.quoteCurrency = 'usdt';
         }
       },
-      init: function() {
+      init: function () {
         this.listDogControl();
       },
-      listDogControl: function() {
+      listDogControl: function () {
         const {quoteCurrency} = this;
         listDogControl({quoteCurrency}).then(data => {
           this.dataList = data.data.list;
           this.closeDic = data.data.closeDic || {};
         });
       },
-      canEmpty: function(row) {
+      canEmpty: function (row) {
         var recommend = (row.historyMin + (row.historyMax - row.historyMin) * 0.2);
         if (recommend < row.historyMin * 1.4) {
           recommend = row.historyMin * 1.4;
@@ -148,17 +154,17 @@
         const nowPrice = this.closeDic[row.symbolName] || 0;
         return nowPrice >= recommend && nowPrice >= row.emptyPrice;
       },
-      showEdit: function(row) {
+      showEdit: function (row) {
         this.dialogFormVisible = true;
         this.form = {...row};
       },
-      saveControlObj: function() {
+      saveControlObj: function () {
         createDogControl(this.form).then(() => {
           this.dialogFormVisible = false;
           this.listDogControl();
         });
       },
-      refreshHistoryMaxMin: function(symbolName) {
+      refreshHistoryMaxMin: function (symbolName) {
         const {quoteCurrency} = this;
         refreshHistoryMaxMin({symbolName, quoteCurrency}).then(() => {
           this.listDogControl();
