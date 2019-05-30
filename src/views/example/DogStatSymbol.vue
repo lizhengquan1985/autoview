@@ -19,7 +19,7 @@
           label="id"
           width="42">
           <template slot-scope="scope">
-            {{scope.$index}}
+            <span @click="resetDogStatCurrency(scope.row)">{{scope.$index}}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -89,6 +89,7 @@
 <script>
   import {
     listDogStatCurrency,
+    resetDogStatCurrency,
   } from '../../api/dogControl';
 
   export default {
@@ -351,6 +352,13 @@
         } else if (this.userName === 'xx') {
           this.userName = 'qq';
         }
+      },
+      resetDogStatCurrency(row) {
+        const {symbolName} = {...row};
+        const userName = this.userName;
+        resetDogStatCurrency({userName, symbolName}).then(() => {
+
+        });
       },
     },
   };

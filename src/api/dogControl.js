@@ -16,6 +16,14 @@ export function listDogStatCurrency(params) {
   });
 }
 
+export function resetDogStatCurrency(query) {
+  return request({
+    url: '/api/Control/resetDogStatCurrency',
+    method: 'get',
+    params: query,
+  });
+}
+
 export function createDogControl(data) {
   return request({
     url: '/api/Control/new',
