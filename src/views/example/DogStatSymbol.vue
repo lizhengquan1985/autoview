@@ -4,9 +4,10 @@
       <el-input-number size="mini" v-model="intervalDay" style="width: 120px;"/>
       <el-input size="mini" v-model="userName" style="width: 80px;" @click.native="changeUserName"/>
       <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
-      <span>{{list.length}}</span>
-      <span>总in：{{totalAmount.toFixed(2, '')}}</span>
-      <span>上次总in：{{preTotalAmount.toFixed(2, '')}}</span>
+      <span>{{list.length}}个</span>&emsp;
+      <el-tag v-for="(amount, index) in totalAmounts" style="margin-right: 10px;">{{amount.toFixed(2, '')}}
+        <span v-if="index < totalAmounts.length - 1">(多{{(amount-totalAmounts[index + 1]).toFixed(2, '')}})</span>
+      </el-tag>
     </el-card>
     <div style="margin-top: 5px;">
       <el-table
@@ -102,8 +103,7 @@
         list: [],
         dateList: [],
         closeDic: {},
-        totalAmount: 0,
-        preTotalAmount: 0,
+        totalAmounts: [0, 0, 0],
         total: {
           '18c': 10,
           'aac': 10,
@@ -373,23 +373,21 @@
           this.list = data.data;
           this.dateList = data.dateList;
           this.closeDic = data.closeDic;
-          let totalAmount = 0;
-          let preTotalAmount = 0;
-          for (const item of this.list) {
-            if (item.symbolName === 'usdt' || item.symbolName === 'btc' || item.symbolName === 'eth' ||
-              item.symbolName === 'ht' ||
-              item.symbolName === 'hpt') {
-              continue;
-            }
-            if (this.closeDic[item.symbolName] && item[this.dateList[0]]) {
-              totalAmount += parseFloat(item[this.dateList[0]]) * this.closeDic[item.symbolName];
-            }
-            if (this.closeDic[item.symbolName] && item[this.dateList[1]]) {
-              preTotalAmount += parseFloat(item[this.dateList[1]]) * this.closeDic[item.symbolName];
+
+          const totalAmounts = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+          for (let i = 0; i < totalAmounts.length; i++) {
+            for (const item of this.list) {
+              if (item.symbolName === 'usdt' || item.symbolName === 'btc' || item.symbolName === 'eth' ||
+                item.symbolName === 'ht' ||
+                item.symbolName === 'hpt') {
+                continue;
+              }
+              if (this.closeDic[item.symbolName] && item[this.dateList[i]]) {
+                totalAmounts[i] += parseFloat(item[this.dateList[i]]) * this.closeDic[item.symbolName];
+              }
             }
           }
-          this.totalAmount = totalAmount;
-          this.preTotalAmount = preTotalAmount;
+          this.totalAmounts = [...totalAmounts];
         });
       },
       changeUserName() {
