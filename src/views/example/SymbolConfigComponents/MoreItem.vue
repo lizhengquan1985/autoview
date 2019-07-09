@@ -1,0 +1,36 @@
+<template>
+  <div>多:
+    <span v-if="close > maxBuyPrice">{{maxBuyPrice}}<span style="color: red;">&emsp;---不可狗--</span></span>
+    <span v-else style="color:blue;">{{maxBuyPrice}}</span>
+  </div>
+</template>
+
+<script>
+  export default {
+    components: {},
+    name: 'DogControl',
+    data() {
+      return {
+        close: null,
+      };
+    },
+    props: ['tickers', 'quote', 'symbol', 'maxBuyPrice'],
+    created: function() {
+      this.init();
+    },
+    computed: {},
+    methods: {
+      init: function() {
+        const findTicker = this.tickers.find(it => it.symbol === `${this.symbol}${this.quote}`);
+        if (findTicker) {
+          this.close = findTicker.close;
+        }
+      },
+    },
+  };
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+</style>

@@ -1,11 +1,12 @@
 <template>
   <div style="padding: 5px;">
     <el-card>
-      <el-input v-model="quoteCurrency" size="mini" style="width: 120px;" @click.native="changeQuoteCurrency"/>
-      <el-button size="mini" @click="listDogControl()" type="primary">搜搜</el-button>
-      <el-button size="mini" @click="showEdit({ emptyPrice:99999, maxInputPrice:0.000001})" type="primary">新增
-      </el-button>
-      {{dataList.length}}
+      <el-input v-model="params.quote" size="mini" style="width: 120px;" placeholder="quote"
+                @click.native="changeQuoteCurrency"/>
+      <el-input v-model="params.symbol" size="mini" style="width: 120px;" placeholder="symbol"/>
+      <el-button size="mini" @click="listSymbolConfig()" type="primary">搜搜</el-button>
+      <el-button size="mini" @click="showEdit()" type="primary">新增</el-button>
+      <el-tag>{{dataList.length}}</el-tag>
     </el-card>
     <div style="margin-top: 3px;">
       <el-table
@@ -20,16 +21,14 @@
           <template slot-scope="scope">
             <div style="line-height: 14px;">
               <div>
-                <el-button size="mini" @click="showEdit(scope.row)">
-                  {{scope.row.symbolName}}
-                </el-button>
-                <span v-if="scope.row.willDelist" style="color:red;">将要退市</span>
+                <el-tag @click="showEdit(scope.row)">
+                  {{scope.row.symbol}}
+                </el-tag>
+                <el-tag type="danger" size="mini" v-if="scope.row.willDelist" style="color:red;">将退市</el-tag>
               </div>
-              <div style="color: red;"
-                   v-if="canEmpty(scope.row)">
-                {{closeDic[scope.row.symbolName]}}
+              <div>
+                <close-item :tickers="tickers" :symbol="scope.row.symbol" :quote="scope.row.quote"/>
               </div>
-              <div v-else>{{closeDic[scope.row.symbolName]}}</div>
             </div>
           </template>
         </el-table-column>
@@ -55,20 +54,16 @@
           width="165">
           <template slot-scope="scope">
             <div style="line-height: 14px;">
-              <div>多:<span
-                v-if="closeDic[scope.row.symbolName]>scope.row.maxInputPrice">{{scope.row.maxInputPrice}}<span
-                style="color: red;">---不可狗--</span></span>
-                <span v-else style="color:blue;">{{scope.row.maxInputPrice}}</span>
-              </div>
-              <div>空:<span
-                :style="{color:closeDic[scope.row.symbolName]<scope.row.emptyPrice?'black':'red'}">{{scope.row.emptyPrice}}</span>
-              </div>
+              <more-item :tickers="tickers" :symbol="scope.row.symbol" :quote="scope.row.quote"
+                         :maxBuyPrice="scope.row.maxBuyPrice"/>
+              <empty-item :tickers="tickers" :symbol="scope.row.symbol" :quote="scope.row.quote"
+                         :minSellPrice="scope.row.minSellPrice"/>
             </div>
           </template>
         </el-table-column>
         <el-table-column
           prop="avgPrice"
-          label="empty">
+          label="avgPrice">
         </el-table-column>
       </el-table>
     </div>
@@ -93,7 +88,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">关 闭</el-button>
-        <el-button type="primary" @click="saveControlObj('ruleForm')">确 定
+        <el-button type="primary" @click="upsertSymbolConfig('ruleForm')">确 定
         </el-button>
       </div>
     </el-dialog>
@@ -102,72 +97,70 @@
 
 <script>
   import {
-    listDogControl, createDogControl, refreshHistoryMaxMin,
-  } from '../../api/dogControl';
-  import ElCheckbox from "../../../node_modules/element-ui/packages/checkbox/src/checkbox.vue";
+    listSymbolConfig,
+    refreshHistoryMaxMin,
+    upsertSymbolConfig,
+  } from '../../api/symbolConfig';
+  import CloseItem from './SymbolConfigComponents/CloseItem';
+  import MoreItem from './SymbolConfigComponents/MoreItem';
+  import EmptyItem from './SymbolConfigComponents/EmptyItem';
 
   export default {
-    components: {ElCheckbox},
+    components: {CloseItem, MoreItem, EmptyItem},
     name: 'DogControl',
     data() {
       return {
-        quoteCurrency: 'usdt',
-        symbolName: '',
+        params: {
+          quote: 'usdt',
+          symbol: '',
+        },
         dataList: [],
         formLabelWidth: '180px',
         form: {},
         dialogFormVisible: false,
-        closeDic: {},
+        tickers: [],
       };
     },
-    created: function () {
+    created: function() {
       this.init();
     },
     computed: {},
     methods: {
       changeQuoteCurrency() {
-        if (this.quoteCurrency === 'usdt') {
-          this.quoteCurrency = 'btc';
-        } else if (this.quoteCurrency === 'btc') {
-          this.quoteCurrency = 'eth';
-        } else if (this.quoteCurrency === 'eth') {
-          this.quoteCurrency = 'ht';
-        } else if (this.quoteCurrency === 'ht') {
-          this.quoteCurrency = 'usdt';
+        if (this.params.quote === 'usdt') {
+          this.params.quote = 'btc';
+        } else if (this.params.quote === 'btc') {
+          this.params.quote = 'eth';
+        } else if (this.params.quote === 'eth') {
+          this.params.quote = 'ht';
+        } else if (this.params.quote === 'ht') {
+          this.params.quote = 'usdt';
         }
       },
-      init: function () {
-        this.listDogControl();
+      init: function() {
+        this.listSymbolConfig();
       },
-      listDogControl: function () {
-        const {quoteCurrency} = this;
-        listDogControl({quoteCurrency}).then(data => {
+      listSymbolConfig: function() {
+        const params = {...this.params};
+        listSymbolConfig(params).then(data => {
           this.dataList = data.data.list;
-          this.closeDic = data.data.closeDic || {};
+          this.tickers = data.data.tickers || [];
         });
       },
-      canEmpty: function (row) {
-        var recommend = (row.historyMin + (row.historyMax - row.historyMin) * 0.2);
-        if (recommend < row.historyMin * 1.4) {
-          recommend = row.historyMin * 1.4;
-        }
-        const nowPrice = this.closeDic[row.symbolName] || 0;
-        return nowPrice >= recommend && nowPrice >= row.emptyPrice;
-      },
-      showEdit: function (row) {
+      showEdit: function(row = {emptyPrice: 99999, maxInputPrice: 0.000001}) {
         this.dialogFormVisible = true;
         this.form = {...row};
       },
-      saveControlObj: function () {
-        createDogControl(this.form).then(() => {
+      upsertSymbolConfig: function() {
+        upsertSymbolConfig(this.form).then(() => {
           this.dialogFormVisible = false;
-          this.listDogControl();
+          this.listSymbolConfig();
         });
       },
-      refreshHistoryMaxMin: function (symbolName) {
+      refreshHistoryMaxMin: function(symbolName) {
         const {quoteCurrency} = this;
         refreshHistoryMaxMin({symbolName, quoteCurrency}).then(() => {
-          this.listDogControl();
+          this.listSymbolConfig();
         });
       },
     },

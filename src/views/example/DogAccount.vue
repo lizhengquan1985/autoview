@@ -62,7 +62,7 @@
 <script>
   import {
     initAccountInfo,
-  } from '../../api/dogControl';
+  } from '../../api/symbolConfig';
 
   export default {
     components: {},

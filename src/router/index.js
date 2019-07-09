@@ -90,11 +90,11 @@ export const asyncRouterMap = [
         meta: {title: 'dogStatSymbol'},
       },
       {
-        path: 'tab/dogControl',
+        path: 'tab/symbolConfig',
         icon: 'tab',
-        component: _import('example/DogControl'),
-        name: 'dogControl',
-        meta: {title: 'dogControl'},
+        component: _import('example/SymbolConfig'),
+        name: 'symbolConfig',
+        meta: {title: 'symbolConfig'},
       },
       {
         path: 'tab/dogAccount',

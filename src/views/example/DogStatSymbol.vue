@@ -91,7 +91,7 @@
   import {
     listDogStatCurrency,
     resetDogStatCurrency,
-  } from '../../api/dogControl';
+  } from '../../api/symbolConfig';
 
   export default {
     components: {},
