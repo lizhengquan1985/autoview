@@ -1,12 +1,13 @@
 <template>
   <div style="padding: 5px;">
-    <el-card>
+    <el-card class="card-container">
       <el-input v-model="params.quote" size="mini" style="width: 120px;" placeholder="quote"
                 @click.native="changeQuoteCurrency"/>
       <el-input v-model="params.symbol" size="mini" style="width: 120px;" placeholder="symbol"/>
       <el-button size="mini" @click="listSymbolConfig()" type="primary">搜搜</el-button>
       <el-button size="mini" @click="showEdit()" type="primary">新增</el-button>
       <el-tag>{{dataList.length}}</el-tag>
+      <el-input-number size="mini" v-model="ladderNum"/>
     </el-card>
     <div style="margin-top: 3px;">
       <el-table
@@ -21,13 +22,14 @@
           <template slot-scope="scope">
             <div style="line-height: 14px;">
               <div>
-                <el-tag @click="showEdit(scope.row)">
+                <el-tag style="cursor: pointer;" @click.native="showEdit(scope.row)">
                   {{scope.row.symbol}}
                 </el-tag>
                 <el-tag type="danger" size="mini" v-if="scope.row.willDelist" style="color:red;">将退市</el-tag>
               </div>
               <div>
-                <close-item :tickers="tickers" :symbol="scope.row.symbol" :quote="scope.row.quote"/>
+                <close-item :key="`ci-${scope.row.symbol}${scope.row.quote}`" :tickers="tickers"
+                            :symbol="scope.row.symbol" :quote="scope.row.quote"/>
               </div>
             </div>
           </template>
@@ -43,7 +45,7 @@
                 </div>
                 <div>
                   max:{{scope.row.historyMax}}
-                  <i class="el-icon-refresh" @click="refreshHistoryMaxMin(scope.row.symbolName)"></i>
+                  <i class="el-icon-refresh" @click="refreshHistoryMaxMin(scope.row.symbol, scope.row.quote)"></i>
                 </div>
               </div>
             </div>
@@ -54,33 +56,46 @@
           width="165">
           <template slot-scope="scope">
             <div style="line-height: 14px;">
-              <more-item :tickers="tickers" :symbol="scope.row.symbol" :quote="scope.row.quote"
-                         :maxBuyPrice="scope.row.maxBuyPrice"/>
-              <empty-item :tickers="tickers" :symbol="scope.row.symbol" :quote="scope.row.quote"
-                         :minSellPrice="scope.row.minSellPrice"/>
+              <more-item :key="`mi-${scope.row.symbol}${scope.row.quote}`" :tickers="tickers" :symbol="scope.row.symbol"
+                         :quote="scope.row.quote" :maxBuyPrice="scope.row.maxBuyPrice"/>
+              <empty-item :key="`ei-${scope.row.symbol}${scope.row.quote}`" :tickers="tickers"
+                          :symbol="scope.row.symbol"
+                          :quote="scope.row.quote" :minSellPrice="scope.row.minSellPrice"/>
             </div>
           </template>
         </el-table-column>
         <el-table-column
-          prop="avgPrice"
           label="avgPrice">
+          <template slot-scope="scope">
+            {{scope.row.avgPrice.toFixed(7, '')}}
+            <span v-if="scope.row.avgPrice < scope.row.maxBuyPrice && scope.row.quote !== 'usdt'"
+                  style="color:red;">过大</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="ladder">
+          <template slot-scope="scope">
+            {{(scope.row.historyMin * (1.06**ladderNum)).toFixed(9, '')}}
+            <span v-if="scope.row.historyMin * (1.06**ladderNum) < scope.row.maxBuyPrice && scope.row.quote !== 'usdt'"
+                  style="color:red;">过大</span>
+          </template>
         </el-table-column>
       </el-table>
     </div>
 
     <el-dialog title="编辑配置" :visible.sync="dialogFormVisible" :width="'520px'">
       <el-form :model="form" ref="ruleForm">
-        <el-form-item label="symbolName：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-input size="small" v-model="form.symbolName" style="width: 200px;"/>
+        <el-form-item label="symbol：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input size="small" v-model="form.symbol" style="width: 200px;"/>
         </el-form-item>
-        <el-form-item label="quoteCurrency：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-input size="small" v-model="form.quoteCurrency" style="width: 200px;"/>
+        <el-form-item label="quote：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input size="small" v-model="form.quote" style="width: 200px;"/>
         </el-form-item>
-        <el-form-item label="maxInputPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-input-number size="small" v-model="form.maxInputPrice" style="width: 200px;"/>
+        <el-form-item label="maxBuyPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.maxBuyPrice" style="width: 200px;"/>
         </el-form-item>
-        <el-form-item label="emptyPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
-          <el-input-number size="small" v-model="form.emptyPrice" style="width: 200px;"/>
+        <el-form-item label="minSellPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.minSellPrice" style="width: 200px;"/>
         </el-form-item>
         <el-form-item label="willDelist：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-checkbox size="small" v-model="form.willDelist" style="width: 200px;"/>
@@ -119,6 +134,7 @@
         form: {},
         dialogFormVisible: false,
         tickers: [],
+        ladderNum: 8,
       };
     },
     created: function() {
@@ -157,9 +173,8 @@
           this.listSymbolConfig();
         });
       },
-      refreshHistoryMaxMin: function(symbolName) {
-        const {quoteCurrency} = this;
-        refreshHistoryMaxMin({symbolName, quoteCurrency}).then(() => {
+      refreshHistoryMaxMin: function(symbol, quote) {
+        refreshHistoryMaxMin({symbol, quote}).then(() => {
           this.listSymbolConfig();
         });
       },
@@ -168,6 +183,8 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
+<style>
+  .card-container > .el-card__body {
+    padding: 10px !important;
+  }
 </style>
