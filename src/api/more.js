@@ -16,9 +16,9 @@ export function listMoreBuyIsNotFinished(data) {
   });
 }
 
-export function listMoreBuyIsFinishedDetail(data) {
+export function listMoreOrderIsFinished(data) {
   return request({
-    url: '/api/More/listMoreBuyIsFinishedDetail',
+    url: '/api/More/listMoreOrderIsFinished',
     method: 'get',
     params: data,
   });
@@ -27,7 +27,7 @@ export function listMoreBuyIsFinishedDetail(data) {
 export function deleteMore(data) {
   return request({
     url: '/api/More/delete',
-    method: 'get',
+    method: 'delete',
     params: data,
   });
 }

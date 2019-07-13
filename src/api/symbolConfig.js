@@ -23,3 +23,13 @@ export function refreshHistoryMaxMin(data) {
     params: data,
   });
 }
+
+
+export function listAccountSymbol(params) {
+  return request({
+    url: '/api/AccountSymbol/listAccountSymbol',
+    method: 'get',
+    params,
+  });
+}
+

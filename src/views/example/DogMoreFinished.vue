@@ -21,17 +21,19 @@
           width="40">
         </el-table-column>
         <el-table-column
-          prop="symbolName"
           label="物"
-          width="68">
+          width="90">
+          <template slot-scope="scope">
+            {{scope.row.symbol}}-{{scope.row.quote}}
+          </template>
         </el-table-column>
         <el-table-column
           label="quote"
           width="85">
           <template slot-scope="scope">
             <div :style="{color:scope.row.usdt>0.3?'red':'black'}">
-              {{scope.row.usdt.toFixed(6, '')}}
-              <div>{{scope.row.quoteCurrency}}</div>
+              {{scope.row.quoteEarn.toFixed(6, '')}}
+              <div>{{scope.row.quote}}</div>
             </div>
           </template>
         </el-table-column>
@@ -39,8 +41,8 @@
           label="symbol"
           width="80">
           <template slot-scope="scope">
-            {{scope.row.baseSymbol.toFixed(4, '')}}
-            <div>{{scope.row.symbolName}}</div>
+            {{scope.row.symbolEarn.toFixed(4, '')}}
+            <div>{{scope.row.symbol}}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -48,8 +50,8 @@
           width="155">
           <template slot-scope="scope">
             <div>
-              {{scope.row.buyTradePrice.toFixed(scope.row.buyTradePrice>1?3:6, '')}}~
-              {{scope.row.sellTradePrice.toFixed(scope.row.buyTradePrice>1?3:6, '')}}
+              {{scope.row.buyTradePrice.toFixed(scope.row.buyTradePrice > 1 ? 3 : 6, '')}}~
+              {{scope.row.sellTradePrice.toFixed(scope.row.buyTradePrice > 1 ? 3 : 6, '')}}
             </div>
             <div :style="{color:(scope.row.sellTradePrice / scope.row.buyTradePrice)>1.05?'red':'black'}">
               {{(scope.row.sellTradePrice / scope.row.buyTradePrice).toFixed(3, '')}}
@@ -99,7 +101,7 @@
 </template>
 
 <script>
-  import {deleteMore, listMoreBuyIsFinishedDetail} from '../../api/more';
+  import {deleteMore, listMoreOrderIsFinished} from '../../api/more';
   import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue';
 
   export default {
@@ -120,14 +122,14 @@
         usdtAmount: 0,
       };
     },
-    created: function() {
+    created: function () {
       this.listMoreBuyIsFinished();
     },
     computed: {},
     methods: {
-      listMoreBuyIsFinished: function() {
+      listMoreBuyIsFinished: function () {
         const {userName, symbolName} = this;
-        listMoreBuyIsFinishedDetail({userName, symbolName, pageIndex: 0, pageSize: 60}).then(data => {
+        listMoreOrderIsFinished({userName, symbolName, pageIndex: 0, pageSize: 60}).then(data => {
           data = data.data || data;
           this.moreList = data;
           let usdtAmount = 0;
@@ -137,7 +139,7 @@
           this.usdtAmount = usdtAmount;
         });
       },
-      deleteMore: function(buyOrderId) {
+      deleteMore: function (buyOrderId) {
         this.$confirm('删除吗', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

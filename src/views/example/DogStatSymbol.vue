@@ -6,7 +6,7 @@
       <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
       <span>{{list.length}}个</span>&emsp;
       <el-tag v-for="(amount, index) in totalAmounts" style="margin-right: 10px;">{{amount.toFixed(2, '')}}
-        <span v-if="index < totalAmounts.length - 1">(多{{(amount-totalAmounts[index + 1]).toFixed(2, '')}})</span>
+        <span v-if="index < totalAmounts.length - 1">(多{{(amount - totalAmounts[index + 1]).toFixed(2, '')}})</span>
       </el-tag>
     </el-card>
     <div style="margin-top: 5px;">
@@ -24,7 +24,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="symbolName"
+          prop="symbol"
           label="名称"
           width="65">
         </el-table-column>
@@ -32,13 +32,13 @@
           label="占比"
           width="75">
           <template slot-scope="scope">
-            <div v-if="total[scope.row.symbolName]">
-              <span v-if="parseFloat(scope.row[dateList[0]]) / (total[scope.row.symbolName] * 100) > 1"
+            <div v-if="total[scope.row.symbol]">
+              <span v-if="parseFloat(scope.row[dateList[0]]) / (total[scope.row.symbol] * 100) > 1"
                     style="color: red;">
-              {{(parseFloat(scope.row[dateList[0]]) / (total[scope.row.symbolName] * 100)).toFixed(5, '')}}
+              {{(parseFloat(scope.row[dateList[0]]) / (total[scope.row.symbol] * 100)).toFixed(5, '')}}
               </span>
               <span v-else>
-              {{(parseFloat(scope.row[dateList[0]]) / (total[scope.row.symbolName] * 100)).toFixed(5, '')}}
+              {{(parseFloat(scope.row[dateList[0]]) / (total[scope.row.symbol] * 100)).toFixed(5, '')}}
               </span>
             </div>
           </template>
@@ -48,7 +48,7 @@
           width="75">
           <template slot-scope="scope">
             <div>
-              {{(parseFloat(scope.row[dateList[0]]) * closeDic[scope.row.symbolName]).toFixed(3, '')}}
+              {{(parseFloat(scope.row[dateList[0]]) * closeDic[scope.row.symbol]).toFixed(3, '')}}
             </div>
           </template>
         </el-table-column>
@@ -89,7 +89,7 @@
 
 <script>
   import {
-    listDogStatCurrency,
+    listAccountSymbol,
     resetDogStatCurrency,
   } from '../../api/symbolConfig';
 
@@ -362,14 +362,14 @@
         },
       };
     },
-    created: function() {
+    created: function () {
     },
     computed: {},
     methods: {
-      initAccountInfo: function() {
+      initAccountInfo: function () {
         const userName = this.userName;
         const intervalDay = this.intervalDay;
-        listDogStatCurrency({userName, intervalDay}).then(({data}) => {
+        listAccountSymbol({userName, sort: 'earn', intervalDay}).then(({data}) => {
           this.list = data.data;
           this.dateList = data.dateList;
           this.closeDic = data.closeDic;
@@ -377,13 +377,13 @@
           const totalAmounts = [0, 0, 0, 0, 0, 0, 0, 0, 0];
           for (let i = 0; i < totalAmounts.length; i++) {
             for (const item of this.list) {
-              if (item.symbolName === 'usdt' || item.symbolName === 'btc' || item.symbolName === 'eth' ||
-                item.symbolName === 'ht' ||
-                item.symbolName === 'hpt') {
+              if (item.symbol === 'usdt' || item.symbol === 'btc' || item.symbol === 'eth' ||
+                item.symbol === 'ht' ||
+                item.symbol === 'hpt') {
                 continue;
               }
-              if (this.closeDic[item.symbolName] && item[this.dateList[i]]) {
-                totalAmounts[i] += parseFloat(item[this.dateList[i]]) * this.closeDic[item.symbolName];
+              if (this.closeDic[item.symbol] && item[this.dateList[i]]) {
+                totalAmounts[i] += parseFloat(item[this.dateList[i]]) * this.closeDic[item.symbol];
               }
             }
           }
@@ -398,9 +398,9 @@
         }
       },
       resetDogStatCurrency(row) {
-        const {symbolName} = {...row};
+        const {symbol} = {...row};
         const userName = this.userName;
-        resetDogStatCurrency({userName, symbolName}).then(() => {
+        resetDogStatCurrency({userName, symbol}).then(() => {
 
         });
       },
