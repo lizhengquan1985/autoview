@@ -9,7 +9,7 @@
       <el-input v-model="userName" size="mini" style="width: 80px;" @focus="userName=(userName==='qq'?'xx':'qq')"/>
       <el-input v-model="symbol" size="mini" style="width: 100px;"/>
       <el-input v-model="quote" size="mini" style="width: 80px;" @click.native="changeQuoteCurrency"/>
-      <el-button @click="listMoreBuyIsNotFinished()" icon="search" type="primary">搜索</el-button>
+      <el-button @click="listMoreOrderIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
     <div>
       <label>种类数量：{{moreList.length}}</label>
