@@ -1,11 +1,6 @@
 <template>
   <div class="role-manage">
     <div>
-      <el-select v-model="userName" clearable>
-        <el-option value="qq">qq</el-option>
-        <el-option value="xx">xx</el-option>
-      </el-select>
-      <el-input v-model="symbolName" style="width: 200px;"/>
       <el-button @click="listEmptySellIsFinished()" icon="search" type="primary">搜索</el-button>
       <span>{{emptyList.length}}</span>
     </div>
@@ -20,16 +15,17 @@
         width="40">
       </el-table-column>
       <el-table-column
-        prop="symbolName"
+        prop="symbol"
         label="物"
         width="68">
       </el-table-column>
       <el-table-column
-        label="usdt"
+        label="quote"
         width="65">
         <template slot-scope="scope">
           <div :style="{color:scope.row.usdt>0.3?'red':'black'}">
-            {{scope.row.usdt.toFixed(4, '')}}
+            {{scope.row.quoteEarn.toFixed(4, '')}}
+            <div>{{scope.row.quote}}</div>
           </div>
         </template>
       </el-table-column>
@@ -37,7 +33,8 @@
         label="symbol"
         width="80">
         <template slot-scope="scope">
-          {{scope.row.baseSymbol.toFixed(4, '')}}
+          {{scope.row.symbolEarn.toFixed(4, '')}}
+          <div>{{scope.row.symbol}}</div>
         </template>
       </el-table-column>
       <el-table-column
@@ -79,49 +76,27 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="sellState"
-        label="state"
-        width="90">
-      </el-table-column>
-      <el-table-column
         label="操作">
         <template slot-scope="scope">
           <el-button size="mini" type="danger" @click="deleteEmpty(scope.row.sellOrderId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-
-    <el-dialog title="详情" :visible.sync="dialogVisible" width="500px">
-      <div>
-        <div v-for="item in Object.keys(detail)"><span class="detail-item">{{item}}</span> {{detail[item]}}</div>
-      </div>
-      <div>
-        <el-button type="danger" @click="deleteEmpty(detail.sellOrderId)">删除</el-button>
-        <el-button type="primary" style="float: right;" @click="dialogVisible=false">关闭</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script>
   import {
-    getEmptySellDetail,
     deleteEmpty,
-    listEmptySellIsFinishedDetail,
+    listEmptyOrderIsFinished,
   } from '../../api/empty';
 
   export default {
     components: {},
-    name: 'HelloWorld',
+    name: 'emptyOrder',
     data() {
       return {
-        userName: 'qq',
-        symbolName: '',
         emptyList: [],
-        hasSell: '0',
-        dialogVisible: false,
-        formLabelWidth: '100px',
-        detail: {},
       };
     },
     created: function() {
@@ -130,16 +105,9 @@
     computed: {},
     methods: {
       listEmptySellIsFinished: function() {
-        const {userName, symbolName} = this;
-        listEmptySellIsFinishedDetail({userName, symbolName, pageIndex: 0, pageSize: 30}).then(data => {
+        listEmptyOrderIsFinished().then(data => {
           data = data.data || data;
           this.emptyList = data;
-        });
-      },
-      showDetail: function(sellOrderId) {
-        getEmptySellDetail({sellOrderId}).then(data => {
-          this.detail = data.data;
-          this.dialogVisible = true;
         });
       },
       deleteEmpty: function(sellOrderId) {
@@ -148,9 +116,8 @@
           cancelButtonText: '取消',
           type: 'warning',
         }).then(() => {
-          deleteEmpty({sellOrderId}).then(data => {
+          deleteEmpty({sellOrderId}).then(() => {
             this.listEmptySellIsFinished();
-            this.dialogVisible = false;
           });
         });
       },
@@ -164,18 +131,4 @@
     padding: 20px;
   }
 
-  .permissions-select {
-    text-align: left;
-  }
-
-  .permissions-select .el-tag {
-    margin-right: 5px;
-  }
-
-  .detail-item {
-    display: inline-block;
-    width: 100px;
-    text-align: right;
-    margin-right: 10px;
-  }
 </style>
