@@ -24,10 +24,17 @@ export function refreshHistoryMaxMin(data) {
   });
 }
 
-
 export function listAccountSymbol(params) {
   return request({
     url: '/api/AccountSymbol/listAccountSymbol',
+    method: 'get',
+    params,
+  });
+}
+
+export function resetAccountSymbol(params) {
+  return request({
+    url: '/api/AccountSymbol/resetAccountSymbol',
     method: 'get',
     params,
   });

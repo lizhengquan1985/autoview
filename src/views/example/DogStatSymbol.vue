@@ -4,6 +4,7 @@
       <el-input-number size="mini" v-model="intervalDay" style="width: 120px;"/>
       <el-input size="mini" v-model="userName" style="width: 80px;" @click.native="changeUserName"/>
       <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
+      <el-button size="mini" @click="resetAccountSymbol" type="primary">刷新</el-button>
       <span>{{list.length}}个</span>&emsp;
       <el-tag v-for="(amount, index) in totalAmounts" style="margin-right: 10px;">{{amount.toFixed(2, '')}}
         <span v-if="index < totalAmounts.length - 1">(多{{(amount - totalAmounts[index + 1]).toFixed(2, '')}})</span>
@@ -20,7 +21,7 @@
           label="id"
           width="42">
           <template slot-scope="scope">
-            <span @click="resetDogStatCurrency(scope.row)">{{scope.$index}}</span>
+            <span>{{scope.$index}}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -90,7 +91,7 @@
 <script>
   import {
     listAccountSymbol,
-    resetDogStatCurrency,
+    resetAccountSymbol,
   } from '../../api/symbolConfig';
 
   export default {
@@ -398,10 +399,10 @@
           this.userName = 'qq';
         }
       },
-      resetDogStatCurrency(row) {
+      resetAccountSymbol(row) {
         const {symbol} = {...row};
         const userName = this.userName;
-        resetDogStatCurrency({userName, symbol}).then(() => {
+        resetAccountSymbol({userName, symbol}).then(() => {
 
         });
       },
