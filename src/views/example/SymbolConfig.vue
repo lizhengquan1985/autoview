@@ -22,7 +22,7 @@
           <template slot-scope="scope">
             <div style="line-height: 14px;">
               <div>
-                <el-tag style="cursor: pointer;" @click.native="showEdit(scope.row)">
+                <el-tag style="cursor: pointer;" size="mini" @click.native="showEdit(scope.row)">
                   {{scope.row.symbol}}
                 </el-tag>
                 <el-tag type="danger" size="mini" v-if="scope.row.willDelist" style="color:red;">将退市</el-tag>
@@ -65,11 +65,12 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="avgPrice">
+          label="avgPrice"
+          width="125">
           <template slot-scope="scope">
             {{scope.row.avgPrice.toFixed(7, '')}}
             <span v-if="scope.row.avgPrice < scope.row.maxBuyPrice && scope.row.quote !== 'usdt'"
-                  style="color:red;">过大</span>
+                  style="color:red;">大加权</span>
           </template>
         </el-table-column>
         <el-table-column

@@ -24,11 +24,6 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="symbol"
-          label="名称"
-          width="65">
-        </el-table-column>
-        <el-table-column
           label="占比"
           width="75">
           <template slot-scope="scope">
@@ -44,13 +39,18 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="in"
+          label="Earn"
           width="75">
           <template slot-scope="scope">
             <div>
               {{(parseFloat(scope.row[dateList[0]]) * closeDic[scope.row.symbol]).toFixed(3, '')}}
             </div>
           </template>
+        </el-table-column>
+        <el-table-column
+          prop="symbol"
+          label="名称"
+          width="65">
         </el-table-column>
         <template v-for="(date, index) in dateList">
           <el-table-column
@@ -105,6 +105,7 @@
         closeDic: {},
         totalAmounts: [0, 0, 0],
         total: {
+          'usdt': 100,
           '18c': 10,
           'aac': 10,
           'abl': 4,
@@ -362,11 +363,11 @@
         },
       };
     },
-    created: function () {
+    created: function() {
     },
     computed: {},
     methods: {
-      initAccountInfo: function () {
+      initAccountInfo: function() {
         const userName = this.userName;
         const intervalDay = this.intervalDay;
         listAccountSymbol({userName, sort: 'earn', intervalDay}).then(({data}) => {
