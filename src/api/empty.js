@@ -8,9 +8,9 @@ export function shouge(data) {
   });
 }
 
-export function listEmptySellIsNotFinished(data) {
+export function listEmptyOrderIsNotFinished(data) {
   return request({
-    url: '/api/Empty/listEmptySellIsNotFinished',
+    url: '/api/Empty/listEmptyOrderIsNotFinished',
     method: 'get',
     params: data,
   });

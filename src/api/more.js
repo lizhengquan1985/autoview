@@ -8,9 +8,9 @@ export function shouge(data) {
   });
 }
 
-export function listMoreBuyIsNotFinished(data) {
+export function listMoreOrderIsNotFinished(data) {
   return request({
-    url: '/api/More/listMoreBuyIsNotFinished',
+    url: '/api/More/listMoreOrderIsNotFinished',
     method: 'get',
     params: data,
   });

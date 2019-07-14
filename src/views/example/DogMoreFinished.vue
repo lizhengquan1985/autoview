@@ -1,14 +1,12 @@
 <template>
   <div class="role-manage">
     <el-card>
-      <el-select v-model="userName" clearable size="mini">
-        <el-option value="qq">qq</el-option>
-        <el-option value="xx">xx</el-option>
-      </el-select>
-      <el-input size="mini" v-model="symbolName" style="width: 150px;"/>
-      <el-button size="mini" @click="listMoreBuyIsFinished()" icon="search" type="primary">搜索</el-button>
       <span style="margin-right: 10px;">数量：{{moreList.length}}</span>
-      <span>USDT：{{usdtAmount.toFixed(4, '')}}</span>
+      <el-button size="mini" @click="listMoreBuyIsFinished()" icon="search" type="primary">搜索</el-button>
+      <span style="margin-right: 10px;">U：<el-tag>{{usdtAmount.toFixed(2, '')}}</el-tag></span>
+      <span style="margin-right: 10px;">B：<el-tag>{{btcAmount.toFixed(5, '')}}</el-tag></span>
+      <span style="margin-right: 10px;">E：<el-tag>{{ethAmount.toFixed(4, '')}}</el-tag></span>
+      <span style="margin-right: 10px;">H：<el-tag>{{htAmount.toFixed(3, '')}}</el-tag></span>
     </el-card>
     <div style="margin-top: 2px;">
       <el-table
@@ -109,37 +107,48 @@
     name: 'HelloWorld',
     data() {
       return {
-        min: 0,
-        max: 0,
-        coin: '',
-        order: 'Id',
-        userName: 'qq',
-        symbolName: '',
         moreList: [],
-        hasSell: '0',
-        formLabelWidth: '100px',
-        detail: {},
         usdtAmount: 0,
+        btcAmount: 0,
+        ethAmount: 0,
+        htAmount: 0,
       };
     },
-    created: function () {
+    created: function() {
       this.listMoreBuyIsFinished();
     },
     computed: {},
     methods: {
-      listMoreBuyIsFinished: function () {
+      listMoreBuyIsFinished: function() {
         const {userName, symbolName} = this;
         listMoreOrderIsFinished({userName, symbolName, pageIndex: 0, pageSize: 60}).then(data => {
           data = data.data || data;
           this.moreList = data;
           let usdtAmount = 0;
+          let btcAmount = 0;
+          let ethAmount = 0;
+          let htAmount = 0;
           data.forEach(it => {
-            usdtAmount += it.usdt;
+            if (it.quote === 'usdt') {
+              usdtAmount += it.quoteEarn;
+            }
+            if (it.quote === 'btc') {
+              btcAmount += it.quoteEarn;
+            }
+            if (it.quote === 'eth') {
+              ethAmount += it.quoteEarn;
+            }
+            if (it.quote === 'ht') {
+              htAmount += it.quoteEarn;
+            }
           });
           this.usdtAmount = usdtAmount;
+          this.btcAmount = btcAmount;
+          this.ethAmount = ethAmount;
+          this.htAmount = htAmount;
         });
       },
-      deleteMore: function (buyOrderId) {
+      deleteMore: function(buyOrderId) {
         this.$confirm('删除吗', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -160,18 +169,4 @@
     padding: 20px;
   }
 
-  .permissions-select {
-    text-align: left;
-  }
-
-  .permissions-select .el-tag {
-    margin-right: 5px;
-  }
-
-  .detail-item {
-    display: inline-block;
-    width: 100px;
-    text-align: right;
-    margin-right: 10px;
-  }
 </style>

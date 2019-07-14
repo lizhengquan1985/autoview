@@ -7,8 +7,8 @@
         <el-radio-button label="shou">收</el-radio-button>
       </el-radio-group>
       <el-input v-model="userName" size="mini" style="width: 80px;" @focus="userName=(userName==='qq'?'xx':'qq')"/>
-      <el-input v-model="symbolName" size="mini" style="width: 100px;"/>
-      <el-input v-model="quoteCurrency" size="mini" style="width: 80px;" @click.native="changeQuoteCurrency"/>
+      <el-input v-model="symbol" size="mini" style="width: 100px;"/>
+      <el-input v-model="quote" size="mini" style="width: 80px;" @click.native="changeQuoteCurrency"/>
       <el-button @click="listMoreBuyIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
     <div>
@@ -27,8 +27,8 @@
         <template slot-scope="scope">
           <div>{{scope.row.buyOrderId}}</div>
           <div style="line-height: 14px;">
-            <div v-if="todayDic[scope.row.symbolName]">{{todayDic[scope.row.symbolName].toFixed(4,'')}}</div>
-            <div v-if="todayDic[scope.row.symbolName+'-']">{{todayDic[scope.row.symbolName+'-'].toFixed(4,'')}}</div>
+            <div v-if="todayDic[scope.row.symbol]">{{todayDic[scope.row.symbol].toFixed(4,'')}}</div>
+            <div v-if="todayDic[scope.row.symbol+'-']">{{todayDic[scope.row.symbol+'-'].toFixed(4,'')}}</div>
           </div>
         </template>
       </el-table-column>
@@ -39,34 +39,34 @@
         <template slot-scope="scope">
           <div>{{scope.row.userName}}</div>
           <div style="line-height: 14px;">
-            <div style="color: blue;" v-if="todayDic[scope.row.symbolName+'+']>1.005">
-              {{todayDic[scope.row.symbolName+'+'].toFixed(4,'')}}
+            <div style="color: blue;" v-if="todayDic[scope.row.symbol+'+']>1.005">
+              {{todayDic[scope.row.symbol+'+'].toFixed(4,'')}}
             </div>
-            <div v-else-if="todayDic[scope.row.symbolName+'+']">{{todayDic[scope.row.symbolName+'+'].toFixed(4,'')}}
+            <div v-else-if="todayDic[scope.row.symbol+'+']">{{todayDic[scope.row.symbol+'+'].toFixed(4,'')}}
             </div>
           </div>
         </template>
       </el-table-column>
       <el-table-column
-        prop="symbolName"
+        prop="symbol"
         label="物"
         width="135">
         <template slot-scope="scope">
-          <div>{{scope.row.symbolName}}(<span :style="{color:scope.row.count>10?'':'red'}">{{scope.row.count}})</span>
+          <div>{{scope.row.symbol}}(<span :style="{color:scope.row.count>10?'':'red'}">{{scope.row.count}})</span>
           </div>
           <div>
           <span
-            v-if="symbolName && scope.$index>0">{{(scope.row.buyTradePrice / moreList[scope.$index - 1].buyTradePrice).toFixed(3, '')}}</span>
+            v-if="symbol && scope.$index>0">{{(scope.row.buyTradePrice / moreList[scope.$index - 1].buyTradePrice).toFixed(3, '')}}</span>
           </div>
           <div style="line-height: 14px;">
-            <div v-if="maxInputPrice[scope.row.symbolName] > closeDic[scope.row.symbolName]">
-              多：{{maxInputPrice[scope.row.symbolName]}}
+            <div v-if="maxBuyPrice[scope.row.symbol] > closeDic[scope.row.symbol]">
+              多：{{maxBuyPrice[scope.row.symbol]}}
             </div>
-            <div v-else style="color: red;">多：{{maxInputPrice[scope.row.symbolName]}}</div>
-            <div v-if="emptyPrice[scope.row.symbolName] > closeDic[scope.row.symbolName]">
-              空：{{emptyPrice[scope.row.symbolName]}}
+            <div v-else style="color: red;">多：{{maxBuyPrice[scope.row.symbol]}}</div>
+            <div v-if="minSellPrice[scope.row.symbol] > closeDic[scope.row.symbol]">
+              空：{{minSellPrice[scope.row.symbol]}}
             </div>
-            <div v-else style="color: red;"> 空：{{emptyPrice[scope.row.symbolName]}}</div>
+            <div v-else style="color: red;"> 空：{{minSellPrice[scope.row.symbol]}}</div>
           </div>
         </template>
       </el-table-column>
@@ -77,9 +77,9 @@
           <div>{{scope.row.buyTradePrice | fixedPrice}}</div>
           <div>
           <span
-            v-if="closeDic[scope.row.symbolName]"
-            :style="{color:( scope.row.buyTradePrice / closeDic[scope.row.symbolName])>=1.06?'red':(( scope.row.buyTradePrice / closeDic[scope.row.symbolName]) > 1.04?'deeppink':'black')}">
-            {{(scope.row.buyTradePrice / closeDic[scope.row.symbolName]).toFixed(3,'')}}</span>
+            v-if="closeDic[scope.row.symbol]"
+            :style="{color:( scope.row.buyTradePrice / closeDic[scope.row.symbol])>=1.06?'red':(( scope.row.buyTradePrice / closeDic[scope.row.symbol]) > 1.04?'deeppink':'black')}">
+            {{(scope.row.buyTradePrice / closeDic[scope.row.symbol]).toFixed(3,'')}}</span>
           </div>
         </template>
       </el-table-column>
@@ -87,13 +87,13 @@
         label="now-more"
         width="150">
         <template slot-scope="scope">
-          <div v-if="closeDic[scope.row.symbolName]">
-            {{closeDic[scope.row.symbolName] | fixedPrice}}
+          <div v-if="closeDic[scope.row.symbol]">
+            {{closeDic[scope.row.symbol] | fixedPrice}}
           </div>
           <div>
           <span
-            v-if="closeDic[scope.row.symbolName]"
-            :style="{color:(closeDic[scope.row.symbolName] / scope.row.buyTradePrice)>=1.05?'red':'black'}">{{(closeDic[scope.row.symbolName] / scope.row.buyTradePrice).toFixed(3,'')}}</span>
+            v-if="closeDic[scope.row.symbol]"
+            :style="{color:(closeDic[scope.row.symbol] / scope.row.buyTradePrice)>=1.05?'red':'black'}">{{(closeDic[scope.row.symbol] / scope.row.buyTradePrice).toFixed(3,'')}}</span>
           </div>
         </template>
       </el-table-column>
@@ -124,7 +124,7 @@
             <el-button size="mini" @click="shouge(scope.row.buyOrderId)">shou</el-button>
           </div>
           <div>
-            <el-button size="mini" @click="doMore(scope.row.symbolName, scope.row.quoteCurrency, scope.row.userName)">
+            <el-button size="mini" @click="doMore(scope.row.symbol, scope.row.quote, scope.row.userName)">
               doMore
             </el-button>
           </div>
@@ -136,7 +136,7 @@
 
 <script>
   import {
-    listMoreBuyIsNotFinished,
+    listMoreOrderIsNotFinished,
     shouge,
   } from '../../api/more';
   import {doMore} from '../../api/empty';
@@ -147,18 +147,18 @@
       return {
         sort: 'lastbuy',
         userName: 'qq',
-        symbolName: '',
-        quoteCurrency: 'usdt',
+        symbol: '',
+        quote: 'usdt',
         moreList: [],
         closeDic: {},
         todayDic: {},
-        maxInputPrice: {},
-        emptyPrice: {},
+        maxBuyPrice: {},
+        minSellPrice: {},
         totalAmount: 0,
       };
     },
     created: function() {
-      this.listMoreBuyIsNotFinished();
+      this.listMoreOrderIsNotFinished();
     },
     computed: {
       totalBiShu() {
@@ -171,25 +171,25 @@
     },
     methods: {
       changeQuoteCurrency() {
-        if (this.quoteCurrency === 'usdt') {
-          this.quoteCurrency = 'btc';
-        } else if (this.quoteCurrency === 'btc') {
-          this.quoteCurrency = 'eth';
-        } else if (this.quoteCurrency === 'eth') {
-          this.quoteCurrency = 'ht';
-        } else if (this.quoteCurrency === 'ht') {
-          this.quoteCurrency = 'usdt';
+        if (this.quote === 'usdt') {
+          this.quote = 'btc';
+        } else if (this.quote === 'btc') {
+          this.quote = 'eth';
+        } else if (this.quote === 'eth') {
+          this.quote = 'ht';
+        } else if (this.quote === 'ht') {
+          this.quote = 'usdt';
         }
       },
-      listMoreBuyIsNotFinished: function() {
-        const {symbolName, userName, sort, quoteCurrency} = this;
-        listMoreBuyIsNotFinished({symbolName, quoteCurrency, userName, sort}).then(data => {
+      listMoreOrderIsNotFinished: function() {
+        const {symbol, userName, sort, quote} = this;
+        listMoreOrderIsNotFinished({symbol, quote, userName, sort}).then(data => {
           data = data.data || data;
           this.moreList = data.list;
           this.closeDic = data.closeDic;
           this.todayDic = data.todayDic;
-          this.maxInputPrice = data.maxInputPrice;
-          this.emptyPrice = data.emptyPrice;
+          this.maxBuyPrice = data.maxBuyPrice;
+          this.minSellPrice = data.minSellPrice;
           let totalAmount = 0;
           for (var item of this.moreList) {
             totalAmount += item.buyQuantity * item.buyTradePrice;
@@ -202,7 +202,7 @@
         });
       },
       tableRowClassName({row, rowIndex}) {
-        const close = this.closeDic[row.symbolName];
+        const close = this.closeDic[row.symbol];
         if (!close) {
           return '';
         }
@@ -220,8 +220,8 @@
         }
         return '';
       },
-      doMore: function(symbolName, quoteCurrency, userName) {
-        doMore({userName, symbolName, quoteCurrency}).then(() => {
+      doMore: function(symbol, quote, userName) {
+        doMore({userName, symbol, quote}).then(() => {
 
         });
       },

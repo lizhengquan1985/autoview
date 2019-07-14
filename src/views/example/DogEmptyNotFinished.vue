@@ -5,9 +5,9 @@
         <el-option value="qq">qq</el-option>
         <el-option value="xx">xx</el-option>
       </el-select>
-      <el-input v-model="symbolName" style="width: 120px;"/>
-      <el-input v-model="quoteCurrency" style="width: 100px;" @click.native="changeQuoteCurrency"/>
-      <el-button @click="listEmptySellIsNotFinished()" icon="search" type="primary">搜索</el-button>
+      <el-input v-model="symbol" style="width: 120px;"/>
+      <el-input v-model="quote" style="width: 100px;" @click.native="changeQuoteCurrency"/>
+      <el-button @click="listEmptyOrderIsNotFinished()" icon="search" type="primary">搜索</el-button>
     </div>
     <div>
       <label>总次数：{{emptyList.length}}</label>
@@ -29,7 +29,7 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="symbolName"
+        prop="symbol"
         label="物"
         width="68">
       </el-table-column>
@@ -42,14 +42,14 @@
         label="now-more"
         width="150">
         <template slot-scope="scope">
-          <div v-if="closeDic[scope.row.symbolName]">
-            {{closeDic[scope.row.symbolName].toFixed(4, '')}}
+          <div v-if="closeDic[scope.row.symbol]">
+            {{closeDic[scope.row.symbol].toFixed(4, '')}}
           </div>
           <div>
           <span
-            :style="{color:(scope.row.sellTradePrice / closeDic[scope.row.symbolName])>=1.04?'red':'black'}">{{(scope.row.sellTradePrice / closeDic[scope.row.symbolName]).toFixed(3, '')}}</span>
-            <span v-if="ladderDic[scope.row.symbolName]">
-            {{ladderDic[scope.row.symbolName].toFixed(4, '')}}
+            :style="{color:(scope.row.sellTradePrice / closeDic[scope.row.symbol])>=1.04?'red':'black'}">{{(scope.row.sellTradePrice / closeDic[scope.row.symbol]).toFixed(3, '')}}</span>
+            <span v-if="ladderDic[scope.row.symbol]">
+            {{ladderDic[scope.row.symbol].toFixed(4, '')}}
           </span>
           </div>
         </template>
@@ -86,7 +86,7 @@
 
 <script>
   import {
-    listEmptySellIsNotFinished,
+    listEmptyOrderIsNotFinished,
     shouge,
   } from '../../api/empty';
 
@@ -96,8 +96,8 @@
     data() {
       return {
         userName: 'qq',
-        symbolName: '',
-        quoteCurrency: 'usdt',
+        symbol: '',
+        quote: 'usdt',
         emptyList: [],
         closeDic: {},
         ladderDic: {},
@@ -109,19 +109,19 @@
     computed: {},
     methods: {
       changeQuoteCurrency() {
-        if (this.quoteCurrency === 'usdt') {
-          this.quoteCurrency = 'btc';
-        } else if (this.quoteCurrency === 'btc') {
-          this.quoteCurrency = 'eth';
-        } else if (this.quoteCurrency === 'eth') {
-          this.quoteCurrency = 'ht';
-        } else if (this.quoteCurrency === 'ht') {
-          this.quoteCurrency = 'usdt';
+        if (this.quote === 'usdt') {
+          this.quote = 'btc';
+        } else if (this.quote === 'btc') {
+          this.quote = 'eth';
+        } else if (this.quote === 'eth') {
+          this.quote = 'ht';
+        } else if (this.quote === 'ht') {
+          this.quote = 'usdt';
         }
       },
-      listEmptySellIsNotFinished: function() {
-        const {symbolName, userName, quoteCurrency} = this;
-        listEmptySellIsNotFinished({symbolName, userName, quoteCurrency}).then(data => {
+      listEmptyOrderIsNotFinished: function() {
+        const {symbol, userName, quote} = this;
+        listEmptyOrderIsNotFinished({symbol, userName, quote}).then(data => {
           data = data.data || data;
           this.emptyList = data.list;
           this.closeDic = data.closeDic;
@@ -138,7 +138,7 @@
         });
       },
       tableRowClassName({row, rowIndex}) {
-        const close = this.closeDic[row.symbolName];
+        const close = this.closeDic[row.symbol];
         if (!close) {
           return '';
         }
