@@ -18,13 +18,13 @@
           label="人"
           width="40">
         </el-table-column>
-        <el-table-column
-          label="物"
-          width="90">
-          <template slot-scope="scope">
-            {{scope.row.symbol}}-{{scope.row.quote}}
-          </template>
-        </el-table-column>
+        <!--<el-table-column-->
+          <!--label="物"-->
+          <!--width="90">-->
+          <!--<template slot-scope="scope">-->
+            <!--{{scope.row.symbol}}-{{scope.row.quote}}-->
+          <!--</template>-->
+        <!--</el-table-column>-->
         <el-table-column
           label="quote"
           width="85">

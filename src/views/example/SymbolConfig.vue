@@ -65,10 +65,20 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="avgPrice"
-          width="125">
+          label="emptySize"
+          width="90">
           <template slot-scope="scope">
-            {{scope.row.avgPrice.toFixed(7, '')}}
+            {{scope.row.emptySize.toFixed(5, '')}}
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="avgPrice"
+          width="90">
+          <template slot-scope="scope">
+            <span v-if="params.quote === 'btc'">{{scope.row.avgPrice.toFixed(8, '')}}</span>
+            <span v-if="params.quote === 'eth'">{{scope.row.avgPrice.toFixed(7, '')}}</span>
+            <span v-if="params.quote === 'usdt'">{{scope.row.avgPrice.toFixed(4, '')}}</span>
+            <span v-if="params.quote === 'ht'">{{scope.row.avgPrice.toFixed(5, '')}}</span>
             <span v-if="scope.row.avgPrice < scope.row.maxBuyPrice && scope.row.quote !== 'usdt'"
                   style="color:red;">大加权</span>
           </template>
@@ -97,6 +107,9 @@
         </el-form-item>
         <el-form-item label="minSellPrice：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input-number size="small" v-model="form.minSellPrice" style="width: 200px;"/>
+        </el-form-item>
+        <el-form-item label="emptySize：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input-number size="small" v-model="form.emptySize" style="width: 200px;"/>
         </el-form-item>
         <el-form-item label="willDelist：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-checkbox size="small" v-model="form.willDelist" style="width: 200px;"/>
