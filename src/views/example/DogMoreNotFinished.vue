@@ -106,7 +106,7 @@
         label="amount"
         width="90">
         <template slot-scope="scope">
-          {{(scope.row.buyQuantity * scope.row.buyTradePrice).toFixed(4, '')}}
+          {{(scope.row.buyQuantity * scope.row.buyTradePrice).toFixed(5, '')}}
         </template>
       </el-table-column>
       <el-table-column
