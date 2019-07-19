@@ -69,8 +69,8 @@
           label="总波动"
           width="120">
           <template slot-scope="scope">
-            <div>入：{{scope.row.buyAmount.toFixed(4, '')}}</div>
-            <div>出：{{scope.row.sellAmount.toFixed(4, '')}}</div>
+            <div>入：{{scope.row.buyAmount.toFixed(5, '')}}</div>
+            <div>出：{{scope.row.sellAmount.toFixed(5, '')}}</div>
           </template>
         </el-table-column>
         <el-table-column

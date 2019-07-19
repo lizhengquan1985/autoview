@@ -39,6 +39,7 @@ export function emptyInfo(data) {
     params: data,
   });
 }
+
 export function moreInfo(data) {
   return request({
     url: '/api/More/moreInfo',
@@ -54,3 +55,12 @@ export function listDogMoreBuyNotFinishedStatistics(data) {
     params: data,
   });
 }
+
+export function listNotFilledData(data) {
+  return request({
+    url: '/api/More/listNotFilledData',
+    method: 'get',
+    params: data,
+  });
+}
+
