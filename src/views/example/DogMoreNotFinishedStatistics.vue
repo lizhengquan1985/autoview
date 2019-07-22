@@ -24,7 +24,7 @@
       :data="list"
       style="width: 100%">
       <el-table-column
-        prop="symbolName"
+        prop="symbol"
         label="物"
         width="90">
       </el-table-column>
