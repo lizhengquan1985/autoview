@@ -48,9 +48,9 @@ export function moreInfo(data) {
   });
 }
 
-export function listDogMoreBuyNotFinishedStatistics(data) {
+export function listMoreOrderNotFinishedStatistics(data) {
   return request({
-    url: '/api/More/listDogMoreBuyNotFinishedStatistics',
+    url: '/api/More/listMoreOrderNotFinishedStatistics',
     method: 'get',
     params: data,
   });
