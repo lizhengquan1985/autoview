@@ -178,6 +178,8 @@
         } else if (this.quote === 'eth') {
           this.quote = 'ht';
         } else if (this.quote === 'ht') {
+          this.quote = 'trx';
+        } else if (this.quote === 'trx') {
           this.quote = 'usdt';
         }
       },

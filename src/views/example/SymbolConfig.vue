@@ -164,6 +164,8 @@
         } else if (this.params.quote === 'eth') {
           this.params.quote = 'ht';
         } else if (this.params.quote === 'ht') {
+          this.params.quote = 'trx';
+        } else if (this.params.quote === 'trx') {
           this.params.quote = 'usdt';
         }
       },

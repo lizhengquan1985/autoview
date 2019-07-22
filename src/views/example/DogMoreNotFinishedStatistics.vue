@@ -10,8 +10,8 @@
         <el-option label="nowamount" value="nowamount"/>
         <el-option label="diffamount" value="diffamount"/>
       </el-select>
-      <el-input v-model="quoteCurrency" style="width: 100px;" @click.native="changeQuoteCurrency"/>
-      <el-button @click="listDogMoreBuyNotFinishedStatistics()">搜索</el-button>
+      <el-input v-model="quote" style="width: 100px;" @click.native="changeQuoteCurrency"/>
+      <el-button @click="listMoreOrderNotFinishedStatistics()">搜索</el-button>
       {{list.length}}
     </div>
     <div class="filter-container">
@@ -76,7 +76,7 @@
 </template>
 
 <script>
-  import {listDogMoreBuyNotFinishedStatistics} from '../../api/more';
+  import {listMoreOrderNotFinishedStatistics} from '../../api/more';
 
   export default {
     name: 'HelloWorld',
@@ -84,7 +84,7 @@
       return {
         sort: 'maxmin',
         userName: 'qq',
-        quoteCurrency: 'usdt',
+        quote: 'usdt',
         list: [],
         totalAmount: 0,
         nowTotalAmount: 0,
@@ -102,22 +102,24 @@
     computed: {},
     methods: {
       changeQuoteCurrency() {
-        if (this.quoteCurrency === 'usdt') {
-          this.quoteCurrency = 'btc';
-        } else if (this.quoteCurrency === 'btc') {
-          this.quoteCurrency = 'eth';
-        } else if (this.quoteCurrency === 'eth') {
-          this.quoteCurrency = 'ht';
-        } else if (this.quoteCurrency === 'ht') {
-          this.quoteCurrency = 'usdt';
+        if (this.quote === 'usdt') {
+          this.quote = 'btc';
+        } else if (this.quote === 'btc') {
+          this.quote = 'eth';
+        } else if (this.quote === 'eth') {
+          this.quote = 'ht';
+        } else if (this.quote === 'ht') {
+          this.quote = 'trx';
+        } else if (this.quote === 'trx') {
+          this.quote = 'usdt';
         }
       },
       init: function() {
-        this.listDogMoreBuyNotFinishedStatistics();
+        this.listMoreOrderNotFinishedStatistics();
       },
-      listDogMoreBuyNotFinishedStatistics: function() {
-        const {userName, sort, quoteCurrency} = this;
-        listDogMoreBuyNotFinishedStatistics({userName, sort, quoteCurrency}).then(data => {
+      listMoreOrderNotFinishedStatistics: function() {
+        const {userName, sort, quote} = this;
+        listMoreOrderNotFinishedStatistics({userName, sort, quote}).then(data => {
           data = data.data || data;
           this.list = data;
           let nowTotalAmount = 0;

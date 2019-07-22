@@ -41,7 +41,14 @@
         <el-table-column
           prop="buyOrderPrice"
           label="buyOrderPrice"
-          width="120">
+          width="110">
+        </el-table-column>
+        <el-table-column
+          label="nowPrice"
+          width="100">
+          <template slot-scope="scope">
+            <span>{{symbolClose[scope.row.symbol+scope.row.quote]}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="buyQuantity"
@@ -89,7 +96,14 @@
         <el-table-column
           prop="sellOrderPrice"
           label="sellOrderPrice"
-          width="120">
+          width="110">
+        </el-table-column>
+        <el-table-column
+          label="nowPrice"
+          width="100">
+          <template slot-scope="scope">
+            <span>{{symbolClose[scope.row.symbol+scope.row.quote]}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="sellQuantity"
@@ -215,6 +229,7 @@
         moreOrderProfitList: [],
         emptyOrderList: [],
         emptyOrderProfitList: [],
+        symbolClose: {},
       };
     },
     created: function() {
@@ -224,11 +239,12 @@
     methods: {
       listNotFilledData() {
         listNotFilledData({}).then(data => {
-          const {moreOrderList, moreOrderProfitList, emptyOrderList, emptyOrderProfitList} = data.data;
+          const {moreOrderList, moreOrderProfitList, emptyOrderList, emptyOrderProfitList, symbolClose} = data.data;
           this.moreOrderList = moreOrderList;
           this.moreOrderProfitList = moreOrderProfitList;
           this.emptyOrderList = emptyOrderList;
           this.emptyOrderProfitList = emptyOrderProfitList;
+          this.symbolClose = symbolClose;
         });
       },
     },
