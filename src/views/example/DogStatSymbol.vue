@@ -6,7 +6,7 @@
       <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
       <el-button size="mini" @click="resetAccountSymbol" type="primary">刷新</el-button>
       <span>{{list.length}}个</span>&emsp;
-      <el-tag>{{totalTaoUsdt}}</el-tag>
+      <el-tag>{{totalTaoUsdt.toFixed(2,'')}}</el-tag>
       <el-tag v-for="(amount, index) in totalAmounts" style="margin-right: 10px;">{{amount.toFixed(2, '')}}
         <span v-if="index < totalAmounts.length - 1">(多{{(amount - totalAmounts[index + 1]).toFixed(2, '')}})</span>
       </el-tag>

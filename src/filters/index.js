@@ -151,17 +151,26 @@ export function formatDate(dt, format = 'yyyy-MM-dd hh:mm:ss') {
 }
 
 export function fixedPrice(price, p) {
-  if(p){
+  if (p) {
     return price.toFixed(p, '');
   }
-  if (price >= 100) {
+  if (price < 0.0000001) {
+    return price.toFixed(10, '');
+  }
+  if (price < 0.00001) {
+    return price.toFixed(8, '');
+  }
+  if (price < 0.001) {
+    return price.toFixed(6, '');
+  }
+  if (price < 0.1) {
+    return price.toFixed(4, '');
+  }
+  if (price < 10) {
+    return price.toFixed(3, '');
+  }
+  if (price < 1000) {
     return price.toFixed(2, '');
   }
-  if (price >= 10) {
-    return price.toFixed(2, '');
-  }
-  if (price < 0.01) {
-    return price.toFixed(5, '');
-  }
-  return price.toFixed(4, '');
+  return price.toFixed(1, '');
 }

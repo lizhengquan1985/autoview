@@ -50,7 +50,7 @@
       <el-table-column
         prop="symbol"
         label="物"
-        width="135">
+        width="140">
         <template slot-scope="scope">
           <div>{{scope.row.symbol}}(<span :style="{color:scope.row.count>10?'':'red'}">{{scope.row.count}})</span>
           </div>
