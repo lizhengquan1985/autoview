@@ -6,6 +6,7 @@
       <el-button size="mini" @click="initAccountInfo()" type="primary">查询</el-button>
       <el-button size="mini" @click="resetAccountSymbol" type="primary">刷新</el-button>
       <span>{{list.length}}个</span>&emsp;
+      <el-tag>{{totalTaoUsdt}}</el-tag>
       <el-tag v-for="(amount, index) in totalAmounts" style="margin-right: 10px;">{{amount.toFixed(2, '')}}
         <span v-if="index < totalAmounts.length - 1">(多{{(amount - totalAmounts[index + 1]).toFixed(2, '')}})</span>
       </el-tag>
@@ -40,12 +41,11 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="Earn"
+          label="Earn/Tao"
           width="75">
           <template slot-scope="scope">
-            <div>
-              {{(parseFloat(scope.row[dateList[0]]) * closeDic[scope.row.symbol]).toFixed(3, '')}}
-            </div>
+            <earn-item :earn="parseFloat(scope.row[dateList[0]]) * closeDic[scope.row.symbol]"
+                       :taoTotalUsdt="taoTotalUsdt[scope.row.symbol]"/>
           </template>
         </el-table-column>
         <el-table-column
@@ -79,6 +79,13 @@
                 <span v-else-if="scope.row[date]">
               {{(parseFloat(scope.row[date])).toFixed(5, '')}}
               </span>
+                <template v-if="index === 0">
+                  <div v-if="taozhu[scope.row.symbol] > 99.999">套：{{taozhu[scope.row.symbol].toFixed(2,'')}}</div>
+                  <div v-else-if="taozhu[scope.row.symbol] <= 0.000001" style="color:green;">
+                    套：{{taozhu[scope.row.symbol].toFixed(2,'')}}
+                  </div>
+                  <div v-else>套：{{taozhu[scope.row.symbol].toFixed(5,'')}}</div>
+                </template>
               </div>
             </template>
           </el-table-column>
@@ -93,9 +100,10 @@
     listAccountSymbol,
     resetAccountSymbol,
   } from '../../api/symbolConfig';
+  import EarnItem from './SymbolConfigComponents/EarnItem';
 
   export default {
-    components: {},
+    components: {EarnItem},
     name: 'HelloWorld',
     data() {
       return {
@@ -105,6 +113,8 @@
         dateList: [],
         closeDic: {},
         totalAmounts: [0, 0, 0],
+        totalTaoUsdt: 0,
+        taoTotalUsdt: {},
         total: {
           'usdt': 100,
           '18c': 10,
@@ -376,6 +386,7 @@
           'iic': 210,
           'pc': 210,
         },
+        taozhu: {},
       };
     },
     created: function() {
@@ -389,6 +400,12 @@
           this.list = data.data;
           this.dateList = data.dateList;
           this.closeDic = data.closeDic;
+          this.taozhu = data.taozhu;
+          this.taoTotalUsdt = data.taoTotalUsdt;
+          this.totalTaoUsdt = 0;
+          for (const key in this.taoTotalUsdt) {
+            this.totalTaoUsdt += this.taoTotalUsdt[key];
+          }
 
           const totalAmounts = [0, 0, 0, 0, 0, 0, 0, 0, 0];
           for (let i = 0; i < totalAmounts.length; i++) {
