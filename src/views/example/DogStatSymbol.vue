@@ -44,7 +44,8 @@
           label="Earn/Tao"
           width="85">
           <template slot-scope="scope">
-            <earn-item :earnQuantity="scope.row[dateList[0]]"
+            <earn-item :key="`${scope.row.symbol}-${userName}-1`"
+                       :earnQuantity="scope.row[dateList[0]]"
                        :taoTotalUsdt="taoTotalUsdt[scope.row.symbol]"
                        :price="closeDic[scope.row.symbol]"
                        :taoQuantity="taozhu[scope.row.symbol]"
@@ -55,6 +56,15 @@
           prop="symbol"
           label="名称"
           width="65">
+          <template slot-scope="scope">
+            <earn-symbol :key="`${scope.row.symbol}-${userName}`"
+                         :earnQuantity="scope.row[dateList[0]]"
+                         :taoTotalUsdt="taoTotalUsdt[scope.row.symbol]"
+                         :price="closeDic[scope.row.symbol]"
+                         :symbol="scope.row.symbol"
+                         :taoQuantity="taozhu[scope.row.symbol]"
+                         :index="scope.$index"/>
+          </template>
         </el-table-column>
         <template v-for="(date, index) in dateList">
           <el-table-column
@@ -104,9 +114,10 @@
     resetAccountSymbol,
   } from '../../api/symbolConfig';
   import EarnItem from './SymbolConfigComponents/EarnItem';
+  import EarnSymbol from './SymbolConfigComponents/EarnSymbol';
 
   export default {
-    components: {EarnItem},
+    components: {EarnItem, EarnSymbol},
     name: 'HelloWorld',
     data() {
       return {

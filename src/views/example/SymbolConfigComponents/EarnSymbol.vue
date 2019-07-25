@@ -1,11 +1,7 @@
 <template>
   <div style="line-height: 14px;">
-    <template v-if="index > 4">
-      <div v-if="kui>0" style="color:red;">亏：{{kui.toFixed(2,'')}}</div>
-      <div v-else style="color:blue;">赚：{{(0-kui).toFixed(2,'')}}</div>
-      <div>{{taoTotalUsdt.toFixed(2,'')}}</div>
-    </template>
-    <div v-else>{{earn.toFixed(2, '')}}</div>
+    <div>{{symbol}}</div>
+    <div @click="show">{{earn.toFixed(2, '')}}</div>
   </div>
 </template>
 
@@ -20,7 +16,7 @@
         kui: 0,
       };
     },
-    props: ['earnQuantity', 'taoTotalUsdt', 'taoQuantity', 'price', 'index'],
+    props: ['earnQuantity', 'taoTotalUsdt', 'taoQuantity', 'price', 'index', 'symbol'],
     created: function() {
       this.init();
     },
@@ -32,6 +28,16 @@
         this.earn = earnQuantity * this.price;
         this.tao = taoQuantity * this.price;
         this.kui = this.taoTotalUsdt - this.tao - this.earn;
+      },
+      show() {
+        console.log('earnQuantity' + this.earnQuantity);
+        console.log('taoTotalUsdt' + this.taoTotalUsdt);
+        console.log('taoQuantity' + this.taoQuantity);
+        console.log('price' + this.price);
+        console.log('index' + this.index);
+        console.log('earn' + this.earn);
+        console.log('tao' + this.tao);
+        console.log('kui' + this.kui);
       },
     },
   };
