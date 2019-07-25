@@ -42,10 +42,13 @@
         </el-table-column>
         <el-table-column
           label="Earn/Tao"
-          width="75">
+          width="85">
           <template slot-scope="scope">
-            <earn-item :earn="parseFloat(scope.row[dateList[0]]) * closeDic[scope.row.symbol]"
-                       :taoTotalUsdt="taoTotalUsdt[scope.row.symbol]"/>
+            <earn-item :earnQuantity="scope.row[dateList[0]]"
+                       :taoTotalUsdt="taoTotalUsdt[scope.row.symbol]"
+                       :price="closeDic[scope.row.symbol]"
+                       :taoQuantity="taozhu[scope.row.symbol]"
+                       :index="scope.$index"/>
           </template>
         </el-table-column>
         <el-table-column

@@ -1,11 +1,10 @@
 <template>
   <div style="line-height: 14px;">
-    <div>{{earn.toFixed(3, '')}}</div>
-    <template v-if="taoTotalUsdt">
-      <div v-if="beishu > 1" style="color:green;">{{taoTotalUsdt.toFixed(2,'')}}</div>
-      <div :tip="beishu" v-if="beishu <= 1 && beishu > 0.25" style="color:blue;">{{taoTotalUsdt.toFixed(2,'')}}</div>
-      <div v-if="beishu <= 0.25 && beishu > 0.05" style="color:hotpink;">{{taoTotalUsdt.toFixed(2,'')}}</div>
-      <div v-if="beishu <= 0.05" style="color:deeppink;">{{taoTotalUsdt.toFixed(2,'')}}</div>
+    <div>{{earn.toFixed(2, '')}}</div>
+    <template v-if="index > 4">
+      <div v-if="kui>0" style="color:red;">亏：{{kui.toFixed(2,'')}}</div>
+      <div v-else style="color:blue;">赚：{{(0-kui).toFixed(2,'')}}</div>
+      <div>{{taoTotalUsdt.toFixed(2,'')}}</div>
     </template>
   </div>
 </template>
@@ -16,17 +15,23 @@
     name: 'DogControl',
     data() {
       return {
-        beishu: 1,
+        earn: 0,
+        tao: 0,
+        kui: 0,
       };
     },
-    props: ['earn', 'taoTotalUsdt'],
+    props: ['earnQuantity', 'taoTotalUsdt', 'taoQuantity', 'price', 'index'],
     created: function() {
       this.init();
     },
     computed: {},
     methods: {
       init: function() {
-        this.beishu = this.earn / this.taoTotalUsdt;
+        const taoQuantity = this.taoQuantity || 0;
+        const earnQuantity = this.earnQuantity || 0;
+        this.earn = earnQuantity * this.price;
+        this.tao = taoQuantity * this.price;
+        this.kui = this.taoTotalUsdt - this.tao - this.earn;
       },
     },
   };
