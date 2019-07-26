@@ -84,11 +84,48 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="ladder">
+          label="ladder"
+          width="110">
           <template slot-scope="scope">
             {{(scope.row.historyMin * (1.06**ladderNum)).toFixed(9, '')}}
             <span v-if="scope.row.historyMin * (1.06**ladderNum) < scope.row.maxBuyPrice && scope.row.quote !== 'usdt'"
                   style="color:red;">过大</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="oneQianWanPrice"
+          label="1千万">
+          <template slot-scope="scope">
+            <price-item :key="`1q-${scope.row.symbol}${scope.row.quote}`" :tickers="tickers"
+                        :price="scope.row.oneQianWanPrice"
+                        :symbol="scope.row.symbol" :quote="scope.row.quote"/>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="twoQianWanPrice"
+          label="2千万">
+          <template slot-scope="scope">
+            <price-item :key="`2q-${scope.row.symbol}${scope.row.quote}`" :tickers="tickers"
+                        :price="scope.row.twoQianWanPrice"
+                        :symbol="scope.row.symbol" :quote="scope.row.quote"/>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="fileQianWanPrice"
+          label="5千万">
+          <template slot-scope="scope">
+            <price-item :key="`5q-${scope.row.symbol}${scope.row.quote}`" :tickers="tickers"
+                        :price="scope.row.fileQianWanPrice"
+                        :symbol="scope.row.symbol" :quote="scope.row.quote"/>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="oneYiPrice"
+          label="1亿">
+          <template slot-scope="scope">
+            <price-item :key="`1y-${scope.row.symbol}${scope.row.quote}`" :tickers="tickers"
+                        :price="scope.row.oneYiPrice"
+                        :symbol="scope.row.symbol" :quote="scope.row.quote"/>
           </template>
         </el-table-column>
       </el-table>
@@ -133,9 +170,10 @@
   import CloseItem from './SymbolConfigComponents/CloseItem';
   import MoreItem from './SymbolConfigComponents/MoreItem';
   import EmptyItem from './SymbolConfigComponents/EmptyItem';
+  import PriceItem from './SymbolConfigComponents/PriceItem';
 
   export default {
-    components: {CloseItem, MoreItem, EmptyItem},
+    components: {CloseItem, MoreItem, EmptyItem, PriceItem},
     name: 'DogControl',
     data() {
       return {

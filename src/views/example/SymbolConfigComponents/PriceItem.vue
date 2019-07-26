@@ -1,6 +1,6 @@
 <template>
-  <span v-if="price > close" style="color:red;">{{close}}</span>
-  <span v-else>{{close}}</span>
+  <span v-if="price < close" style="color:red;">{{price}}</span>
+  <span v-else>{{price}}</span>
 </template>
 
 <script>
