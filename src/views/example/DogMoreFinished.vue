@@ -83,11 +83,6 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="buyState"
-          label="state"
-          width="90">
-        </el-table-column>
-        <el-table-column
           label="操作">
           <template slot-scope="scope">
             <el-button size="mini" type="danger" @click="deleteMore(scope.row.buyOrderId)">删除</el-button>
