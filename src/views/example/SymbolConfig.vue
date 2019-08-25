@@ -1,6 +1,8 @@
 <template>
   <div style="padding: 5px;">
     <el-card class="card-container">
+      <el-input v-model="params.userName" size="mini" style="width: 80px;"
+                @focus="params.userName=(params.userName==='qq'?'xx':'qq')"/>
       <el-input v-model="params.quote" size="mini" style="width: 120px;" placeholder="quote"
                 @click.native="changeQuoteCurrency"/>
       <el-input v-model="params.symbol" size="mini" style="width: 120px;" placeholder="symbol"/>
@@ -87,9 +89,15 @@
           label="ladder"
           width="110">
           <template slot-scope="scope">
-            {{(scope.row.historyMin * (1.06**ladderNum)).toFixed(9, '')}}
+            {{(scope.row.historyMin * Math.pow(1.06, ladderNum)).toFixed(9, '')}}
             <span v-if="scope.row.historyMin * (1.06**ladderNum) < scope.row.maxBuyPrice && scope.row.quote !== 'usdt'"
                   style="color:red;">过大</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="做多">
+          <template slot-scope="scope">
+            <el-checkbox v-model="scope.row.doMore" @change="changeDoMore(scope.row)">{{scope.row.doMore ? '做多' : '不做多'}}</el-checkbox>
           </template>
         </el-table-column>
         <el-table-column
@@ -133,6 +141,9 @@
 
     <el-dialog title="编辑配置" :visible.sync="dialogFormVisible" :width="'520px'">
       <el-form :model="form" ref="ruleForm">
+        <el-form-item label="userName：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
+          <el-input size="small" v-model="form.userName" style="width: 200px;"/>
+        </el-form-item>
         <el-form-item label="symbol：" :label-width="formLabelWidth" style="margin-bottom: 2px;">
           <el-input size="small" v-model="form.symbol" style="width: 200px;"/>
         </el-form-item>
@@ -166,18 +177,24 @@
     listSymbolConfig,
     refreshHistoryMaxMin,
     upsertSymbolConfig,
+    updateDoMore
   } from '../../api/symbolConfig';
   import CloseItem from './SymbolConfigComponents/CloseItem';
   import MoreItem from './SymbolConfigComponents/MoreItem';
   import EmptyItem from './SymbolConfigComponents/EmptyItem';
   import PriceItem from './SymbolConfigComponents/PriceItem';
+  import ElCheckbox from "../../../node_modules/element-ui/packages/checkbox/src/checkbox.vue";
 
   export default {
-    components: {CloseItem, MoreItem, EmptyItem, PriceItem},
+    components: {
+      ElCheckbox,
+      CloseItem, MoreItem, EmptyItem, PriceItem
+    },
     name: 'DogControl',
     data() {
       return {
         params: {
+          userName: 'qq',
           quote: 'usdt',
           symbol: '',
         },
@@ -189,7 +206,7 @@
         ladderNum: 8,
       };
     },
-    created: function() {
+    created: function () {
       this.init();
     },
     computed: {},
@@ -207,31 +224,37 @@
           this.params.quote = 'usdt';
         }
       },
-      init: function() {
+      init: function () {
         this.listSymbolConfig();
       },
-      listSymbolConfig: function() {
+      listSymbolConfig: function () {
         const params = {...this.params};
         listSymbolConfig(params).then(data => {
           this.dataList = data.data.list;
           this.tickers = data.data.tickers || [];
         });
       },
-      showEdit: function(row = {emptyPrice: 99999, maxInputPrice: 0.000001}) {
+      showEdit: function (row = {emptyPrice: 99999, maxInputPrice: 0.000001}) {
         this.dialogFormVisible = true;
         this.form = {...row};
       },
-      upsertSymbolConfig: function() {
+      upsertSymbolConfig: function () {
         upsertSymbolConfig(this.form).then(() => {
           this.dialogFormVisible = false;
           this.listSymbolConfig();
         });
       },
-      refreshHistoryMaxMin: function(symbol, quote) {
+      refreshHistoryMaxMin: function (symbol, quote) {
         refreshHistoryMaxMin({symbol, quote}).then(() => {
           this.listSymbolConfig();
         });
       },
+      changeDoMore(row) {
+        const {userName, quote, symbol, doMore} = row;
+        updateDoMore({userName, quote, symbol, doMore}).then(() => {
+
+        })
+      }
     },
   };
 </script>

@@ -40,3 +40,11 @@ export function resetAccountSymbol(params) {
   });
 }
 
+
+export function updateDoMore(params) {
+  return request({
+    url: '/api/SymbolConfig/updateDoMore',
+    method: 'put',
+    params,
+  });
+}
