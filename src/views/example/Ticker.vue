@@ -10,11 +10,6 @@
       :data="tickerList"
       style="width: 100%">
       <el-table-column
-        prop="userName"
-        label="人"
-        width="40">
-      </el-table-column>
-      <el-table-column
         prop="quote"
         label="quote"
         width="65">
@@ -26,12 +21,12 @@
       </el-table-column>
       <el-table-column
         prop="notFinishedEmptyCount"
-        label="空数"
+        label="空单数"
         width="68">
       </el-table-column>
       <el-table-column
         prop="notFinishedMoreCount"
-        label="多数"
+        label="多单数"
         width="68">
       </el-table-column>
       <el-table-column

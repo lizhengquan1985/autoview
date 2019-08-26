@@ -10,6 +10,7 @@
       <el-button size="mini" @click="showEdit()" type="primary">新增</el-button>
       <el-tag>{{dataList.length}}</el-tag>
       <el-input-number size="mini" v-model="ladderNum"/>
+      <el-button size="mini" @click="initMaxBuyPrice()" type="primary">初始化最大</el-button>
     </el-card>
     <div style="margin-top: 3px;">
       <el-table
@@ -54,7 +55,7 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="empty"
+          label="empty/more"
           width="165">
           <template slot-scope="scope">
             <div style="line-height: 14px;">
@@ -64,13 +65,6 @@
                           :symbol="scope.row.symbol"
                           :quote="scope.row.quote" :minSellPrice="scope.row.minSellPrice"/>
             </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="emptySize"
-          width="90">
-          <template slot-scope="scope">
-            {{scope.row.emptySize.toFixed(5, '')}}
           </template>
         </el-table-column>
         <el-table-column
@@ -97,7 +91,18 @@
         <el-table-column
           label="做多">
           <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.doMore" @change="changeDoMore(scope.row)">{{scope.row.doMore ? '做多' : '不做多'}}</el-checkbox>
+            <el-checkbox v-model="scope.row.doMore" @change="changeDoMore(scope.row)">{{scope.row.doMore ? '做多' :
+              '不做多'}}
+            </el-checkbox>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="做空">
+          <template slot-scope="scope">
+            <el-checkbox v-model="scope.row.doEmpty" @change="changeDoEmpty(scope.row)">{{scope.row.doMore ? '做空' :
+              '不做空'}}
+            </el-checkbox>
+            {{scope.row.emptySize.toFixed(5, '')}}
           </template>
         </el-table-column>
         <el-table-column
@@ -177,18 +182,20 @@
     listSymbolConfig,
     refreshHistoryMaxMin,
     upsertSymbolConfig,
-    updateDoMore
+    updateDoMore,
+    updateDoEmpty,
+    initMaxBuyPrice,
   } from '../../api/symbolConfig';
   import CloseItem from './SymbolConfigComponents/CloseItem';
   import MoreItem from './SymbolConfigComponents/MoreItem';
   import EmptyItem from './SymbolConfigComponents/EmptyItem';
   import PriceItem from './SymbolConfigComponents/PriceItem';
-  import ElCheckbox from "../../../node_modules/element-ui/packages/checkbox/src/checkbox.vue";
+  import ElCheckbox from '../../../node_modules/element-ui/packages/checkbox/src/checkbox.vue';
 
   export default {
     components: {
       ElCheckbox,
-      CloseItem, MoreItem, EmptyItem, PriceItem
+      CloseItem, MoreItem, EmptyItem, PriceItem,
     },
     name: 'DogControl',
     data() {
@@ -206,7 +213,7 @@
         ladderNum: 8,
       };
     },
-    created: function () {
+    created: function() {
       this.init();
     },
     computed: {},
@@ -224,27 +231,27 @@
           this.params.quote = 'usdt';
         }
       },
-      init: function () {
+      init: function() {
         this.listSymbolConfig();
       },
-      listSymbolConfig: function () {
+      listSymbolConfig: function() {
         const params = {...this.params};
         listSymbolConfig(params).then(data => {
           this.dataList = data.data.list;
           this.tickers = data.data.tickers || [];
         });
       },
-      showEdit: function (row = {emptyPrice: 99999, maxInputPrice: 0.000001}) {
+      showEdit: function(row = {emptyPrice: 99999, maxInputPrice: 0.000001}) {
         this.dialogFormVisible = true;
         this.form = {...row};
       },
-      upsertSymbolConfig: function () {
+      upsertSymbolConfig: function() {
         upsertSymbolConfig(this.form).then(() => {
           this.dialogFormVisible = false;
           this.listSymbolConfig();
         });
       },
-      refreshHistoryMaxMin: function (symbol, quote) {
+      refreshHistoryMaxMin: function(symbol, quote) {
         refreshHistoryMaxMin({symbol, quote}).then(() => {
           this.listSymbolConfig();
         });
@@ -253,8 +260,20 @@
         const {userName, quote, symbol, doMore} = row;
         updateDoMore({userName, quote, symbol, doMore}).then(() => {
 
-        })
-      }
+        });
+      },
+      changeDoEmpty(row) {
+        const {userName, quote, symbol, doEmpty} = row;
+        updateDoEmpty({userName, quote, symbol, doEmpty}).then(() => {
+
+        });
+      },
+      initMaxBuyPrice() {
+        const {userName, quote} = this.params;
+        initMaxBuyPrice({userName, quote}).then(() => {
+          this.$message.success('初始化完成');
+        });
+      },
     },
   };
 </script>

@@ -40,7 +40,6 @@ export function resetAccountSymbol(params) {
   });
 }
 
-
 export function updateDoMore(params) {
   return request({
     url: '/api/SymbolConfig/updateDoMore',
@@ -48,3 +47,21 @@ export function updateDoMore(params) {
     params,
   });
 }
+
+export function updateDoEmpty(params) {
+  return request({
+    url: '/api/SymbolConfig/updateDoEmpty',
+    method: 'put',
+    params,
+  });
+}
+
+export function initMaxBuyPrice(params) {
+  return request({
+    url: '/api/SymbolConfig/initMaxBuyPrice',
+    method: 'get',
+    params,
+  });
+}
+
+
