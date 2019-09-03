@@ -421,6 +421,20 @@
             this.totalTaoUsdt += this.taoTotalUsdt[key];
           }
 
+          const total = {...this.total};
+          const totalSymbolAmount = data.totalSymbolAmount;
+          for (const key in totalSymbolAmount) {
+            const newValue = totalSymbolAmount[key] / 100000000;
+            if (!total[key]) {
+              total[key] = newValue;
+              continue;
+            }
+            if (total[key] !== newValue) {
+              console.log(key, total[key], newValue);
+            }
+          }
+          this.total = {...total};
+
           const totalAmounts = [0, 0, 0, 0, 0, 0, 0, 0, 0];
           for (let i = 0; i < totalAmounts.length; i++) {
             for (const item of this.list) {
