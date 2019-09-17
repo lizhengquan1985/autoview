@@ -74,7 +74,7 @@
             <span v-if="params.quote === 'btc'" @click="setSymbolConfig(scope.row, scope.row.avgPrice, scope.row.historyMin)">{{scope.row.avgPrice.toFixed(8, '')}}</span>
             <span v-if="params.quote === 'eth'" @click="setSymbolConfig(scope.row, scope.row.avgPrice, scope.row.historyMin)">{{scope.row.avgPrice.toFixed(7, '')}}</span>
             <span v-if="params.quote === 'usdt'">{{scope.row.avgPrice.toFixed(4, '')}}</span>
-            <span v-if="params.quote === 'ht'">{{scope.row.avgPrice.toFixed(5, '')}}</span>
+            <span v-if="params.quote === 'ht'" @click="setSymbolConfig(scope.row, scope.row.avgPrice, scope.row.historyMin)">{{scope.row.avgPrice.toFixed(5, '')}}</span>
             <span v-if="scope.row.avgPrice < scope.row.maxBuyPrice && scope.row.quote !== 'usdt'"
                   style="color:red;">大加权</span>
           </template>
