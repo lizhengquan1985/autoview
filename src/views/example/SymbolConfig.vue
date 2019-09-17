@@ -71,8 +71,8 @@
           label="avgPrice"
           width="90">
           <template slot-scope="scope">
-            <span v-if="params.quote === 'btc'">{{scope.row.avgPrice.toFixed(8, '')}}</span>
-            <span v-if="params.quote === 'eth'">{{scope.row.avgPrice.toFixed(7, '')}}</span>
+            <span v-if="params.quote === 'btc'" @click="setSymbolConfig(scope.row, scope.row.avgPrice, scope.row.historyMin)">{{scope.row.avgPrice.toFixed(8, '')}}</span>
+            <span v-if="params.quote === 'eth'" @click="setSymbolConfig(scope.row, scope.row.avgPrice, scope.row.historyMin)">{{scope.row.avgPrice.toFixed(7, '')}}</span>
             <span v-if="params.quote === 'usdt'">{{scope.row.avgPrice.toFixed(4, '')}}</span>
             <span v-if="params.quote === 'ht'">{{scope.row.avgPrice.toFixed(5, '')}}</span>
             <span v-if="scope.row.avgPrice < scope.row.maxBuyPrice && scope.row.quote !== 'usdt'"
@@ -272,6 +272,19 @@
         const {userName, quote} = this.params;
         initMaxBuyPrice({userName, quote}).then(() => {
           this.$message.success('初始化完成');
+        });
+      },
+      setSymbolConfig(row, avgPrice, minHistory) {
+        let price = minHistory * Math.pow(1.06, this.ladderNum);
+        var form = {...row};
+        if (avgPrice > price) {
+          form.maxBuyPrice = price;
+        } else {
+          form.maxBuyPrice = avgPrice;
+        }
+        form.maxBuyPrice = form.maxBuyPrice * 0.99;
+        upsertSymbolConfig(form).then(() => {
+          this.listSymbolConfig();
         });
       },
     },
