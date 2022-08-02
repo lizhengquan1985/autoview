@@ -4129,8 +4129,8 @@ map-visit@^1.0.0:
     object-visit "^1.0.0"
 
 marked@*:
-  version "0.3.17"
-  resolved "http://registry.npm.taobao.org/marked/download/marked-0.3.17.tgz#607f06668b3c6b1246b28f13da76116ac1aa2d2b"
+  version "4.0.18"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-4.0.18.tgz#cd0ac54b2e5610cfb90e8fd46ccaa8292c9ed569"
 
 math-expression-evaluator@^1.2.14:
   version "1.2.17"
